@@ -1,0 +1,30 @@
+# Compiled Kotlin class files
+*.class
+
+# Gradle build directory
+/build/
+
+# idea folder
+.idea/
+
+# Ignore .gradle folder
+.gradle/
+gradle/
+
+# Other generated files
+out/
+
+# Gradle wrapper
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Kotlin library specific build artifacts (e.g., JAR files)
+/libs/
+
+# IDE-specific files for Android Studio, IntelliJ IDEA, etc.
+*.iml
+*.ipr
+*.iws

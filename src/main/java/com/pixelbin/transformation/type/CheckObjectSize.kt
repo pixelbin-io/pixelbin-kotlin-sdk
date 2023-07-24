@@ -1,0 +1,41 @@
+package com.pixelbin.transformation.type
+import com.pixelbin.transformation.TransformationObj
+
+
+ class CheckObjectSize {
+ 
+    
+    
+    
+
+    /**
+     * Method for Calculates the percentage of the main object area relative to image dimensions.
+     * 
+     * @param Object Threshold Percent Int (Default: 50)
+     
+     * @return TransformationObj.
+     */
+     @JvmOverloads
+    fun detect(
+       
+        objectthresholdpercent: Int? = null
+        
+    ): TransformationObj {
+        // Create the values HashMap
+        val values = HashMap<String, String>()
+        
+        
+        
+        values["obj_threshold_perc"] = objectthresholdpercent.toString()
+        
+        
+        
+        
+        return TransformationObj(
+            plugin = "cos",
+            name = "detect",
+            values = values
+        )
+    }
+}
+
