@@ -69,8 +69,8 @@ image.getUrl()
 | file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
 | signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
 
-- Resolves with no response on success.
-- Rejects with error on failure.
+-   Resolves with no response on success.
+-   Rejects with error on failure.
 
 Example :
 
@@ -127,8 +127,8 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //            cloudName = your-cloud-name,
 //            transformation= [
 //                TransformationObj(
-//                    plugin = t,
-//                    name = resize,
+//                    plugin = "t",
+//                    name = "resize",
 //                    values= hashMapOf(
 //                      "w" to "200",
 //                      "h" to "100",
@@ -155,8 +155,8 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //            cloudName = your-cloud-name,
 //            transformation= [
 //                TransformationObj(
-//                    plugin = t,
-//                    name = resize,
+//                    plugin = "t",
+//                    name = "resize",
 //                    values= hashMapOf(
 //                      "w" to "200",
 //                      "h" to "100",
@@ -189,15 +189,14 @@ Converts the extracted url obj to a Pixelbin url.
 | filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
 | baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
 
-```kotlin
 val obj = {
     cloudName = your-cloud-name,
     zone = z-slug,
     version = v2,
     transformations = arrayListOf(
                TransformationObj(
-                    plugin = t,
-                    name = resize,
+                    plugin = "t",
+                    name = "resize",
                     values= hashMapOf(
                        "w" to "200",
                        "h" to "100",
@@ -287,90 +286,66 @@ For a working example, refer [here](#transform-and-optimize-images)
 
 #### Usage Example
 
-````kotlin
 val t = Transformation.detectbackgroundtype();
 
 </details>
 
-
-
 ### 2. Artifact
-
 
 <details>
 <summary>1. remove</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.artifact();
 
 </details>
 
-
-
 ### 3. AWSRekognitionPlugin
-
 
 <details>
 <summary>1. detectLabels</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | maximumLabels | integer | 5 |
 
 | minimumConfidence | integer | 55 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.detectlabels(maximumlabels = 5, minimumconfidence = 55);
 
 </details>
 
-
-
 <details>
 <summary>2. moderation</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | minimumConfidence | integer | 55 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.moderation(minimumconfidence = 55);
 
 </details>
 
-
-
 ### 4. BackgroundGenerator
-
 
 <details>
 <summary>1. bg</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | backgroundPrompt | custom | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
 
@@ -380,105 +355,77 @@ val t = Transformation.moderation(minimumconfidence = 55);
 
 | seed | integer | 123 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw", focus = BackgroundGenerator.Focus.PRODUCT, negativeprompt = "", seed = 123);
 
 </details>
 
-
-
 ### 5. EraseBG
-
 
 <details>
 <summary>1. bg</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | industryType | enum: `general`, `ecommerce`, `car` | `general` |
 
 | addShadow | boolean | false |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL, addshadow = false);
 
 </details>
 
-
-
 ### 6. GoogleVisionPlugin
-
 
 <details>
 <summary>1. detectLabels</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | maximumLabels | integer | 5 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.googlevisionplugin(maximumlabels = 5);
 
 </details>
 
-
-
 ### 7. ImageCentering
-
 
 <details>
 <summary>1. detect</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | distancePercentage | integer | 10 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.imagecentering(distancepercentage = 10);
 
 </details>
 
-
-
 ### 8. IntelligentCrop
-
 
 <details>
 <summary>1. crop</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | requiredWidth | integer | 0 |
 
@@ -496,180 +443,123 @@ val t = Transformation.imagecentering(distancepercentage = 10);
 
 | objectType | enum: `airplane`, `apple`, `backpack`, `banana`, `baseball_bat`, `baseball_glove`, `bear`, `bed`, `bench`, `bicycle`, `bird`, `boat`, `book`, `bottle`, `bowl`, `broccoli`, `bus`, `cake`, `car`, `carrot`, `cat`, `cell_phone`, `chair`, `clock`, `couch`, `cow`, `cup`, `dining_table`, `dog`, `donut`, `elephant`, `fire_hydrant`, `fork`, `frisbee`, `giraffe`, `hair_drier`, `handbag`, `horse`, `hot_dog`, `keyboard`, `kite`, `knife`, `laptop`, `microwave`, `motorcycle`, `mouse`, `orange`, `oven`, `parking_meter`, `person`, `pizza`, `potted_plant`, `refrigerator`, `remote`, `sandwich`, `scissors`, `sheep`, `sink`, `skateboard`, `skis`, `snowboard`, `spoon`, `sports_ball`, `stop_sign`, `suitcase`, `surfboard`, `teddy_bear`, `tennis_racket`, `tie`, `toaster`, `toilet`, `toothbrush`, `traffic_light`, `train`, `truck`, `tv`, `umbrella`, `vase`, `wine_glass`, `zebra` | `person` |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.intelligentcrop(requiredwidth = 0, requiredheight = 0, paddingpercentage = 0, maintainoriginalaspect = false, aspectratio = "", gravitytowards = IntelligentCrop.Gravitytowards.NONE, preferreddirection = IntelligentCrop.Preferreddirection.CENTER, objecttype = IntelligentCrop.Objecttype.PERSON);
 
 </details>
 
-
-
 ### 9. ObjectCounter
-
 
 <details>
 <summary>1. detect</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.objectcounter();
 
 </details>
 
-
-
 ### 10. NumberPlateDetection
-
 
 <details>
 <summary>1. detect</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.numberplatedetection();
 
 </details>
 
-
-
 ### 11. CheckObjectSize
-
 
 <details>
 <summary>1. detect</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | objectThresholdPercent | integer | 50 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.checkobjectsize(objectthresholdpercent = 50);
 
 </details>
 
-
-
 ### 12. TextDetectionandRecognition
-
 
 <details>
 <summary>1. extract</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | detectOnly | boolean | false |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.textdetectionandrecognition(detectonly = false);
 
 </details>
 
-
-
 ### 13. PdfWatermarkRemoval
-
 
 <details>
 <summary>1. remove</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.pdfwatermarkremoval();
 
 </details>
 
-
-
 ### 14. ProductTagging
-
 
 <details>
 <summary>1. tag</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.producttagging();
 
 </details>
 
-
-
 ### 15. CheckProductVisibility
-
 
 <details>
 <summary>1. detect</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.checkproductvisibility();
 
 </details>
 
-
-
 ### 16. RemoveBG
-
 
 <details>
 <summary>1. bg</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.removebg();
 
 </details>
 
-
-
 ### 17. Basic
-
 
 <details>
 <summary>1. resize</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | height | integer | 0 |
 
@@ -685,47 +575,35 @@ val t = Transformation.removebg();
 
 | dpr | float | 1 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.resize(height = 0, width = 0, fit = Resize.Fit.COVER, background = "000000", position = Resize.Position.CENTER, algorithm = Resize.Algorithm.LANCZOS3, dpr = 1);
 
 </details>
 
-
-
 <details>
 <summary>2. compress</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | quality | integer | 80 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.compress(quality = 80);
 
 </details>
 
-
-
 <details>
 <summary>3. extend</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | top | integer | 10 |
 
@@ -741,25 +619,19 @@ val t = Transformation.compress(quality = 80);
 
 | dpr | float | 1 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.extend(top = 10, left = 10, bottom = 10, right = 10, background = "000000", bordertype = Extend.Bordertype.CONSTANT, dpr = 1);
 
 </details>
 
-
-
 <details>
 <summary>4. extract</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | top | integer | 10 |
 
@@ -769,241 +641,173 @@ val t = Transformation.extend(top = 10, left = 10, bottom = 10, right = 10, back
 
 | width | integer | 20 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.extract(top = 10, left = 10, height = 50, width = 20);
 
 </details>
 
-
-
 <details>
 <summary>5. trim</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | threshold | integer | 10 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.trim(threshold = 10);
 
 </details>
 
-
-
 <details>
 <summary>6. rotate</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | angle | integer | 0 |
 
 | background | color | `000000` |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.rotate(angle = 0, background = "000000");
 
 </details>
 
-
-
 <details>
 <summary>7. flip</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.flip();
 
 </details>
 
-
-
 <details>
 <summary>8. flop</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.flop();
 
 </details>
 
-
-
 <details>
 <summary>9. sharpen</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | sigma | float | 1.5 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.sharpen(sigma = 1.5);
 
 </details>
 
-
-
 <details>
 <summary>10. median</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | size | integer | 3 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.median(size = 3);
 
 </details>
 
-
-
 <details>
 <summary>11. blur</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | sigma | float | 0.3 |
 
 | dpr | float | 1 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.blur(sigma = 0.3, dpr = 1);
 
 </details>
 
-
-
 <details>
 <summary>12. flatten</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | background | color | `000000` |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.flatten(background = "000000");
 
 </details>
 
-
-
 <details>
 <summary>13. negate</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.negate();
 
 </details>
 
-
-
 <details>
 <summary>14. normalise</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.normalise();
 
 </details>
 
-
-
 <details>
 <summary>15. linear</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | a | integer | 1 |
 
 | b | integer | 0 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.linear(a = 1, b = 0);
 
 </details>
 
-
-
 <details>
 <summary>16. modulate</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | brightness | float | 1 |
 
@@ -1011,105 +815,76 @@ val t = Transformation.linear(a = 1, b = 0);
 
 | hue | integer | 90 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.modulate(brightness = 1, saturation = 1, hue = 90);
 
 </details>
 
-
-
 <details>
 <summary>17. grey</summary>
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.grey();
 
 </details>
 
-
-
 <details>
 <summary>18. tint</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | color | color | `000000` |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.tint(color = "000000");
 
 </details>
 
-
-
 <details>
 <summary>19. toFormat</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | format | enum: `jpeg`, `png`, `webp`, `tiff`, `avif` | `jpeg` |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.toformat(format = Toformat.Format.JPEG);
 
 </details>
 
-
-
 <details>
 <summary>20. density</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | density | integer | 300 |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.density(density = 300);
 
 </details>
 
-
-
 <details>
 <summary>21. merge</summary>
-
 
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | mode | enum: `overlay`, `underlay`, `wrap` | `overlay` |
 
@@ -1133,59 +908,45 @@ val t = Transformation.density(density = 300);
 
 | tile | boolean | false |
 
-| listOfBboxes | bboxList |  |
+| listOfBboxes | bboxList | |
 
-| listOfPolygons | polygonList |  |
-
-
+| listOfPolygons | polygonList | |
 
 #### Usage Example
 
-```kotlin
 val t = Transformation.merge(mode = Merge.Mode.OVERLAY, image = "", transformation = "", background = "00000000", height = 0, width = 0, top = 0, left = 0, gravity = Merge.Gravity.CENTER, blend = Merge.Blend.OVER, tile = false, listofbboxes = "", listofpolygons = "");
 
 </details>
 
-
-
 ### 18. SuperResolution
-
 
 <details>
 <summary>1. upscale</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | type | enum: `2x`, `4x` | `2x` |
 
 | enhanceFace | boolean | false |
 
-
-
 #### Usage Example
 
-```kotlin
-val t = Transformation.superresolution(type = SuperResolution.Type._2X, enhanceface = false);
+val t = Transformation.superresolution(type = SuperResolution.Type.\_2X, enhanceface = false);
 
 </details>
 
-
-
 ### 19. WatermarkRemoval
-
 
 <details>
 <summary>1. remove</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | removeText | boolean | false |
 
@@ -1201,41 +962,26 @@ val t = Transformation.superresolution(type = SuperResolution.Type._2X, enhancef
 
 | box5 | string | `0_0_0_0` |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.watermarkremoval(removetext = false, removelogo = false, box1 = "0_0_100_100", box2 = "0_0_0_0", box3 = "0_0_0_0", box4 = "0_0_0_0", box5 = "0_0_0_0");
 
 </details>
 
-
-
 ### 20. WatermarkDetection
-
 
 <details>
 <summary>1. detect</summary>
 
-
 #### Supported Configuration
 
 | Parameter | Type | Default |
-| --- | --- | --- |
+| --------- | ---- | ------- |
 
 | detectText | boolean | false |
 
-
-
 #### Usage Example
 
-```kotlin
 val t = Transformation.watermarkdetection(detecttext = false);
 
 </details>
-
-
-
-
-````
