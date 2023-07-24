@@ -8,14 +8,15 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 
 add kotlin library dependency in build gradle
 
-```kotlin
 // Import the Pixelbin class
 import com.pixelbin.PixelBin
 
 // Create your instance
+```
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url("https://cdn.pixelbin.io/v2/cloudName/z-slug/transformation/path/to/image.jpeg")
 or
+
 val image = pixelbin.url(
     UrlObj(
         baseUrl = baseUrl,
@@ -32,7 +33,7 @@ val image = pixelbin.url(
 
 ### Transform and Optimize Images
 
-```kotlin
+```
 // Import transformations
 import com.pixelbin.transformation.Transformation
 
@@ -81,11 +82,11 @@ val file =  File(pathname);
 ```
 
 2. Use the presignedUrl generated with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
-
+```
 CoroutineScope(Dispatchers.IO).launch {
-PixelBin.getInstance().upload(file,signedDetails)
+    PixelBin.getInstance().upload(file,signedDetails)
 }
-
+```
 ## Utilities
 
 //Import the utils class
@@ -96,7 +97,7 @@ Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 ### urlToObj
 
 Deconstruct a pixelbin url
-
+```
 | parameter            | description          | example                                                                                               |
 | -------------------- | -------------------- | ----------------------------------------------------------------------------------------------------- |
 | pixelbinUrl (string) | A valid pixelbin url | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
@@ -111,21 +112,21 @@ Deconstruct a pixelbin url
 | transformations (array) | Extracted transformations from the url |                            |
 | filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
 | baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
-
+```
 Example:
-
-```kotlin
+```
 val pixelbinUrl =
     "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
 
 //string representation of url object
 //name of transformation = plugin+"."+name
+
 val obj = Utils.urlToUrlObj(pixelbinUrl)
 //        UrlObj(
 //            baseUrl = https://cdn.pixelbin.io/,
 //            version = v2,
 //            cloudName = your-cloud-name,
-//            transformation= [
+//            transformation= {
 //                TransformationObj(
 //                    plugin = "t",
 //                    name = "resize",
@@ -138,7 +139,7 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                    plugin = "t",
 //                    name = "flip",
 //                )
-//                            ],
+//                            },
 //                zone = z-slug,
 //            filePath = path/to/image.jpeg
 //        )
@@ -148,12 +149,14 @@ val pixelbinUrl =
 
 //string representation of url object
 //name of transformation = plugin+"."+name
+```
+```
 val obj = Utils.urlToUrlObj(pixelbinUrl)
 //        UrlObj(
 //            baseUrl = https://cdn.pixelbin.io/,
 //            version = v2,
 //            cloudName = your-cloud-name,
-//            transformation= [
+//            transformation= {
 //                TransformationObj(
 //                    plugin = "t",
 //                    name = "resize",
@@ -166,7 +169,7 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                    plugin="t",
 //                    name="flip",
 //                )
-//                            ],
+//                            },
 //            zone = z-slug,
 //            options = hashMapOf(
 //                  "dpr" to "2.0",
@@ -177,7 +180,7 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 ```
 
 ### objToUrl
-
+```
 Converts the extracted url obj to a Pixelbin url.
 
 | property                | description                            | example                    |
@@ -189,6 +192,9 @@ Converts the extracted url obj to a Pixelbin url.
 | filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
 | baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
 
+```
+Example
+```
 val obj = {
     cloudName = your-cloud-name,
     zone = z-slug,
@@ -210,11 +216,13 @@ val obj = {
     filePath = path/to/image.jpeg,
     baseUrl = "https://cdn.pixelbin.io"
 }
+
+
 val url = Utils.objToUrl(pixelbinUrl) // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
-
-
+```
+```
 val obj = {
     cloudName = your-cloud-name,
     zone = z-slug,
@@ -240,6 +248,7 @@ val obj = {
         "f_auto" to "true"
     )
 }
+
 val url = Utils.objToUrl(pixelbinUrl)  // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True
@@ -249,8 +258,8 @@ val url = Utils.objToUrl(pixelbinUrl)  // obj is as shown above
 
 A transformation is an operation or a list of operations that can be performed on an image. Please refer [list of supported transformations](#list-of-supported-transformations) for details.
 
-```kotlin
 
+```
 // Create resize transformation
 val t2 = Transformation.resize(height = 100,width = 100)
 
@@ -261,17 +270,17 @@ image.addTransformation(t1);
 
 //or add multiple transformation
 image.addTransformation(arrayListOf(t1,t2));
-```
+
 
 Transformations can be set on an image by using `addTransformation` on the imageUrl object.
 
-```kotlin
+
 image.addTransformation(t)
-```
+
 
 To get the url of the image with the applied transformations, use the `getUrl` on the image object.
 
-```kotlin
+
 image.getUrl()
 ```
 
