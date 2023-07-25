@@ -8,14 +8,18 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 
 add kotlin library dependency in build gradle
 
-```kotlin
-// Import the Pixelbin class
-import com.pixelbin.PixelBin
+Import the Pixelbin class
 
-// Create your instance
+```
+import com.pixelbin.PixelBin
+```
+
+Create your instance
+
+```
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url("https://cdn.pixelbin.io/v2/cloudName/z-slug/transformation/path/to/image.jpeg")
-or
+    
 val image = pixelbin.url(
     UrlObj(
         baseUrl = baseUrl,
@@ -32,8 +36,9 @@ val image = pixelbin.url(
 
 ### Transform and Optimize Images
 
-```kotlin
-// Import transformations
+Import transformations
+
+```
 import com.pixelbin.transformation.Transformation
 
 val eraseTransformation = Transformation.erasebg();
@@ -82,14 +87,19 @@ val file =  File(pathname);
 
 2. Use the presignedUrl generated with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
+```
 CoroutineScope(Dispatchers.IO).launch {
-PixelBin.getInstance().upload(file,signedDetails)
+    PixelBin.getInstance().upload(file,signedDetails)
 }
+```
 
 ## Utilities
 
-//Import the utils class
+Import the utils class
+
+```
 import com.pixelbin.Utils
+```
 
 Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 
@@ -114,18 +124,19 @@ Deconstruct a pixelbin url
 
 Example:
 
-```kotlin
+```
 val pixelbinUrl =
     "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
 
 //string representation of url object
 //name of transformation = plugin+"."+name
+
 val obj = Utils.urlToUrlObj(pixelbinUrl)
 //        UrlObj(
-//            baseUrl = https://cdn.pixelbin.io/,
-//            version = v2,
-//            cloudName = your-cloud-name,
-//            transformation= [
+//            baseUrl = "https://cdn.pixelbin.io/",
+//            version = "v2",
+//            cloudName = "your-cloud-name",
+//            transformation= arrayListOf(
 //                TransformationObj(
 //                    plugin = "t",
 //                    name = "resize",
@@ -138,22 +149,24 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                    plugin = "t",
 //                    name = "flip",
 //                )
-//                            ],
-//                zone = z-slug,
-//            filePath = path/to/image.jpeg
+//                            ),
+//                zone =" z-slug",
+//            filePath = "path/to/image.jpeg"
 //        )
 
 val pixelbinUrl =
     "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
+```
 
+```
 //string representation of url object
 //name of transformation = plugin+"."+name
 val obj = Utils.urlToUrlObj(pixelbinUrl)
 //        UrlObj(
-//            baseUrl = https://cdn.pixelbin.io/,
-//            version = v2,
-//            cloudName = your-cloud-name,
-//            transformation= [
+//            baseUrl = "https://cdn.pixelbin.io/",
+//            version = "v2",
+//            cloudName = "your-cloud-name",
+//            transformation = arrayListOf(
 //                TransformationObj(
 //                    plugin = "t",
 //                    name = "resize",
@@ -166,13 +179,13 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                    plugin="t",
 //                    name="flip",
 //                )
-//                            ],
-//            zone = z-slug,
+//                            ),
+//            zone = "z-slug",
 //            options = hashMapOf(
 //                  "dpr" to "2.0",
 //                  "f_auto" to "true"
-//              )
-//            filePath = path/to/image.jpeg
+//              ),
+//            filePath = "path/to/image.jpeg"
 //        )
 ```
 
@@ -189,11 +202,14 @@ Converts the extracted url obj to a Pixelbin url.
 | filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
 | baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
 
-val obj = {
-    cloudName = your-cloud-name,
-    zone = z-slug,
-    version = v2,
-    transformations = arrayListOf(
+Example
+
+```
+val obj = UrlObj(
+    cloudName = "your-cloud-name",
+    zone = "z-slug",
+    version = "v2",
+    transformation = arrayListOf(
                TransformationObj(
                     plugin = "t",
                     name = "resize",
@@ -203,26 +219,29 @@ val obj = {
                     )
                 ),
                 TransformationObj(
-                    plugin = "t,"
+                    plugin = "t",
                     name = "flip",
                 )
     ),
-    filePath = path/to/image.jpeg,
+    filePath = "path/to/image.jpeg",
     baseUrl = "https://cdn.pixelbin.io"
-}
+)
+
+
 val url = Utils.objToUrl(pixelbinUrl) // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
+```
 
-
-val obj = {
-    cloudName = your-cloud-name,
-    zone = z-slug,
-    version = v2,
-    transformations = arrayListOf(
+```
+val obj = UrlObj(
+    cloudName = "your-cloud-name",
+    zone = "z-slug",
+    version = "v2",
+    transformation = arrayListOf(
                TransformationObj(
-                    plugin = t,
-                    name = resize,
+                    plugin = "t",
+                    name = "resize",
                     values= hashMapOf(
                        "w" to "200",
                        "h" to "100",
@@ -233,13 +252,14 @@ val obj = {
                     name = "flip()",
                 )
     ),
-    filePath = path/to/image.jpeg,
+    filePath = "path/to/image.jpeg",
     baseUrl = "https://cdn.pixelbin.io",
     options = hashMapOf(
         "dpr" to "2.0",
         "f_auto" to "true"
     )
-}
+)
+
 val url = Utils.objToUrl(pixelbinUrl)  // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True
@@ -249,29 +269,20 @@ val url = Utils.objToUrl(pixelbinUrl)  // obj is as shown above
 
 A transformation is an operation or a list of operations that can be performed on an image. Please refer [list of supported transformations](#list-of-supported-transformations) for details.
 
-```kotlin
+Example
 
+```
 // Create resize transformation
 val t2 = Transformation.resize(height = 100,width = 100)
 
-// Add the transformations to the imageUrl
-
+// Transformations can be set on an image by using `addTransformation` on the imageUrl object.
 //add single transformation
 image.addTransformation(t1);
 
 //or add multiple transformation
 image.addTransformation(arrayListOf(t1,t2));
-```
-
-Transformations can be set on an image by using `addTransformation` on the imageUrl object.
-
-```kotlin
-image.addTransformation(t)
-```
 
 To get the url of the image with the applied transformations, use the `getUrl` on the image object.
-
-```kotlin
 image.getUrl()
 ```
 
@@ -286,7 +297,9 @@ For a working example, refer [here](#transform-and-optimize-images)
 
 #### Usage Example
 
+```
 val t = Transformation.detectbackgroundtype();
+```
 
 </details>
 
@@ -297,7 +310,9 @@ val t = Transformation.detectbackgroundtype();
 
 #### Usage Example
 
+```
 val t = Transformation.artifact();
+```
 
 </details>
 
@@ -308,16 +323,16 @@ val t = Transformation.artifact();
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| maximumLabels | integer | 5 |
-
-| minimumConfidence | integer | 55 |
+| Parameter         | Type    | Default |
+| ----------------- | ------- | ------- |
+| maximumLabels     | integer | 5       |
+| minimumConfidence | integer | 55      |
 
 #### Usage Example
 
+```
 val t = Transformation.detectlabels(maximumlabels = 5, minimumconfidence = 55);
+```
 
 </details>
 
@@ -326,14 +341,15 @@ val t = Transformation.detectlabels(maximumlabels = 5, minimumconfidence = 55);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| minimumConfidence | integer | 55 |
+| Parameter         | Type    | Default |
+| ----------------- | ------- | ------- |
+| minimumConfidence | integer | 55      |
 
 #### Usage Example
 
+```
 val t = Transformation.moderation(minimumconfidence = 55);
+```
 
 </details>
 
@@ -344,20 +360,18 @@ val t = Transformation.moderation(minimumconfidence = 55);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| backgroundPrompt | custom | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
-
-| focus | enum: `Product`, `Background` | `Product` |
-
-| negativePrompt | custom | `` |
-
-| seed | integer | 123 |
+| Parameter        | Type                          | Default                                                                                          |
+| ---------------- | ----------------------------- | ------------------------------------------------------------------------------------------------ |
+| backgroundPrompt | custom                        | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
+| focus            | enum: `Product`, `Background` | `Product`                                                                                        |
+| negativePrompt   | custom                        | ``                                                                                               |
+| seed             | integer                       | 123                                                                                              |
 
 #### Usage Example
 
+```
 val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw", focus = BackgroundGenerator.Focus.PRODUCT, negativeprompt = "", seed = 123);
+```
 
 </details>
 
@@ -368,16 +382,16 @@ val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZ
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
+| Parameter    | Type                                | Default   |
+| ------------ | ----------------------------------- | --------- |
 | industryType | enum: `general`, `ecommerce`, `car` | `general` |
-
-| addShadow | boolean | false |
+| addShadow    | boolean                             | false     |
 
 #### Usage Example
 
+```
 val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL, addshadow = false);
+```
 
 </details>
 
@@ -388,14 +402,15 @@ val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL, adds
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| maximumLabels | integer | 5 |
+| Parameter     | Type    | Default |
+| ------------- | ------- | ------- |
+| maximumLabels | integer | 5       |
 
 #### Usage Example
 
+```
 val t = Transformation.googlevisionplugin(maximumlabels = 5);
+```
 
 </details>
 
@@ -406,14 +421,15 @@ val t = Transformation.googlevisionplugin(maximumlabels = 5);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| distancePercentage | integer | 10 |
+| Parameter          | Type    | Default |
+| ------------------ | ------- | ------- |
+| distancePercentage | integer | 10      |
 
 #### Usage Example
 
+```
 val t = Transformation.imagecentering(distancepercentage = 10);
+```
 
 </details>
 
@@ -424,28 +440,22 @@ val t = Transformation.imagecentering(distancepercentage = 10);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| requiredWidth | integer | 0 |
-
-| requiredHeight | integer | 0 |
-
-| paddingPercentage | integer | 0 |
-
-| maintainOriginalAspect | boolean | false |
-
-| aspectRatio | string | `` |
-
-| gravityTowards | enum: `object`, `foreground`, `face`, `none` | `none` |
-
-| preferredDirection | enum: `north_west`, `north`, `north_east`, `west`, `center`, `east`, `south_west`, `south`, `south_east` | `center` |
-
-| objectType | enum: `airplane`, `apple`, `backpack`, `banana`, `baseball_bat`, `baseball_glove`, `bear`, `bed`, `bench`, `bicycle`, `bird`, `boat`, `book`, `bottle`, `bowl`, `broccoli`, `bus`, `cake`, `car`, `carrot`, `cat`, `cell_phone`, `chair`, `clock`, `couch`, `cow`, `cup`, `dining_table`, `dog`, `donut`, `elephant`, `fire_hydrant`, `fork`, `frisbee`, `giraffe`, `hair_drier`, `handbag`, `horse`, `hot_dog`, `keyboard`, `kite`, `knife`, `laptop`, `microwave`, `motorcycle`, `mouse`, `orange`, `oven`, `parking_meter`, `person`, `pizza`, `potted_plant`, `refrigerator`, `remote`, `sandwich`, `scissors`, `sheep`, `sink`, `skateboard`, `skis`, `snowboard`, `spoon`, `sports_ball`, `stop_sign`, `suitcase`, `surfboard`, `teddy_bear`, `tennis_racket`, `tie`, `toaster`, `toilet`, `toothbrush`, `traffic_light`, `train`, `truck`, `tv`, `umbrella`, `vase`, `wine_glass`, `zebra` | `person` |
+| Parameter              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Default  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| requiredWidth          | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| requiredHeight         | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| paddingPercentage      | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| maintainOriginalAspect | boolean                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | false    |
+| aspectRatio            | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ``       |
+| gravityTowards         | enum: `object`, `foreground`, `face`, `none`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `none`   |
+| preferredDirection     | enum: `north_west`, `north`, `north_east`, `west`, `center`, `east`, `south_west`, `south`, `south_east`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `center` |
+| objectType             | enum: `airplane`, `apple`, `backpack`, `banana`, `baseball_bat`, `baseball_glove`, `bear`, `bed`, `bench`, `bicycle`, `bird`, `boat`, `book`, `bottle`, `bowl`, `broccoli`, `bus`, `cake`, `car`, `carrot`, `cat`, `cell_phone`, `chair`, `clock`, `couch`, `cow`, `cup`, `dining_table`, `dog`, `donut`, `elephant`, `fire_hydrant`, `fork`, `frisbee`, `giraffe`, `hair_drier`, `handbag`, `horse`, `hot_dog`, `keyboard`, `kite`, `knife`, `laptop`, `microwave`, `motorcycle`, `mouse`, `orange`, `oven`, `parking_meter`, `person`, `pizza`, `potted_plant`, `refrigerator`, `remote`, `sandwich`, `scissors`, `sheep`, `sink`, `skateboard`, `skis`, `snowboard`, `spoon`, `sports_ball`, `stop_sign`, `suitcase`, `surfboard`, `teddy_bear`, `tennis_racket`, `tie`, `toaster`, `toilet`, `toothbrush`, `traffic_light`, `train`, `truck`, `tv`, `umbrella`, `vase`, `wine_glass`, `zebra` | `person` |
 
 #### Usage Example
 
+```
 val t = Transformation.intelligentcrop(requiredwidth = 0, requiredheight = 0, paddingpercentage = 0, maintainoriginalaspect = false, aspectratio = "", gravitytowards = IntelligentCrop.Gravitytowards.NONE, preferreddirection = IntelligentCrop.Preferreddirection.CENTER, objecttype = IntelligentCrop.Objecttype.PERSON);
+```
 
 </details>
 
@@ -456,7 +466,9 @@ val t = Transformation.intelligentcrop(requiredwidth = 0, requiredheight = 0, pa
 
 #### Usage Example
 
+```
 val t = Transformation.objectcounter();
+```
 
 </details>
 
@@ -467,7 +479,9 @@ val t = Transformation.objectcounter();
 
 #### Usage Example
 
+```
 val t = Transformation.numberplatedetection();
+```
 
 </details>
 
@@ -478,14 +492,15 @@ val t = Transformation.numberplatedetection();
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| objectThresholdPercent | integer | 50 |
+| Parameter              | Type    | Default |
+| ---------------------- | ------- | ------- |
+| objectThresholdPercent | integer | 50      |
 
 #### Usage Example
 
+```
 val t = Transformation.checkobjectsize(objectthresholdpercent = 50);
+```
 
 </details>
 
@@ -496,14 +511,15 @@ val t = Transformation.checkobjectsize(objectthresholdpercent = 50);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| detectOnly | boolean | false |
+| Parameter  | Type    | Default |
+| ---------- | ------- | ------- |
+| detectOnly | boolean | false   |
 
 #### Usage Example
 
+```
 val t = Transformation.textdetectionandrecognition(detectonly = false);
+```
 
 </details>
 
@@ -514,7 +530,9 @@ val t = Transformation.textdetectionandrecognition(detectonly = false);
 
 #### Usage Example
 
+```
 val t = Transformation.pdfwatermarkremoval();
+```
 
 </details>
 
@@ -525,7 +543,9 @@ val t = Transformation.pdfwatermarkremoval();
 
 #### Usage Example
 
+```
 val t = Transformation.producttagging();
+```
 
 </details>
 
@@ -536,7 +556,9 @@ val t = Transformation.producttagging();
 
 #### Usage Example
 
+```
 val t = Transformation.checkproductvisibility();
+```
 
 </details>
 
@@ -547,7 +569,9 @@ val t = Transformation.checkproductvisibility();
 
 #### Usage Example
 
+```
 val t = Transformation.removebg();
+```
 
 </details>
 
@@ -558,26 +582,21 @@ val t = Transformation.removebg();
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| height | integer | 0 |
-
-| width | integer | 0 |
-
-| fit | enum: `cover`, `contain`, `fill`, `inside`, `outside` | `cover` |
-
-| background | color | `000000` |
-
-| position | enum: `top`, `bottom`, `left`, `right`, `right_top`, `right_bottom`, `left_top`, `left_bottom`, `center` | `center` |
-
-| algorithm | enum: `nearest`, `cubic`, `mitchell`, `lanczos2`, `lanczos3` | `lanczos3` |
-
-| dpr | float | 1 |
+| Parameter  | Type                                                                                                     | Default    |
+| ---------- | -------------------------------------------------------------------------------------------------------- | ---------- |
+| height     | integer                                                                                                  | 0          |
+| width      | integer                                                                                                  | 0          |
+| fit        | enum: `cover`, `contain`, `fill`, `inside`, `outside`                                                    | `cover`    |
+| background | color                                                                                                    | `000000`   |
+| position   | enum: `top`, `bottom`, `left`, `right`, `right_top`, `right_bottom`, `left_top`, `left_bottom`, `center` | `center`   |
+| algorithm  | enum: `nearest`, `cubic`, `mitchell`, `lanczos2`, `lanczos3`                                             | `lanczos3` |
+| dpr        | float                                                                                                    | 1          |
 
 #### Usage Example
 
+```
 val t = Transformation.resize(height = 0, width = 0, fit = Resize.Fit.COVER, background = "000000", position = Resize.Position.CENTER, algorithm = Resize.Algorithm.LANCZOS3, dpr = 1);
+```
 
 </details>
 
@@ -586,14 +605,15 @@ val t = Transformation.resize(height = 0, width = 0, fit = Resize.Fit.COVER, bac
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| quality | integer | 80 |
+| Parameter | Type    | Default |
+| --------- | ------- | ------- |
+| quality   | integer | 80      |
 
 #### Usage Example
 
+```
 val t = Transformation.compress(quality = 80);
+```
 
 </details>
 
@@ -602,26 +622,21 @@ val t = Transformation.compress(quality = 80);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| top | integer | 10 |
-
-| left | integer | 10 |
-
-| bottom | integer | 10 |
-
-| right | integer | 10 |
-
-| background | color | `000000` |
-
+| Parameter  | Type                                             | Default    |
+| ---------- | ------------------------------------------------ | ---------- |
+| top        | integer                                          | 10         |
+| left       | integer                                          | 10         |
+| bottom     | integer                                          | 10         |
+| right      | integer                                          | 10         |
+| background | color                                            | `000000`   |
 | borderType | enum: `constant`, `replicate`, `reflect`, `wrap` | `constant` |
-
-| dpr | float | 1 |
+| dpr        | float                                            | 1          |
 
 #### Usage Example
 
+```
 val t = Transformation.extend(top = 10, left = 10, bottom = 10, right = 10, background = "000000", bordertype = Extend.Bordertype.CONSTANT, dpr = 1);
+```
 
 </details>
 
@@ -630,20 +645,18 @@ val t = Transformation.extend(top = 10, left = 10, bottom = 10, right = 10, back
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| top | integer | 10 |
-
-| left | integer | 10 |
-
-| height | integer | 50 |
-
-| width | integer | 20 |
+| Parameter | Type    | Default |
+| --------- | ------- | ------- |
+| top       | integer | 10      |
+| left      | integer | 10      |
+| height    | integer | 50      |
+| width     | integer | 20      |
 
 #### Usage Example
 
+```
 val t = Transformation.extract(top = 10, left = 10, height = 50, width = 20);
+```
 
 </details>
 
@@ -652,14 +665,15 @@ val t = Transformation.extract(top = 10, left = 10, height = 50, width = 20);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| threshold | integer | 10 |
+| Parameter | Type    | Default |
+| --------- | ------- | ------- |
+| threshold | integer | 10      |
 
 #### Usage Example
 
+```
 val t = Transformation.trim(threshold = 10);
+```
 
 </details>
 
@@ -668,16 +682,16 @@ val t = Transformation.trim(threshold = 10);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| angle | integer | 0 |
-
-| background | color | `000000` |
+| Parameter  | Type    | Default  |
+| ---------- | ------- | -------- |
+| angle      | integer | 0        |
+| background | color   | `000000` |
 
 #### Usage Example
 
+```
 val t = Transformation.rotate(angle = 0, background = "000000");
+```
 
 </details>
 
@@ -686,7 +700,9 @@ val t = Transformation.rotate(angle = 0, background = "000000");
 
 #### Usage Example
 
+```
 val t = Transformation.flip();
+```
 
 </details>
 
@@ -695,7 +711,9 @@ val t = Transformation.flip();
 
 #### Usage Example
 
+```
 val t = Transformation.flop();
+```
 
 </details>
 
@@ -704,14 +722,15 @@ val t = Transformation.flop();
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| sigma | float | 1.5 |
+| Parameter | Type  | Default |
+| --------- | ----- | ------- |
+| sigma     | float | 1.5     |
 
 #### Usage Example
 
+```
 val t = Transformation.sharpen(sigma = 1.5);
+```
 
 </details>
 
@@ -720,14 +739,15 @@ val t = Transformation.sharpen(sigma = 1.5);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| size | integer | 3 |
+| Parameter | Type    | Default |
+| --------- | ------- | ------- |
+| size      | integer | 3       |
 
 #### Usage Example
 
+```
 val t = Transformation.median(size = 3);
+```
 
 </details>
 
@@ -736,16 +756,16 @@ val t = Transformation.median(size = 3);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| sigma | float | 0.3 |
-
-| dpr | float | 1 |
+| Parameter | Type  | Default |
+| --------- | ----- | ------- |
+| sigma     | float | 0.3     |
+| dpr       | float | 1       |
 
 #### Usage Example
 
+```
 val t = Transformation.blur(sigma = 0.3, dpr = 1);
+```
 
 </details>
 
@@ -754,14 +774,15 @@ val t = Transformation.blur(sigma = 0.3, dpr = 1);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
+| Parameter  | Type  | Default  |
+| ---------- | ----- | -------- |
 | background | color | `000000` |
 
 #### Usage Example
 
+```
 val t = Transformation.flatten(background = "000000");
+```
 
 </details>
 
@@ -770,7 +791,9 @@ val t = Transformation.flatten(background = "000000");
 
 #### Usage Example
 
+```
 val t = Transformation.negate();
+```
 
 </details>
 
@@ -779,7 +802,9 @@ val t = Transformation.negate();
 
 #### Usage Example
 
+```
 val t = Transformation.normalise();
+```
 
 </details>
 
@@ -788,16 +813,16 @@ val t = Transformation.normalise();
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| a | integer | 1 |
-
-| b | integer | 0 |
+| Parameter | Type    | Default |
+| --------- | ------- | ------- |
+| a         | integer | 1       |
+| b         | integer | 0       |
 
 #### Usage Example
 
+```
 val t = Transformation.linear(a = 1, b = 0);
+```
 
 </details>
 
@@ -806,18 +831,17 @@ val t = Transformation.linear(a = 1, b = 0);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| brightness | float | 1 |
-
-| saturation | float | 1 |
-
-| hue | integer | 90 |
+| Parameter  | Type    | Default |
+| ---------- | ------- | ------- |
+| brightness | float   | 1       |
+| saturation | float   | 1       |
+| hue        | integer | 90      |
 
 #### Usage Example
 
+```
 val t = Transformation.modulate(brightness = 1, saturation = 1, hue = 90);
+```
 
 </details>
 
@@ -826,7 +850,9 @@ val t = Transformation.modulate(brightness = 1, saturation = 1, hue = 90);
 
 #### Usage Example
 
+```
 val t = Transformation.grey();
+```
 
 </details>
 
@@ -835,14 +861,15 @@ val t = Transformation.grey();
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| color | color | `000000` |
+| Parameter | Type  | Default  |
+| --------- | ----- | -------- |
+| color     | color | `000000` |
 
 #### Usage Example
 
+```
 val t = Transformation.tint(color = "000000");
+```
 
 </details>
 
@@ -851,14 +878,15 @@ val t = Transformation.tint(color = "000000");
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| format | enum: `jpeg`, `png`, `webp`, `tiff`, `avif` | `jpeg` |
+| Parameter | Type                                        | Default |
+| --------- | ------------------------------------------- | ------- |
+| format    | enum: `jpeg`, `png`, `webp`, `tiff`, `avif` | `jpeg`  |
 
 #### Usage Example
 
+```
 val t = Transformation.toformat(format = Toformat.Format.JPEG);
+```
 
 </details>
 
@@ -867,14 +895,15 @@ val t = Transformation.toformat(format = Toformat.Format.JPEG);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| density | integer | 300 |
+| Parameter | Type    | Default |
+| --------- | ------- | ------- |
+| density   | integer | 300     |
 
 #### Usage Example
 
+```
 val t = Transformation.density(density = 300);
+```
 
 </details>
 
@@ -883,38 +912,27 @@ val t = Transformation.density(density = 300);
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| mode | enum: `overlay`, `underlay`, `wrap` | `overlay` |
-
-| image | file | `` |
-
-| transformation | custom | `` |
-
-| background | color | `00000000` |
-
-| height | integer | 0 |
-
-| width | integer | 0 |
-
-| top | integer | 0 |
-
-| left | integer | 0 |
-
-| gravity | enum: `northwest`, `north`, `northeast`, `east`, `center`, `west`, `southwest`, `south`, `southeast`, `custom` | `center` |
-
-| blend | enum: `over`, `in`, `out`, `atop`, `dest`, `dest-over`, `dest-in`, `dest-out`, `dest-atop`, `xor`, `add`, `saturate`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `colour-dodge`, `color-dodge`, `colour-burn`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion` | `over` |
-
-| tile | boolean | false |
-
-| listOfBboxes | bboxList | |
-
-| listOfPolygons | polygonList | |
+| Parameter      | Type                                                                                                                                                                                                                                                                                          | Default    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| mode           | enum: `overlay`, `underlay`, `wrap`                                                                                                                                                                                                                                                           | `overlay`  |
+| image          | file                                                                                                                                                                                                                                                                                          | ``         |
+| transformation | custom                                                                                                                                                                                                                                                                                        | ``         |
+| background     | color                                                                                                                                                                                                                                                                                         | `00000000` |
+| height         | integer                                                                                                                                                                                                                                                                                       | 0          |
+| width          | integer                                                                                                                                                                                                                                                                                       | 0          |
+| top            | integer                                                                                                                                                                                                                                                                                       | 0          |
+| left           | integer                                                                                                                                                                                                                                                                                       | 0          |
+| gravity        | enum: `northwest`, `north`, `northeast`, `east`, `center`, `west`, `southwest`, `south`, `southeast`, `custom`                                                                                                                                                                                | `center`   |
+| blend          | enum: `over`, `in`, `out`, `atop`, `dest`, `dest-over`, `dest-in`, `dest-out`, `dest-atop`, `xor`, `add`, `saturate`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `colour-dodge`, `color-dodge`, `colour-burn`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion` | `over`     |
+| tile           | boolean                                                                                                                                                                                                                                                                                       | false      |
+| listOfBboxes   | bboxList                                                                                                                                                                                                                                                                                      |            |
+| listOfPolygons | polygonList                                                                                                                                                                                                                                                                                   |            |
 
 #### Usage Example
 
+```
 val t = Transformation.merge(mode = Merge.Mode.OVERLAY, image = "", transformation = "", background = "00000000", height = 0, width = 0, top = 0, left = 0, gravity = Merge.Gravity.CENTER, blend = Merge.Blend.OVER, tile = false, listofbboxes = "", listofpolygons = "");
+```
 
 </details>
 
@@ -925,16 +943,16 @@ val t = Transformation.merge(mode = Merge.Mode.OVERLAY, image = "", transformati
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| type | enum: `2x`, `4x` | `2x` |
-
-| enhanceFace | boolean | false |
+| Parameter   | Type             | Default |
+| ----------- | ---------------- | ------- |
+| type        | enum: `2x`, `4x` | `2x`    |
+| enhanceFace | boolean          | false   |
 
 #### Usage Example
 
-val t = Transformation.superresolution(type = SuperResolution.Type.\_2X, enhanceface = false);
+```
+val t = Transformation.superresolution(type = SuperResolution.Type._2X, enhanceface = false);
+```
 
 </details>
 
@@ -945,26 +963,21 @@ val t = Transformation.superresolution(type = SuperResolution.Type.\_2X, enhance
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| removeText | boolean | false |
-
-| removeLogo | boolean | false |
-
-| box1 | string | `0_0_100_100` |
-
-| box2 | string | `0_0_0_0` |
-
-| box3 | string | `0_0_0_0` |
-
-| box4 | string | `0_0_0_0` |
-
-| box5 | string | `0_0_0_0` |
+| Parameter  | Type    | Default       |
+| ---------- | ------- | ------------- |
+| removeText | boolean | false         |
+| removeLogo | boolean | false         |
+| box1       | string  | `0_0_100_100` |
+| box2       | string  | `0_0_0_0`     |
+| box3       | string  | `0_0_0_0`     |
+| box4       | string  | `0_0_0_0`     |
+| box5       | string  | `0_0_0_0`     |
 
 #### Usage Example
 
+```
 val t = Transformation.watermarkremoval(removetext = false, removelogo = false, box1 = "0_0_100_100", box2 = "0_0_0_0", box3 = "0_0_0_0", box4 = "0_0_0_0", box5 = "0_0_0_0");
+```
 
 </details>
 
@@ -975,13 +988,14 @@ val t = Transformation.watermarkremoval(removetext = false, removelogo = false, 
 
 #### Supported Configuration
 
-| Parameter | Type | Default |
-| --------- | ---- | ------- |
-
-| detectText | boolean | false |
+| Parameter  | Type    | Default |
+| ---------- | ------- | ------- |
+| detectText | boolean | false   |
 
 #### Usage Example
 
+```
 val t = Transformation.watermarkdetection(detecttext = false);
+```
 
 </details>
