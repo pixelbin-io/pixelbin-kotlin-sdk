@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version "1.8.0"
+    id 'org.jetbrains.kotlin.jvm' version "1.6.0"
 }
 
 group 'com.pixelbin'
-version 'v0.0.2'
+version 'v0.0.3'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 }
@@ -31,9 +31,9 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            groupId = 'com.pixelbin'
+            groupId = 'com.github.pixelbin-dev'
             artifactId = 'pixelbin-kotlin-sdk'
-            version = 'v0.0.2'
+            version = 'v0.0.3'
         }
     }
     repositories {
