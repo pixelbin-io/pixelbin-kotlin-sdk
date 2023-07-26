@@ -63,8 +63,9 @@ val image = pixelbin.url(imageUrl)
 // Create EraseBg.bg transformation
 // Kotlin
 val t1 = Transformation.erasebg();
-TransformationObj t1 = Transformation.INSTANCE.erasebg();
+
 //Java
+TransformationObj t1 = Transformation.INSTANCE.erasebg();
 
 // Create resize transformation
 // Kotlin
@@ -86,6 +87,7 @@ ArrayList<TransformationObj> list = new ArrayList<>();
 list.add(t1);
 list.add(t2);
 image.add(list);
+
 // Get the image url
 image.getUrl()
 // output
