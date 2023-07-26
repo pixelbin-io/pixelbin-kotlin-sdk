@@ -6,8 +6,21 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 
 ### Setup
 
-add kotlin library dependency in build gradle
-
+Add it in your root build.gradle at the end of repositories:
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+Add the dependency
+```
+dependencies {
+    implementation 'com.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
+}
+```
 Import the Pixelbin class
 
 ```
@@ -48,18 +61,32 @@ val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url(imageUrl)
 
 // Create EraseBg.bg transformation
+// Kotlin
 val t1 = Transformation.erasebg();
 
+//Java
+TransformationObj t1 = Transformation.INSTANCE.erasebg();
+
 // Create resize transformation
+// Kotlin
 val t2 = Transformation.resize(height = 100,width = 100)
+
+//Java
+TransformationObj t2 = Transformation.INSTANCE.resize(height = 100,width = 100);
 
 // Add the transformations to the image object
 //add single transformation
 image.addTransformation(t1);
 
 //or add multiple transformation
-
+//Kotlin
 image.addTransformation(arrayListOf(t1,t2));
+
+//Java
+ArrayList<TransformationObj> list = new ArrayList<>();
+list.add(t1);
+list.add(t2);
+image.add(list);
 
 // Get the image url
 image.getUrl()

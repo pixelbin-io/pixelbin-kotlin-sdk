@@ -2,12 +2,12 @@ package com.pixelbin.url
 
 import com.pixelbin.transformation.TransformationObj
 
-data class UrlObj(
-    val baseUrl: String,
-    val version: String,
-    val cloudName: String,
-    var transformation: ArrayList<TransformationObj> = ArrayList(),
-    val zone: String,
-    val filePath: String,
-    var options:HashMap<String,String>? = null
+data class UrlObj @JvmOverloads constructor(
+    @JvmField val baseUrl: String,
+    @JvmField val version: String,
+    @JvmField val cloudName: String,
+    @JvmField var transformation: ArrayList<TransformationObj> = ArrayList(),
+    @JvmField val zone: String,
+    @JvmField val filePath: String,
+    @JvmField var options:HashMap<String,String>? = null
 )
