@@ -1,6 +1,7 @@
-package com.pixelbin.url
+package com.pixelbin
 
 import com.pixelbin.transformation.TransformationObj
+import com.pixelbin.url.Url
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -80,6 +81,11 @@ class UrlTest {
         assertNotNull(urlObj)
         if (urlObj != null) {
             assertEquals("https://cdn.pixelbin.io", urlObj.baseUrl)
+            assertEquals("v2", urlObj.version)
+            assertEquals("orange-lake-60c8e1", urlObj.cloudName)
+            assertEquals("t.resize(w:200,h:300)", Utility.getTransformationString(urlObj.transformation))
+            assertEquals("", urlObj.zone)
+            assertEquals("__playground/playground-default.jpeg", urlObj.filePath)
         }
         // Add assertions for other properties of UrlObj
     }

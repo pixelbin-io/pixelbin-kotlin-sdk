@@ -1,8 +1,9 @@
+# Ignore .gradle folder
+.gradle/
+
+##uncomment for publishing library
 # Compiled Kotlin class files
 *.class
-
-# Gradle build directory
-/build/
 
 # idea folder
 .idea/
@@ -23,3 +24,5 @@ local.properties
 *.iml
 *.ipr
 *.iws
+
+.DS_Store

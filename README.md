@@ -5,9 +5,9 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 ## Usage
 
 ### Setup
-
 Add it in your root build.gradle at the end of repositories:
 ```
+//jitpack
 allprojects {
 	repositories {
 		...
@@ -18,8 +18,36 @@ allprojects {
 Add the dependency
 ```
 dependencies {
+//jitpack
     implementation 'com.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
+//maven central   
+    implementation 'io.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
 }
+```
+For maven
+```
+//jitpack
+//add jitpack repository to your build file
+<repositories>
+	<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
+</repositories>
+
+//add the dependency
+<dependency>
+	<groupId>com.github.pixelbin-dev</groupId>
+    <artifactId>pixelbin-kotlin-sdk</artifactId>	   
+    <version>v0.0.3</version>
+</dependency>
+	
+//maven central
+<dependency>
+    <groupId>io.github.pixelbin-dev</groupId>
+    <artifactId>pixelbin-kotlin-sdk</artifactId>
+    <version>v0.0.3</version>
+</dependency>
 ```
 Import the Pixelbin class
 
@@ -115,9 +143,67 @@ val file =  File(pathname);
 2. Use the presignedUrl generated with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
 ```
+val signedDetails = SignedDetails(url = "url",fields = fieldsToHashMap(fields))
+
+//fields refer to hashmap of fields object which we got from signed url api 
+//Example
+data class Fields(
+    @SerializedName("key") var key: String? = null,
+    @SerializedName("x-amz-meta-assetData") var xAmzMetaAssetData: String? = null,
+    @SerializedName("x-amz-meta-token") var xAmzMetaToken: String? = null,
+    @SerializedName("bucket") var bucket: String? = null,
+    @SerializedName("X-Amz-Algorithm") var xAmzAlgorithm: String? = null,
+    @SerializedName("X-Amz-Credential") var xAmzCredential: String? = null,
+    @SerializedName("X-Amz-Date") var xAmzDate: String? = null,
+    @SerializedName("Policy") var policy: String? = null,
+    @SerializedName("X-Amz-Signature") var xAmzSignature: String? = null
+)
+
+fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
+        val hashMap = HashMap<String, String>()
+        hashMap["key"] = fields.key?:""
+        hashMap["x-amz-meta-assetData"] = fields.xAmzMetaAssetData?:""
+        hashMap["x-amz-meta-token"] = fields.xAmzMetaToken?:""
+        hashMap["bucket"] = fields.bucket?:""
+        hashMap["X-Amz-Algorithm"] = fields.xAmzAlgorithm?:""
+        hashMap["X-Amz-Credential"] = fields.xAmzCredential?:""
+        hashMap["X-Amz-Date"] = fields.xAmzDate?:""
+        hashMap["Policy"] = fields.policy?:""
+        hashMap["X-Amz-Signature"] = fields.xAmzSignature?:""
+        return hashMap
+}
+
+//for kotlin
 CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file,signedDetails)
 }
+//for java
+//create a helper class
+class PixelBinCoroutineHelper() {
+    suspend fun doSomethingAsync(pixelBin: PixelBin,file: File,signedDetails: SignedDetails) {
+        pixelBin.upload(file, signedDetails)
+    }
+
+    // Java-friendly method to call the suspend function asynchronously
+    fun doSomethingAsyncJava(pixelBin: PixelBin,file: File,signedDetails: SignedDetails) {
+        CoroutineScope(Dispatchers.IO).launch {
+            doSomethingAsync(pixelBin, file, signedDetails)
+        }
+    }
+}
+//call this in you java class
+     PixelBinCoroutineHelper helper = new PixelBinCoroutineHelper();
+     // Create a CoroutineScope with Dispatchers.Main (for Android UI thread)
+     CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+     // Run the Kotlin suspend function asynchronously using the Java-friendly method
+     executorService.execute(() -> {
+        try {
+              coroutineHelper.doSomethingAsyncJava(pixelbin,new File("filePath"),details);
+              completableFuture.complete(null); // Complete the CompletableFuture once the async task is done
+            } catch (Exception e) {
+                completableFuture.completeExceptionally(e);
+            }
+        });
 ```
 
 ## Utilities
