@@ -44,7 +44,15 @@ internal object TransformationMap{
         
         
         
+        "nsfw.detect" to Transformation.nsfwdetection(),
+        
+        
+        
         "numPlate.detect" to Transformation.numberplatedetection(),
+        
+        
+        
+        "od.detect" to Transformation.objectdetection(),
         
         
         
@@ -117,6 +125,10 @@ internal object TransformationMap{
         
         
         "sr.upscale" to Transformation.superresolution(),
+        
+        
+        
+        "vd.detect" to Transformation.viewdetection(),
         
         
         
