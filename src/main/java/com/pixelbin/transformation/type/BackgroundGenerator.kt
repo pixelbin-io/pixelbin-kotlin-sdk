@@ -8,6 +8,8 @@ import com.pixelbin.transformation.TransformationObj
     
     
     
+    
+    
     enum class Focus {
         
         PRODUCT
@@ -41,6 +43,8 @@ import com.pixelbin.transformation.TransformationObj
      * 
      * @param Background prompt custom (Default: cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw)
      
+     * @param Background image for shadow file (Default: )
+     
      * @param focus Focus? (Default: Product)
      
      * @param Negative prompt custom (Default: )
@@ -53,6 +57,8 @@ import com.pixelbin.transformation.TransformationObj
     fun bg(
        
         backgroundprompt: String? = null,
+        
+        backgroundimageforshadow: String? = null,
         
         focus: Focus? = null,
         
@@ -69,6 +75,16 @@ import com.pixelbin.transformation.TransformationObj
         
         if(!backgroundprompt.isNullOrEmpty()){
             values["p"] = backgroundprompt.toString()
+        }
+        
+        
+        
+        
+        
+        
+        
+        if(!backgroundimageforshadow.isNullOrEmpty()){
+            values["i"] = backgroundimageforshadow.toString()
         }
         
         

@@ -26,3 +26,6 @@ local.properties
 *.iws
 
 .DS_Store
+
+publish-remote.gradle
+scripts/

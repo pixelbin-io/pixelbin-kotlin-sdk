@@ -9,5 +9,9 @@ data class UrlObj @JvmOverloads constructor(
     @JvmField var transformation: ArrayList<TransformationObj> = ArrayList(),
     @JvmField val zone: String,
     @JvmField val filePath: String,
-    @JvmField var options:HashMap<String,String>? = null
+    @JvmField var options: HashMap<String, String>? = null,
+    @JvmField val worker: Boolean? = false,
+    @JvmField val isCustomDomain: Boolean? = false,
+    @JvmField val workerPath: String? = "",
 )
+

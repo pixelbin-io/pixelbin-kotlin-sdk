@@ -175,34 +175,35 @@ fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
 
 //for kotlin
 CoroutineScope(Dispatchers.IO).launch {
-    PixelBin.getInstance().upload(file,signedDetails)
+    PixelBin.getInstance().upload(file,signedDetails){
+    //here Result class is from com.pixelbin.upload.Result
+            when(it){
+                is Result.Success ->{
+                    val response = it.data
+                }
+                is Result.Failure ->{
+                    val response = it.response
+                }
+                is Result.Error ->{
+                    val exception = it.exception
+                }
+                else -> {}
+            }
+        }
 }
 //for java
-//create a helper class
-class PixelBinCoroutineHelper() {
-    suspend fun doSomethingAsync(pixelBin: PixelBin,file: File,signedDetails: SignedDetails) {
-        pixelBin.upload(file, signedDetails)
-    }
-
-    // Java-friendly method to call the suspend function asynchronously
-    fun doSomethingAsyncJava(pixelBin: PixelBin,file: File,signedDetails: SignedDetails) {
-        CoroutineScope(Dispatchers.IO).launch {
-            doSomethingAsync(pixelBin, file, signedDetails)
-        }
-    }
-}
-//call this in you java class
-     PixelBinCoroutineHelper helper = new PixelBinCoroutineHelper();
-     // Create a CoroutineScope with Dispatchers.Main (for Android UI thread)
-     CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-     // Run the Kotlin suspend function asynchronously using the Java-friendly method
-     executorService.execute(() -> {
-        try {
-              coroutineHelper.doSomethingAsyncJava(pixelbin,new File("filePath"),details);
-              completableFuture.complete(null); // Complete the CompletableFuture once the async task is done
-            } catch (Exception e) {
-                completableFuture.completeExceptionally(e);
+  pixelbin.upload(file,signedDetails, result->{
+  //here Result class is from com.pixelbin.upload.Result
+      if (result instanceof Result.Success) {
+                System.out.println("Upload successful");
+          } else if (result instanceof Result.Failure) {
+                Result.Failure failure = (Result.Failure) result;
+                System.out.println("Upload failed: " + failure.getResponse());
+            } else if (result instanceof Result.Error) {
+                Result.Error error = (Result.Error) result;
+                System.out.println("Error during upload: " + error.getException().getMessage());
             }
+            return null;
         });
 ```
 

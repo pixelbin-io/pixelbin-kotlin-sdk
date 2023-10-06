@@ -1112,10 +1112,17 @@ class Toformat {
             }
         },
         
+        BMP
+        {
+            override fun toString(): String {
+                return "bmp"
+            }
+        },
+        
     }
 
     /**
-     * Format options: jpeg, png, webp, tiff, avif
+     * Format options: jpeg, png, webp, tiff, avif, bmp
      */
     
     
