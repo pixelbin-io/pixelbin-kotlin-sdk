@@ -41,7 +41,15 @@ import com.pixelbin.transformation.type.ObjectCounter
 
 
 
+import com.pixelbin.transformation.type.NSFWDetection
+
+
+
 import com.pixelbin.transformation.type.NumberPlateDetection
+
+
+
+import com.pixelbin.transformation.type.ObjectDetection
 
 
 
@@ -114,6 +122,10 @@ import com.pixelbin.transformation.type.Merge
 
 
 import com.pixelbin.transformation.type.SuperResolution
+
+
+
+import com.pixelbin.transformation.type.ViewDetection
 
 
 
@@ -224,6 +236,8 @@ object Transformation {
      * 
      * @param backgroundprompt Background prompt (Default: cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw)
      
+     * @param backgroundimageforshadow Background image for shadow (Default: )
+     
      * @param focus Focus (Default: Product)
      
      * @param negativeprompt Negative prompt (Default: )
@@ -237,6 +251,9 @@ object Transformation {
    
     backgroundprompt: String?
      = "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",
+
+    backgroundimageforshadow: String?
+     = "",
 
     focus: BackgroundGenerator.Focus?
      = BackgroundGenerator.Focus.PRODUCT,
@@ -252,6 +269,8 @@ object Transformation {
         return BackgroundGenerator().bg(
             
             backgroundprompt, 
+            
+            backgroundimageforshadow, 
             
             focus, 
             
@@ -437,6 +456,31 @@ object Transformation {
     }
     
     
+    // NSFWDetection
+    
+    /**
+     * Detect NSFW content in images
+     * 
+     * @param minimumconfidence Minimum confidence (Default: 0.5)
+     
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun nsfwdetection(
+   
+    minimumconfidence: Number?
+     = 0.5
+
+    ): TransformationObj {
+        // Call the generated class method
+        return NSFWDetection().detect(
+            
+            minimumconfidence
+            
+        )
+    }
+    
+    
     // NumberPlateDetection
     
     /**
@@ -450,6 +494,24 @@ object Transformation {
     ): TransformationObj {
         // Call the generated class method
         return NumberPlateDetection().detect(
+            
+        )
+    }
+    
+    
+    // ObjectDetection
+    
+    /**
+     * Detect bounding boxes of objects in the image
+     * 
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun objectdetection(
+   
+    ): TransformationObj {
+        // Call the generated class method
+        return ObjectDetection().detect(
             
         )
     }
@@ -1258,6 +1320,24 @@ object Transformation {
             type, 
             
             enhanceface
+            
+        )
+    }
+    
+    
+    // ViewDetection
+    
+    /**
+     * Classifies wear type and view type of products in the image
+     * 
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun viewdetection(
+   
+    ): TransformationObj {
+        // Call the generated class method
+        return ViewDetection().detect(
             
         )
     }
