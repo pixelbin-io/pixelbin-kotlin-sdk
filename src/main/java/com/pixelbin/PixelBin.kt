@@ -1,10 +1,16 @@
 package com.pixelbin
 
 import com.pixelbin.Utility.isImageUrlValid
+import com.pixelbin.error.PDKIllegalArgumentException
+import com.pixelbin.error.PDKInvalidUrlException
+import com.pixelbin.upload.Result
 import com.pixelbin.upload.SignedDetails
 import com.pixelbin.upload.Upload
 import com.pixelbin.url.Url
 import com.pixelbin.url.UrlObj
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -17,26 +23,29 @@ class PixelBin internal constructor(){
      * method to create url object from image url
      *
      * @param imageUrl url of the image
+     * @param isCustomDomain domain of the image url
      */
-    fun url(imageUrl: String): Url {
+    @JvmOverloads
+    fun url(imageUrl: String, isCustomDomain:Boolean?=false): Url {
         if(isImageUrlValid(imageUrl)){
-            url = Url(imageUrl)
+            url = Url(imageUrl, isCustomDomain = isCustomDomain)
             return url as Url
         }else{
-            throw IllegalArgumentException("invalid image url")
+            throw PDKInvalidUrlException("invalid image url")
         }
     }
 
      /**
-     * method to create url from urlObject
-     *
-     * @param urlObj urlObject of the image
-     */
-    fun url(urlObj: UrlObj): Url {
+      * method to create url from urlObject
+      * @param urlObj urlObject of the image
+      * @param isCustomDomain domain of the image url
+      */
+     @JvmOverloads
+    fun url(urlObj: UrlObj, isCustomDomain:Boolean?=false): Url {
         if(urlObj.baseUrl.isNullOrEmpty()||urlObj.cloudName.isNullOrEmpty()||urlObj.filePath.isNullOrEmpty())
-            throw IllegalArgumentException("invalid url object")   
+            throw PDKIllegalArgumentException("invalid url object")
         else{
-            url = Url(urlObject = urlObj)  
+            url = Url(urlObject = urlObj,isCustomDomain=isCustomDomain)
         }
         return url as Url
     }
@@ -48,8 +57,10 @@ class PixelBin internal constructor(){
      *
      * signedDetails object containing signed url details
      */
-    suspend fun upload(file:File,signedDetails: SignedDetails){
-        Upload().upload(file,signedDetails)
+     fun upload(file:File,signedDetails: SignedDetails,callback: (Result<Any>)-> Unit){
+        CoroutineScope(Dispatchers.IO).launch{
+            Upload().upload(file,signedDetails,callback)
+        }
     }
 
     companion object {

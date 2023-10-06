@@ -1,7 +1,9 @@
 package com.pixelbin.url
 
-import com.pixelbin.PixelBin
 import com.pixelbin.Utility
+import com.pixelbin.error.PDKIllegalStateException
+import com.pixelbin.error.PDKInvalidUrlException
+import com.pixelbin.error.PDKTransformationException
 import com.pixelbin.transformation.TransformationObj
 import com.pixelbin.transformation.TransformationMap.hashMap
 
@@ -10,7 +12,8 @@ import com.pixelbin.transformation.TransformationMap.hashMap
  */
 class Url @JvmOverloads internal constructor(
     imgUrl: String?=null,
-    urlObject: UrlObj?=null
+    urlObject: UrlObj?=null,
+    isCustomDomain: Boolean?=false
 ) {
     private var imageUrl: String = ""
     private var originalUrl = ""
@@ -22,7 +25,7 @@ class Url @JvmOverloads internal constructor(
      *
      * @param imageUrl url of the image
      */
-    private fun setUrlComponents(imageUrl: String) {
+    private fun setUrlComponents(imageUrl: String, isCustomDomain: Boolean?) {
         try {
             val baseUrlEndIndex = imageUrl.indexOf("/", imageUrl.indexOf("//") + 2)
             val baseUrl = imageUrl.substring(0, baseUrlEndIndex )
@@ -34,37 +37,60 @@ class Url @JvmOverloads internal constructor(
             var version = ""
             var zone = ""
             var imagePath = ""
-            var map = HashMap<String,String>()
-
-            if (parts.size >= 2 && parts[0].startsWith("v")) {
-                version = parts[0]
-                parts.removeAt(0)
-                cloudName = parts[0]
-                parts.removeAt(0)
-                if (parts[1] == "original" || parts[1].contains("(")) {
-                    zone = parts[0]
+            var worker = false;
+            var workerPath = ""
+            var remainingPath = ""
+            if(imageUrl.contains("wrkr")){
+                if (parts.size >= 2 && parts[0].startsWith("v")) {
+                    version = parts[0]
                     parts.removeAt(0)
-                }
-                if (parts.size >= 1 && parts[0] != "original") {
-                    parts[0].split("~").forEach { transformation ->
-
-                        val transformationName = transformation.split("(")[0]
-                        val map: HashMap<String, String> = HashMap()
-                        if (transformation.contains(":")) {
-                            addValuesToHashMap(
-                                transformation.substring(1, transformation.length - 1),
-                                map
-                            )
-                        }
-                        addTransformation(transformationName, transformationList, map)
+                    cloudName = parts[0]
+                    parts.removeAt(0)
+                    if (parts[1] == "wrkr") {
+                        zone = parts[0]
+                        parts.removeAt(0)
                     }
+                    worker = true
+                    remainingPath = parts.joinToString("/")
+                    workerPath = if(remainingPath.contains("?")) remainingPath.substringBefore("?") else remainingPath
+                    parts.clear()
                 }
-                parts.removeAt(0)
-                val remainingPath = parts.joinToString("/")
-                imagePath = if(remainingPath.contains("?")) remainingPath.substringBefore("?") else remainingPath
-                parts.clear()
+            }else{
+                if (parts.size >= 2 && parts[0].startsWith("v")) {
+                    version = parts[0]
+                    parts.removeAt(0)
+                    cloudName = parts[0]
+                    parts.removeAt(0)
+                    if (parts[1] == "original" || parts[1].contains("(")) {
+                        zone = parts[0]
+                        parts.removeAt(0)
+                    }
+                    if (parts.size >= 1 && parts[0] != "original") {
+                        parts[0].split("~").forEach { transformation ->
 
+                            val transformationName = transformation.split("(")[0]
+                            if(hashMap.contains(transformationName)){
+                                val map: HashMap<String, String> = HashMap()
+                                if (transformation.contains(":")) {
+                                    addValuesToHashMap(
+                                        transformation.substring(1, transformation.length - 1),
+                                        map
+                                    )
+                                }
+                                addTransformation(transformationName, transformationList, map)
+                            }else{
+                                throw PDKInvalidUrlException("invalid image url")
+                            }
+
+                        }
+                    }
+                    parts.removeAt(0)
+                    remainingPath = parts.joinToString("/")
+                    imagePath = if(remainingPath.contains("?")) remainingPath.substringBefore("?") else remainingPath
+                    parts.clear()
+                }
             }
+
             urlObj = UrlObj(
                 baseUrl = baseUrl,
                 version = version,
@@ -72,10 +98,13 @@ class Url @JvmOverloads internal constructor(
                 transformation = transformationList,
                 zone = zone,
                 filePath = imagePath,
-                options = extractUrlParams(imageUrl)
+                options = extractUrlParams(remainingPath),
+                isCustomDomain = isCustomDomain,
+                worker = worker,
+                workerPath = workerPath
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+           throw PDKInvalidUrlException("invalid image url")
         }
     }
 
@@ -155,13 +184,13 @@ class Url @JvmOverloads internal constructor(
             // If the transformation object is found in the map, add it to the transformation set
             return transformationObj.copy(values = map)
         } else
-            throw IllegalStateException("transformation not found in transformationMap")
+            throw PDKTransformationException("transformation not found in transformationMap")
     }
 
     init {
         if (imgUrl != null) {
             imageUrl = imgUrl
-            setUrlComponents(imageUrl)
+            setUrlComponents(imageUrl,isCustomDomain)
             originalUrl = imageUrl
         }
         if(urlObject!=null){
@@ -176,9 +205,11 @@ class Url @JvmOverloads internal constructor(
      */
     fun addTransformation(list: ArrayList<TransformationObj>): Url {
         if(urlObj==null){
-            throw IllegalStateException("url object is null.")
+            throw PDKIllegalStateException("url object is null.")
         }
-        urlObj?.transformation?.addAll(list)
+        if(urlObj?.worker==false){
+            urlObj?.transformation?.addAll(list)
+        }
         return this
     }
 
@@ -189,9 +220,12 @@ class Url @JvmOverloads internal constructor(
      */
     fun addTransformation(transformation: TransformationObj): Url {
         if(urlObj==null){
-            throw IllegalStateException("url is empty .")
+            throw PDKIllegalStateException("url is empty .")
         }
-        urlObj?.transformation?.add(transformation)
+        if(urlObj?.worker==false){
+            urlObj?.transformation?.add(transformation)
+        }
+
         return this
     }
 
@@ -207,6 +241,10 @@ class Url @JvmOverloads internal constructor(
                 originalPath
             else "${transformationString}/"
             val optionValue = if (options.isNullOrEmpty()) "" else getOptionParamString(options!!)
+            val workerFinalPath = if(zoneValue.isNullOrEmpty())workerPath else "/${zoneValue}${workerPath}"
+            if(urlObj?.worker==true)
+                "${baseUrl}/${version}/${cloudName}${workerFinalPath}"
+                else
             "${baseUrl}/${version}/${cloudName}/${zoneValue}${transValue}${filePath}${optionValue}"
         } ?: ""
         return transformedUrl
@@ -226,7 +264,7 @@ class Url @JvmOverloads internal constructor(
      */
     fun getUrlObject():UrlObj?{
         if(urlObj==null)
-            throw IllegalStateException("UrlObj is null.")
+            throw PDKIllegalStateException("UrlObj is null.")
         else
             return urlObj
     }

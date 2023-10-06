@@ -8,7 +8,7 @@ object Utils {
         return Url(urlObject = urlObj).getUrl()
     }
     
-    fun urlToUrlObj(url: String): UrlObj? {
-        return Url(url).getUrlObject()
+    fun urlToUrlObj(url: String,isCustomDomain:Boolean?=false): UrlObj? {
+        return Url(imgUrl = url, isCustomDomain =  isCustomDomain).getUrlObject()
     }
 }

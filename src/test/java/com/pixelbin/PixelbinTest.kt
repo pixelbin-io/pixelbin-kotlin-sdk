@@ -1,5 +1,6 @@
 package com.pixelbin
 
+import com.pixelbin.error.PDKInvalidUrlException
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -18,7 +19,7 @@ class PixelBinTest {
         assertEquals(imageUrl, url.getUrl())
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test(expected = PDKInvalidUrlException::class)
     fun testInvalidImageUrl() {
         // Arrange
         val pixelBin = PixelBin.getInstance()
