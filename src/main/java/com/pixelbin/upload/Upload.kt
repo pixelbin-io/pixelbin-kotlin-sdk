@@ -60,7 +60,7 @@ class Upload internal constructor(){
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    if(response.code==200)
+                    if(response.code==200||response.code==204)
                         callback(Result.Success(response.message))
                     else
                         callback(Result.Failure(response))
