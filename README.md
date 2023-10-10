@@ -5,7 +5,9 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 ## Usage
 
 ### Setup
+
 Add it in your root build.gradle at the end of repositories:
+
 ```
 //jitpack
 allprojects {
@@ -15,16 +17,20 @@ allprojects {
 	}
 }
 ```
+
 Add the dependency
+
 ```
 dependencies {
 //jitpack
     implementation 'com.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
-//maven central   
+//maven central
     implementation 'io.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
 }
 ```
+
 For maven
+
 ```
 //jitpack
 //add jitpack repository to your build file
@@ -38,10 +44,10 @@ For maven
 //add the dependency
 <dependency>
 	<groupId>com.github.pixelbin-dev</groupId>
-    <artifactId>pixelbin-kotlin-sdk</artifactId>	   
+    <artifactId>pixelbin-kotlin-sdk</artifactId>
     <version>v0.0.3</version>
 </dependency>
-	
+
 //maven central
 <dependency>
     <groupId>io.github.pixelbin-dev</groupId>
@@ -49,6 +55,7 @@ For maven
     <version>v0.0.3</version>
 </dependency>
 ```
+
 Import the Pixelbin class
 
 ```
@@ -60,7 +67,7 @@ Create your instance
 ```
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url("https://cdn.pixelbin.io/v2/cloudName/z-slug/transformation/path/to/image.jpeg")
-    
+
 val image = pixelbin.url(
     UrlObj(
         baseUrl = baseUrl,
@@ -145,8 +152,8 @@ val file =  File(pathname);
 ```
 val signedDetails = SignedDetails(url = "url",fields = fieldsToHashMap(fields))
 
-//fields refer to hashmap of fields object which we got from signed url api 
-//Example
+//fields refer to hashmap of fields object which we got from signed url api
+Example
 data class Fields(
     @SerializedName("key") var key: String? = null,
     @SerializedName("x-amz-meta-assetData") var xAmzMetaAssetData: String? = null,
@@ -221,20 +228,25 @@ Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 
 Deconstruct a pixelbin url
 
-| parameter            | description          | example                                                                                               |
-| -------------------- | -------------------- | ----------------------------------------------------------------------------------------------------- |
-| pixelbinUrl (string) | A valid pixelbin url | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+| parameter                | description                                               | example                                                                                               |
+| ------------------------ | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| pixelbinUrl (string)     | A valid pixelbin url                                      | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                                                                                               |
 
 **Returns**:
 
-| property                | description                            | example                    |
-| ----------------------- | -------------------------------------- | -------------------------- |
-| cloudName (string)      | The cloudname extracted from the url   | `your-cloud-name`          |
-| zone (string)           | 6 character zone slug                  | `z-slug`                   |
-| version (string)        | cdn api version                        | `v2`                       |
-| transformations (array) | Extracted transformations from the url |                            |
-| filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
-| baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
+| property                 | description                                               | example                              |
+| ------------------------ | --------------------------------------------------------- | ------------------------------------ |
+| cloudName (string)       | The cloudname extracted from the url                      | `your-cloud-name`                    |
+| zone (string)            | 6 character zone slug                                     | `z-slug`                             |
+| version (string)         | cdn api version                                           | `v2`                                 |
+| transformations (array)  | Extracted transformations from the url                    |                                      |
+| filePath                 | Path to the file on Pixelbin storage                      | `/path/to/image.jpeg`                |
+| baseUrl (string)         | Base url                                                  | `https://cdn.pixelbin.io/`           |
+| worker (boolean)         | Indicates if the URL is a URL Translation Worker URL      | `false`                              |
+| workerPath (string)      | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
+| options (Object)         | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
+| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                              |
 
 Example:
 
@@ -265,14 +277,47 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                )
 //                            ),
 //                zone =" z-slug",
-//            filePath = "path/to/image.jpeg"
+//            filePath = "path/to/image.jpeg",
+//            wrkr = false;
+//            workerPath = ";
+//        )
+```
+
+```
+val pixelbinUrl =
+    "https://xyz.designify.media/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+
+val obj = Utils.urlToUrlObj(url=pixelbinUrl, isCustomDomain = true)
+//        UrlObj(
+//            baseUrl = "https://cdn.pixelbin.io/",
+//            version = "v2",
+//            cloudName = "your-cloud-name",
+//            transformation= arrayListOf(
+//                TransformationObj(
+//                    plugin = "t",
+//                    name = "resize",
+//                    values= hashMapOf(
+//                      "w" to "200",
+//                      "h" to "100",
+//                   )
+//                ),
+//                TransformationObj(
+//                    plugin = "t",
+//                    name = "flip",
+//                )
+//                            ),
+//            zone =" z-slug",
+//            filePath = "path/to/image.jpeg",
+//            isCustomDomain = true
+//            wrkr = false;
+//            workerPath = ";
 //        )
 
-val pixelbinUrl =
-    "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
 ```
 
 ```
+val pixelbinUrl =
+    "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
 //string representation of url object
 //name of transformation = plugin+"."+name
 val obj = Utils.urlToUrlObj(pixelbinUrl)
@@ -299,7 +344,31 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                  "dpr" to "2.0",
 //                  "f_auto" to "true"
 //              ),
-//            filePath = "path/to/image.jpeg"
+//            filePath = "path/to/image.jpeg",
+//            wrkr = false;
+//            workerPath = ";
+//        )
+```
+
+```
+val pixelbinUrl =
+    "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/wrkr/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
+//string representation of url object
+//name of transformation = plugin+"."+name
+val obj = Utils.urlToUrlObj(pixelbinUrl)
+//        UrlObj(
+//            baseUrl = "https://cdn.pixelbin.io/",
+//            version = "v2",
+//            cloudName = "your-cloud-name",
+//            transformation = arrayListOf<TransformationObj>(),
+//            zone = "z-slug",
+//            options = hashMapOf(
+//                  "dpr" to "2.0",
+//                  "f_auto" to "true"
+//              ),
+//            filePath = "",
+//            wrkr = true;
+//            workerPath = "t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
 //        )
 ```
 
@@ -307,14 +376,18 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 
 Converts the extracted url obj to a Pixelbin url.
 
-| property                | description                            | example                    |
-| ----------------------- | -------------------------------------- | -------------------------- |
-| cloudName (string)      | The cloudname extracted from the url   | `your-cloud-name`          |
-| zone (string)           | 6 character zone slug                  | `z-slug`                   |
-| version (string)        | cdn api version                        | `v2`                       |
-| transformations (array) | Extracted transformations from the url |                            |
-| filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
-| baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
+| property                 | description                                               | example                              |
+| ------------------------ | --------------------------------------------------------- | ------------------------------------ |
+| cloudName (string)       | The cloudname extracted from the url                      | `your-cloud-name`                    |
+| zone (string)            | 6 character zone slug                                     | `z-slug`                             |
+| version (string)         | cdn api version                                           | `v2`                                 |
+| transformations (array)  | Extracted transformations from the url                    |                                      |
+| filePath                 | Path to the file on Pixelbin storage                      | `/path/to/image.jpeg`                |
+| baseUrl (string)         | Base url                                                  | `https://cdn.pixelbin.io/`           |
+| worker (boolean)         | Indicates if the URL is a URL Translation Worker URL      | `false`                              |
+| workerPath (string)      | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
+| options (Object)         | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
+| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                              |
 
 Example
 
@@ -374,33 +447,32 @@ val obj = UrlObj(
     )
 )
 
-val url = Utils.objToUrl(pixelbinUrl)  // obj is as shown above
+val url = Utils.objToUrl(obj)  // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True
 ```
 
-## Transformation
+```
+val obj = UrlObj(
+              baseUrl = "https://cdn.pixelbin.io/",
+              version = "v2",
+              cloudName = "your-cloud-name",
+              transformation = arrayListOf<TransformationObj>(),
+              zone = "z-slug",
+              options = hashMapOf(
+                    "dpr" to "2.0",
+                    "f_auto" to "true"
+                ),
+              filePath = "",
+              wrkr = true;
+              workerPath = "t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+          )
+val url = Utils.objToUrl(obj)
+//url
+//"https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/wrkr/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
 
-A transformation is an operation or a list of operations that can be performed on an image. Please refer [list of supported transformations](#list-of-supported-transformations) for details.
-
-Example
 
 ```
-// Create resize transformation
-val t2 = Transformation.resize(height = 100,width = 100)
-
-// Transformations can be set on an image by using `addTransformation` on the imageUrl object.
-//add single transformation
-image.addTransformation(t1);
-
-//or add multiple transformation
-image.addTransformation(arrayListOf(t1,t2));
-
-To get the url of the image with the applied transformations, use the `getUrl` on the image object.
-image.getUrl()
-```
-
-For a working example, refer [here](#transform-and-optimize-images)
 
 ## List of supported transformations
 
@@ -411,7 +483,7 @@ For a working example, refer [here](#transform-and-optimize-images)
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.detectbackgroundtype();
 ```
 
@@ -424,7 +496,7 @@ val t = Transformation.detectbackgroundtype();
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.artifact();
 ```
 
@@ -444,8 +516,8 @@ val t = Transformation.artifact();
 
 #### Usage Example
 
-```
-val t = Transformation.detectlabels(maximumlabels = 5, minimumconfidence = 55);
+```kotlin
+val t = Transformation.detectlabels(maximumlabels = 5,minimumconfidence = 55);
 ```
 
 </details>
@@ -461,7 +533,7 @@ val t = Transformation.detectlabels(maximumlabels = 5, minimumconfidence = 55);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.moderation(minimumconfidence = 55);
 ```
 
@@ -474,17 +546,18 @@ val t = Transformation.moderation(minimumconfidence = 55);
 
 #### Supported Configuration
 
-| Parameter        | Type                          | Default                                                                                          |
-| ---------------- | ----------------------------- | ------------------------------------------------------------------------------------------------ |
-| backgroundPrompt | custom                        | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
-| focus            | enum: `Product`, `Background` | `Product`                                                                                        |
-| negativePrompt   | custom                        | ``                                                                                               |
-| seed             | integer                       | 123                                                                                              |
+| Parameter                | Type                          | Default                                                                                          |
+| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------ |
+| backgroundPrompt         | custom                        | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
+| backgroundImageForShadow | file                          | ``                                                                                               |
+| focus                    | enum: `Product`, `Background` | `Product`                                                                                        |
+| negativePrompt           | custom                        | ``                                                                                               |
+| seed                     | integer                       | 123                                                                                              |
 
 #### Usage Example
 
-```
-val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw", focus = BackgroundGenerator.Focus.PRODUCT, negativeprompt = "", seed = 123);
+```kotlin
+val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",backgroundimageforshadow = "",focus = BackgroundGenerator.Focus.PRODUCT,negativeprompt = "",seed = 123);
 ```
 
 </details>
@@ -496,15 +569,15 @@ val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZ
 
 #### Supported Configuration
 
-| Parameter    | Type                                | Default   |
-| ------------ | ----------------------------------- | --------- |
-| industryType | enum: `general`, `ecommerce`, `car` | `general` |
-| addShadow    | boolean                             | false     |
+| Parameter    | Type                                         | Default   |
+| ------------ | -------------------------------------------- | --------- |
+| industryType | enum: `general`, `ecommerce`, `car`, `human` | `general` |
+| addShadow    | boolean                                      | false     |
 
 #### Usage Example
 
-```
-val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL, addshadow = false);
+```kotlin
+val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL,addshadow = false);
 ```
 
 </details>
@@ -522,7 +595,7 @@ val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL, adds
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.googlevisionplugin(maximumlabels = 5);
 ```
 
@@ -541,7 +614,7 @@ val t = Transformation.googlevisionplugin(maximumlabels = 5);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.imagecentering(distancepercentage = 10);
 ```
 
@@ -567,8 +640,8 @@ val t = Transformation.imagecentering(distancepercentage = 10);
 
 #### Usage Example
 
-```
-val t = Transformation.intelligentcrop(requiredwidth = 0, requiredheight = 0, paddingpercentage = 0, maintainoriginalaspect = false, aspectratio = "", gravitytowards = IntelligentCrop.Gravitytowards.NONE, preferreddirection = IntelligentCrop.Preferreddirection.CENTER, objecttype = IntelligentCrop.Objecttype.PERSON);
+```kotlin
+val t = Transformation.intelligentcrop(requiredwidth = 0,requiredheight = 0,paddingpercentage = 0,maintainoriginalaspect = false,aspectratio = "",gravitytowards = IntelligentCrop.Gravitytowards.NONE,preferreddirection = IntelligentCrop.Preferreddirection.CENTER,objecttype = IntelligentCrop.Objecttype.PERSON);
 ```
 
 </details>
@@ -580,26 +653,58 @@ val t = Transformation.intelligentcrop(requiredwidth = 0, requiredheight = 0, pa
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.objectcounter();
 ```
 
 </details>
 
-### 10. NumberPlateDetection
+### 10. NSFWDetection
+
+<details>
+<summary>1. detect</summary>
+
+#### Supported Configuration
+
+| Parameter         | Type  | Default |
+| ----------------- | ----- | ------- |
+| minimumConfidence | float | 0.5     |
+
+#### Usage Example
+
+```kotlin
+val t = Transformation.nsfwdetection(minimumconfidence = 0.5);
+```
+
+</details>
+
+### 11. NumberPlateDetection
 
 <details>
 <summary>1. detect</summary>
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.numberplatedetection();
 ```
 
 </details>
 
-### 11. CheckObjectSize
+### 12. ObjectDetection
+
+<details>
+<summary>1. detect</summary>
+
+#### Usage Example
+
+```kotlin
+val t = Transformation.objectdetection();
+```
+
+</details>
+
+### 13. CheckObjectSize
 
 <details>
 <summary>1. detect</summary>
@@ -612,13 +717,13 @@ val t = Transformation.numberplatedetection();
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.checkobjectsize(objectthresholdpercent = 50);
 ```
 
 </details>
 
-### 12. TextDetectionandRecognition
+### 14. TextDetectionandRecognition
 
 <details>
 <summary>1. extract</summary>
@@ -631,65 +736,65 @@ val t = Transformation.checkobjectsize(objectthresholdpercent = 50);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.textdetectionandrecognition(detectonly = false);
 ```
 
 </details>
 
-### 13. PdfWatermarkRemoval
+### 15. PdfWatermarkRemoval
 
 <details>
 <summary>1. remove</summary>
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.pdfwatermarkremoval();
 ```
 
 </details>
 
-### 14. ProductTagging
+### 16. ProductTagging
 
 <details>
 <summary>1. tag</summary>
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.producttagging();
 ```
 
 </details>
 
-### 15. CheckProductVisibility
+### 17. CheckProductVisibility
 
 <details>
 <summary>1. detect</summary>
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.checkproductvisibility();
 ```
 
 </details>
 
-### 16. RemoveBG
+### 18. RemoveBG
 
 <details>
 <summary>1. bg</summary>
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.removebg();
 ```
 
 </details>
 
-### 17. Basic
+### 19. Basic
 
 <details>
 <summary>1. resize</summary>
@@ -708,8 +813,8 @@ val t = Transformation.removebg();
 
 #### Usage Example
 
-```
-val t = Transformation.resize(height = 0, width = 0, fit = Resize.Fit.COVER, background = "000000", position = Resize.Position.CENTER, algorithm = Resize.Algorithm.LANCZOS3, dpr = 1);
+```kotlin
+val t = Transformation.resize(height = 0,width = 0,fit = Resize.Fit.COVER,background = "000000",position = Resize.Position.CENTER,algorithm = Resize.Algorithm.LANCZOS3,dpr = 1);
 ```
 
 </details>
@@ -725,7 +830,7 @@ val t = Transformation.resize(height = 0, width = 0, fit = Resize.Fit.COVER, bac
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.compress(quality = 80);
 ```
 
@@ -748,8 +853,8 @@ val t = Transformation.compress(quality = 80);
 
 #### Usage Example
 
-```
-val t = Transformation.extend(top = 10, left = 10, bottom = 10, right = 10, background = "000000", bordertype = Extend.Bordertype.CONSTANT, dpr = 1);
+```kotlin
+val t = Transformation.extend(top = 10,left = 10,bottom = 10,right = 10,background = "000000",bordertype = Extend.Bordertype.CONSTANT,dpr = 1);
 ```
 
 </details>
@@ -768,8 +873,8 @@ val t = Transformation.extend(top = 10, left = 10, bottom = 10, right = 10, back
 
 #### Usage Example
 
-```
-val t = Transformation.extract(top = 10, left = 10, height = 50, width = 20);
+```kotlin
+val t = Transformation.extract(top = 10,left = 10,height = 50,width = 20);
 ```
 
 </details>
@@ -785,7 +890,7 @@ val t = Transformation.extract(top = 10, left = 10, height = 50, width = 20);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.trim(threshold = 10);
 ```
 
@@ -803,8 +908,8 @@ val t = Transformation.trim(threshold = 10);
 
 #### Usage Example
 
-```
-val t = Transformation.rotate(angle = 0, background = "000000");
+```kotlin
+val t = Transformation.rotate(angle = 0,background = "000000");
 ```
 
 </details>
@@ -814,7 +919,7 @@ val t = Transformation.rotate(angle = 0, background = "000000");
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.flip();
 ```
 
@@ -825,7 +930,7 @@ val t = Transformation.flip();
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.flop();
 ```
 
@@ -842,7 +947,7 @@ val t = Transformation.flop();
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.sharpen(sigma = 1.5);
 ```
 
@@ -859,7 +964,7 @@ val t = Transformation.sharpen(sigma = 1.5);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.median(size = 3);
 ```
 
@@ -877,8 +982,8 @@ val t = Transformation.median(size = 3);
 
 #### Usage Example
 
-```
-val t = Transformation.blur(sigma = 0.3, dpr = 1);
+```kotlin
+val t = Transformation.blur(sigma = 0.3,dpr = 1);
 ```
 
 </details>
@@ -894,7 +999,7 @@ val t = Transformation.blur(sigma = 0.3, dpr = 1);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.flatten(background = "000000");
 ```
 
@@ -905,7 +1010,7 @@ val t = Transformation.flatten(background = "000000");
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.negate();
 ```
 
@@ -916,7 +1021,7 @@ val t = Transformation.negate();
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.normalise();
 ```
 
@@ -934,8 +1039,8 @@ val t = Transformation.normalise();
 
 #### Usage Example
 
-```
-val t = Transformation.linear(a = 1, b = 0);
+```kotlin
+val t = Transformation.linear(a = 1,b = 0);
 ```
 
 </details>
@@ -953,8 +1058,8 @@ val t = Transformation.linear(a = 1, b = 0);
 
 #### Usage Example
 
-```
-val t = Transformation.modulate(brightness = 1, saturation = 1, hue = 90);
+```kotlin
+val t = Transformation.modulate(brightness = 1,saturation = 1,hue = 90);
 ```
 
 </details>
@@ -964,7 +1069,7 @@ val t = Transformation.modulate(brightness = 1, saturation = 1, hue = 90);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.grey();
 ```
 
@@ -981,7 +1086,7 @@ val t = Transformation.grey();
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.tint(color = "000000");
 ```
 
@@ -992,13 +1097,13 @@ val t = Transformation.tint(color = "000000");
 
 #### Supported Configuration
 
-| Parameter | Type                                        | Default |
-| --------- | ------------------------------------------- | ------- |
-| format    | enum: `jpeg`, `png`, `webp`, `tiff`, `avif` | `jpeg`  |
+| Parameter | Type                                               | Default |
+| --------- | -------------------------------------------------- | ------- |
+| format    | enum: `jpeg`, `png`, `webp`, `tiff`, `avif`, `bmp` | `jpeg`  |
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.toformat(format = Toformat.Format.JPEG);
 ```
 
@@ -1015,7 +1120,7 @@ val t = Transformation.toformat(format = Toformat.Format.JPEG);
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.density(density = 300);
 ```
 
@@ -1044,33 +1149,47 @@ val t = Transformation.density(density = 300);
 
 #### Usage Example
 
-```
-val t = Transformation.merge(mode = Merge.Mode.OVERLAY, image = "", transformation = "", background = "00000000", height = 0, width = 0, top = 0, left = 0, gravity = Merge.Gravity.CENTER, blend = Merge.Blend.OVER, tile = false, listofbboxes = "", listofpolygons = "");
+```kotlin
+val t = Transformation.merge(mode = Merge.Mode.OVERLAY,image = "",transformation = "",background = "00000000",height = 0,width = 0,top = 0,left = 0,gravity = Merge.Gravity.CENTER,blend = Merge.Blend.OVER,tile = false,listofbboxes = "",listofpolygons = "");
 ```
 
 </details>
 
-### 18. SuperResolution
+### 20. SuperResolution
 
 <details>
 <summary>1. upscale</summary>
 
 #### Supported Configuration
 
-| Parameter   | Type             | Default |
-| ----------- | ---------------- | ------- |
-| type        | enum: `2x`, `4x` | `2x`    |
-| enhanceFace | boolean          | false   |
+| Parameter   | Type                             | Default      |
+| ----------- | -------------------------------- | ------------ |
+| type        | enum: `2x`, `4x`                 | `2x`         |
+| enhanceFace | boolean                          | false        |
+| model       | enum: `SuperScale`, `QuickScale` | `SuperScale` |
 
 #### Usage Example
 
-```
-val t = Transformation.superresolution(type = SuperResolution.Type._2X, enhanceface = false);
+```kotlin
+val t = Transformation.superresolution(type = SuperResolution.Type._2X,enhanceface = false,model = SuperResolution.Model.SUPERSCALE);
 ```
 
 </details>
 
-### 19. WatermarkRemoval
+### 21. ViewDetection
+
+<details>
+<summary>1. detect</summary>
+
+#### Usage Example
+
+```kotlin
+val t = Transformation.viewdetection();
+```
+
+</details>
+
+### 22. WatermarkRemoval
 
 <details>
 <summary>1. remove</summary>
@@ -1089,13 +1208,13 @@ val t = Transformation.superresolution(type = SuperResolution.Type._2X, enhancef
 
 #### Usage Example
 
-```
-val t = Transformation.watermarkremoval(removetext = false, removelogo = false, box1 = "0_0_100_100", box2 = "0_0_0_0", box3 = "0_0_0_0", box4 = "0_0_0_0", box5 = "0_0_0_0");
+```kotlin
+val t = Transformation.watermarkremoval(removetext = false,removelogo = false,box1 = "0_0_100_100",box2 = "0_0_0_0",box3 = "0_0_0_0",box4 = "0_0_0_0",box5 = "0_0_0_0");
 ```
 
 </details>
 
-### 20. WatermarkDetection
+### 23. WatermarkDetection
 
 <details>
 <summary>1. detect</summary>
@@ -1108,7 +1227,7 @@ val t = Transformation.watermarkremoval(removetext = false, removelogo = false, 
 
 #### Usage Example
 
-```
+```kotlin
 val t = Transformation.watermarkdetection(detecttext = false);
 ```
 

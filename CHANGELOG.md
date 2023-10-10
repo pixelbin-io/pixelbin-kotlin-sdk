@@ -2,8 +2,10 @@
 
 -   Added new plugins
     - `NSFW Detection` - Detect NSFW content in images.
-    -   `ObjectDetection` - Detect bounding boxes of objects in the image.
-    -   `ViewDetection` - Classifies wear type and view type of products in the image
+    - `ObjectDetection` - Detect bounding boxes of objects in the image.
+    - `ViewDetection` - Classifies wear type and view type of products in the image
+    - `CustomDomain` support added
+    - `worker url` support added
 
 
 # v0.0.4
