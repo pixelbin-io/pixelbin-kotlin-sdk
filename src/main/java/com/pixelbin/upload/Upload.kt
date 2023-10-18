@@ -1,4 +1,5 @@
 package com.pixelbin.upload
+import com.pixelbin.error.PDKTimeoutException
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -48,7 +49,7 @@ class Upload internal constructor(){
         builder.addFormDataPart("file", file.name, RequestBody.create(contentType, file))
         val form = builder.build()
         try {
-            val client = OkHttpClient()
+            val client = NetworkUtil.createOkHttpClient()
             val request = Request.Builder()
                 .url(url)
                 .post(form)
@@ -62,6 +63,8 @@ class Upload internal constructor(){
                 override fun onResponse(call: Call, response: Response) {
                     if(response.code==200||response.code==204)
                         callback(Result.Success(response.message))
+                    else if(response.code==408)
+                        callback(Result.Error(PDKTimeoutException("Request failed due to timeout. Check network connection")))
                     else
                         callback(Result.Failure(response))
                 }
@@ -79,6 +82,7 @@ class Upload internal constructor(){
      * @param file image file to upload
      */
     private suspend fun uploadToGCS(url:String, fields:Map<String,String>, file:File, callback: (Result<Any>)-> Unit){
+        var count =0
         if (url.isNullOrEmpty() || fields.isNullOrEmpty()) {
             throw Error("Please provide the correct object. Refer upload api docs for details.")
         }
@@ -94,7 +98,7 @@ class Upload internal constructor(){
         // Build the request
         val request = requestBuilder.build()
         try {
-            val client = OkHttpClient()
+            val client = NetworkUtil.createOkHttpClient()
             client.newCall(request).enqueue(object :Callback{
                 override fun onFailure(call: Call, e: IOException) {
                     callback(Result.Error(e))
@@ -103,6 +107,8 @@ class Upload internal constructor(){
                 override fun onResponse(call: Call, response: Response) {
                     if(response.code==200)
                         callback(Result.Success(response.message))
+                    else if(response.code==408)
+                        callback(Result.Error(PDKTimeoutException("Request failed due to timeout. Check network connection")))
                     else
                         callback(Result.Failure(response))
                 }

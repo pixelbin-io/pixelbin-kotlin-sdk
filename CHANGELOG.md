@@ -1,3 +1,7 @@
+# v0.0.6
+
+- retry support in case of timeout connection
+
 # v0.0.5
 
 -   Added new plugins
