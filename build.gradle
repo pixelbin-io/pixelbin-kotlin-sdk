@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.pixelbin'
-version 'v0.0.5'
+version 'v0.0.6'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
