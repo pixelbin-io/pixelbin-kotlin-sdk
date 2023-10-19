@@ -64,7 +64,7 @@ class Upload internal constructor(){
                     if(response.code==200||response.code==204)
                         callback(Result.Success(response.message))
                     else if(response.code==408)
-                        callback(Result.Error(PDKTimeoutException("Request failed due to timeout. Check network connection")))
+                        callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
                     else
                         callback(Result.Failure(response))
                 }
@@ -108,7 +108,7 @@ class Upload internal constructor(){
                     if(response.code==200)
                         callback(Result.Success(response.message))
                     else if(response.code==408)
-                        callback(Result.Error(PDKTimeoutException("Request failed due to timeout. Check network connection")))
+                        callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
                     else
                         callback(Result.Failure(response))
                 }

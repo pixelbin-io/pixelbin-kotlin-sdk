@@ -17,7 +17,7 @@ object NetworkUtil {
             .addInterceptor(RetryInterceptor())
             .connectTimeout(45, TimeUnit.SECONDS)
             .readTimeout(45, TimeUnit.SECONDS)
-            .writeTimeout(45,TimeUnit.SECONDS)
+            .writeTimeout(45, TimeUnit.SECONDS)
             .build()
     }
 }
@@ -25,15 +25,17 @@ object NetworkUtil {
 class RetryInterceptor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
-        var response: Response? = null
+        lateinit var response: Response
         var retryCount = 0
         val maxRetries = 3
+        var errorMsg = ""
         do {
             try {
                 response = chain.proceed(request)
-                if (response != null && !response.isSuccessful && retryCount < maxRetries) {
+                if (!response.isSuccessful && retryCount < maxRetries) {
                     val exception = response.body?.string()
                     if (exception != null && exception.contains("timeout")) {
+                        errorMsg = "timeout"
                         // It's a timeout, so we'll retry.
                         retryCount++
                     } else {
@@ -43,18 +45,30 @@ class RetryInterceptor() : Interceptor {
                     break
                 }
             } catch (e: IOException) {
-                // Handle exceptions in your code, if needed.
-                break
+                if (e.message?.contains("timeout") == true) {
+                    retryCount++
+                    errorMsg = "timeout"
+                    if(retryCount==3){
+                        response = Response.Builder()
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_1_1)
+                            .code(408) // Some appropriate default status code
+                            .message(errorMsg)
+                            .body(ResponseBody.create("application/json".toMediaType(), ""))
+                            .build()
+                    }
+                } else {
+                    errorMsg = e.message.toString()
+                    Response.Builder()
+                        .request(chain.request())
+                        .protocol(Protocol.HTTP_1_1)
+                        .message(errorMsg)
+                        .build()
+                    break
+                }
             }
         } while (retryCount < maxRetries)
-
-        return response ?: Response.Builder()
-            .request(chain.request())
-            .protocol(Protocol.HTTP_1_1)
-            .code(408) // Some appropriate default status code
-            .message("Request failed after 3 tries")
-            .body(ResponseBody.create("application/json".toMediaType(), ""))
-            .build()
+        return response
     }
 }
 
