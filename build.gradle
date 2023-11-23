@@ -5,8 +5,8 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-group 'io.github.pixelbin-dev'
-version 'v0.0.6'
+group 'com.pixelbin'
+version 'v0.0.7'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -31,31 +31,17 @@ dependencies {
 }
 
 //publish jitpack
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            groupId = 'com.github.pixelbin-dev'
-            artifactId = 'pixelbin-kotlin-sdk'
-            version = 'v0.0.333'
-//             from components.java
-//             groupId = 'com.github.pixelbin-dev'
-//             artifactId = 'pixelbin-kotlin-sdk'
-//             version = 'v0.0.6'
-        }
-    }
-    repositories {
-        mavenCentral()
-    }
-}
-
-// apply from: 'scripts/publish-root.gradle'
-//
-// ext {
-//     PUBLISH_GROUP_ID = 'io.github.pixelbin-dev'
-//     PUBLISH_VERSION = 'v0.0.6'
-//     PUBLISH_ARTIFACT_ID = 'pixelbin-kotlin-sdk'
-// }
-// apply from: 'publish-remote.gradle'
-
+ publishing {
+     publications {
+         mavenJava(MavenPublication) {
+             from components.java
+             groupId = 'com.github.pixelbin-dev'
+             artifactId = 'pixelbin-kotlin-sdk'
+             version = 'v0.0.7'
+         }
+     }
+     repositories {
+         mavenCentral()
+     }
+ }
 
