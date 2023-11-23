@@ -6,7 +6,10 @@ import com.pixelbin.transformation.TransformationObj
  
     
     
-    enum class Industrytype {
+      /**
+     * Industry type options: general, ecommerce, car, human
+     */
+      enum class Industrytype {
         
         GENERAL
         {
@@ -29,11 +32,14 @@ import com.pixelbin.transformation.TransformationObj
             }
         },
         
+        HUMAN
+        {
+            override fun toString(): String {
+                return "human"
+            }
+        },
+        
     }
-
-    /**
-     * Industry type options: general, ecommerce, car
-     */
     
     
     

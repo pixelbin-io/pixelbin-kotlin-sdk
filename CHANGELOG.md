@@ -1,3 +1,7 @@
+# v0.0.7
+
+- added support for file upload on 3g network
+
 # v0.0.6
 
 - retry support in case of timeout connection
