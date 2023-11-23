@@ -10,7 +10,10 @@ import com.pixelbin.transformation.TransformationObj
     
     
     
-    enum class Focus {
+      /**
+     * Focus options: Product, Background
+     */
+      enum class Focus {
         
         PRODUCT
         {
@@ -27,10 +30,6 @@ import com.pixelbin.transformation.TransformationObj
         },
         
     }
-
-    /**
-     * Focus options: Product, Background
-     */
     
     
     

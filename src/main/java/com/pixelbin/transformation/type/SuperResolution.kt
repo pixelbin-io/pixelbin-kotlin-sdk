@@ -6,7 +6,10 @@ import com.pixelbin.transformation.TransformationObj
  
     
     
-    enum class Type {
+      /**
+     * Type options: 2x, 4x
+     */
+      enum class Type {
         
         _2X
         {
@@ -23,10 +26,31 @@ import com.pixelbin.transformation.TransformationObj
         },
         
     }
-
-    /**
-     * Type options: 2x, 4x
+    
+    
+    
+    
+    
+      /**
+     * Model options: Picasso, Flash
      */
+      enum class Model {
+        
+        PICASSO
+        {
+            override fun toString(): String {
+                return "Picasso"
+            }
+        },
+        
+        FLASH
+        {
+            override fun toString(): String {
+                return "Flash"
+            }
+        },
+        
+    }
     
     
     
@@ -35,9 +59,13 @@ import com.pixelbin.transformation.TransformationObj
     /**
      * Method for Super Resolution Module
      * 
-     * @param type Type? (Default: 2x)
+     * @param Type Type? (Default: 2x)
      
      * @param Enhance Face Boolean (Default: false)
+     
+     * @param Model Model? (Default: Picasso)
+     
+     * @param Enhance Quality Boolean (Default: false)
      
      * @return TransformationObj.
      */
@@ -46,7 +74,11 @@ import com.pixelbin.transformation.TransformationObj
        
         type: Type? = null,
         
-        enhanceface: Boolean? = null
+        enhanceface: Boolean? = null,
+        
+        model: Model? = null,
+        
+        enhancequality: Boolean? = null
         
     ): TransformationObj {
         // Create the values HashMap
@@ -59,6 +91,16 @@ import com.pixelbin.transformation.TransformationObj
         
         
         values["enhance_face"] = enhanceface.toString()
+        
+        
+        
+        
+        values["model"] = model.toString()
+        
+        
+        
+        
+        values["enhance_quality"] = enhancequality.toString()
         
         
         

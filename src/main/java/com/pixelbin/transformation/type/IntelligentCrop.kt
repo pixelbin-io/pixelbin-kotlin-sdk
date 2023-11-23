@@ -16,7 +16,10 @@ import com.pixelbin.transformation.TransformationObj
     
     
     
-    enum class Gravitytowards {
+      /**
+     * Gravity towards options: object, foreground, face, none
+     */
+      enum class Gravitytowards {
         
         OBJECT
         {
@@ -47,14 +50,13 @@ import com.pixelbin.transformation.TransformationObj
         },
         
     }
-
-    /**
-     * Gravity towards options: object, foreground, face, none
+    
+    
+    
+      /**
+     * Preferred direction options: north_west, north, north_east, west, center, east, south_west, south, south_east
      */
-    
-    
-    
-    enum class Preferreddirection {
+      enum class Preferreddirection {
         
         NORTH_WEST
         {
@@ -120,14 +122,13 @@ import com.pixelbin.transformation.TransformationObj
         },
         
     }
-
-    /**
-     * Preferred direction options: north_west, north, north_east, west, center, east, south_west, south, south_east
+    
+    
+    
+      /**
+     * Object Type (if Gravity is object) options: airplane, apple, backpack, banana, baseball_bat, baseball_glove, bear, bed, bench, bicycle, bird, boat, book, bottle, bowl, broccoli, bus, cake, car, carrot, cat, cell_phone, chair, clock, couch, cow, cup, dining_table, dog, donut, elephant, fire_hydrant, fork, frisbee, giraffe, hair_drier, handbag, horse, hot_dog, keyboard, kite, knife, laptop, microwave, motorcycle, mouse, orange, oven, parking_meter, person, pizza, potted_plant, refrigerator, remote, sandwich, scissors, sheep, sink, skateboard, skis, snowboard, spoon, sports_ball, stop_sign, suitcase, surfboard, teddy_bear, tennis_racket, tie, toaster, toilet, toothbrush, traffic_light, train, truck, tv, umbrella, vase, wine_glass, zebra
      */
-    
-    
-    
-    enum class Objecttype {
+      enum class Objecttype {
         
         AIRPLANE
         {
@@ -690,10 +691,6 @@ import com.pixelbin.transformation.TransformationObj
         },
         
     }
-
-    /**
-     * Object Type (if Gravity is object) options: airplane, apple, backpack, banana, baseball_bat, baseball_glove, bear, bed, bench, bicycle, bird, boat, book, bottle, bowl, broccoli, bus, cake, car, carrot, cat, cell_phone, chair, clock, couch, cow, cup, dining_table, dog, donut, elephant, fire_hydrant, fork, frisbee, giraffe, hair_drier, handbag, horse, hot_dog, keyboard, kite, knife, laptop, microwave, motorcycle, mouse, orange, oven, parking_meter, person, pizza, potted_plant, refrigerator, remote, sandwich, scissors, sheep, sink, skateboard, skis, snowboard, spoon, sports_ball, stop_sign, suitcase, surfboard, teddy_bear, tennis_racket, tie, toaster, toilet, toothbrush, traffic_light, train, truck, tv, umbrella, vase, wine_glass, zebra
-     */
     
     
 

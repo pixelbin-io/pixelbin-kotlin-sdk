@@ -1302,6 +1302,10 @@ object Transformation {
      
      * @param enhanceface Enhance face (Default: false)
      
+     * @param model Model (Default: Picasso)
+     
+     * @param enhancequality Enhance quality (Default: false)
+     
      * @return The generated TransformationObj.
      */
      @JvmOverloads
@@ -1311,6 +1315,12 @@ object Transformation {
      = SuperResolution.Type._2X,
 
     enhanceface: Boolean?
+     = false,
+
+    model: SuperResolution.Model?
+     = SuperResolution.Model.PICASSO,
+
+    enhancequality: Boolean?
      = false
 
     ): TransformationObj {
@@ -1319,7 +1329,11 @@ object Transformation {
             
             type, 
             
-            enhanceface
+            enhanceface, 
+            
+            model, 
+            
+            enhancequality
             
         )
     }

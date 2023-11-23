@@ -10,7 +10,10 @@ class Resize {
     
     
     
-    enum class Fit {
+      /**
+     * Fit options: cover, contain, fill, inside, outside
+     */
+      enum class Fit {
         
         COVER
         {
@@ -48,16 +51,15 @@ class Resize {
         },
         
     }
-
-    /**
-     * Fit options: cover, contain, fill, inside, outside
+    
+    
+    
+    
+    
+      /**
+     * Position options: top, bottom, left, right, right_top, right_bottom, left_top, left_bottom, center
      */
-    
-    
-    
-    
-    
-    enum class Position {
+      enum class Position {
         
         TOP
         {
@@ -123,14 +125,13 @@ class Resize {
         },
         
     }
-
-    /**
-     * Position options: top, bottom, left, right, right_top, right_bottom, left_top, left_bottom, center
+    
+    
+    
+      /**
+     * Algorithm options: nearest, cubic, mitchell, lanczos2, lanczos3
      */
-    
-    
-    
-    enum class Algorithm {
+      enum class Algorithm {
         
         NEAREST
         {
@@ -168,10 +169,6 @@ class Resize {
         },
         
     }
-
-    /**
-     * Algorithm options: nearest, cubic, mitchell, lanczos2, lanczos3
-     */
     
     
     
@@ -319,7 +316,10 @@ class Extend {
     
     
     
-    enum class Bordertype {
+      /**
+     * Border type options: constant, replicate, reflect, wrap
+     */
+      enum class Bordertype {
         
         CONSTANT
         {
@@ -350,10 +350,6 @@ class Extend {
         },
         
     }
-
-    /**
-     * Border type options: constant, replicate, reflect, wrap
-     */
     
     
     
@@ -1075,7 +1071,10 @@ class Toformat {
  
     
     
-    enum class Format {
+      /**
+     * Format options: jpeg, png, webp, tiff, avif, bmp
+     */
+      enum class Format {
         
         JPEG
         {
@@ -1120,10 +1119,6 @@ class Toformat {
         },
         
     }
-
-    /**
-     * Format options: jpeg, png, webp, tiff, avif, bmp
-     */
     
     
 
@@ -1199,7 +1194,10 @@ class Merge {
  
     
     
-    enum class Mode {
+      /**
+     * Mode options: overlay, underlay, wrap
+     */
+      enum class Mode {
         
         OVERLAY
         {
@@ -1223,28 +1221,27 @@ class Merge {
         },
         
     }
-
-    /**
-     * Mode options: overlay, underlay, wrap
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      /**
+     * Gravity options: northwest, north, northeast, east, center, west, southwest, south, southeast, custom
      */
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    enum class Gravity {
+      enum class Gravity {
         
         NORTHWEST
         {
@@ -1317,14 +1314,13 @@ class Merge {
         },
         
     }
-
-    /**
-     * Gravity options: northwest, north, northeast, east, center, west, southwest, south, southeast, custom
+    
+    
+    
+      /**
+     * Blend options: over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate, multiply, screen, overlay, darken, lighten, colour-dodge, color-dodge, colour-burn, color-burn, hard-light, soft-light, difference, exclusion
      */
-    
-    
-    
-    enum class Blend {
+      enum class Blend {
         
         OVER
         {
@@ -1502,10 +1498,6 @@ class Merge {
         },
         
     }
-
-    /**
-     * Blend options: over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate, multiply, screen, overlay, darken, lighten, colour-dodge, color-dodge, colour-burn, color-burn, hard-light, soft-light, difference, exclusion
-     */
     
     
     

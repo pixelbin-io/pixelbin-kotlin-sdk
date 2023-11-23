@@ -180,6 +180,7 @@ fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
         return hashMap
 }
 
+
 //for kotlin
 CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file,signedDetails){
@@ -198,6 +199,25 @@ CoroutineScope(Dispatchers.IO).launch {
             }
         }
 }
+//in case of poor network 3g use
+//signed details here only contain the url and fields map which has one key "x-pixb-meta-assetdata
+//here size is optional default is 3kb
+    PixelBin.getInstance().uploadOn3gNetwork(file,signedDetails,size){
+    //here Result class is from com.pixelbin.upload.Result
+            when(it){
+                is Result.Success ->{
+                    val response = it.data
+                }
+                is Result.Failure ->{
+                    val response = it.response
+                }
+                is Result.Error ->{
+                    val exception = it.exception
+                }
+                else -> {}
+            }
+        }
+
 //for java
   pixelbin.upload(file,signedDetails, result->{
   //here Result class is from com.pixelbin.upload.Result
@@ -212,6 +232,22 @@ CoroutineScope(Dispatchers.IO).launch {
             }
             return null;
         });
+
+//here size is optional default is 3kb
+//signed details here only contain the url and fields map which has one key "x-pixb-meta-assetdata
+  pixelbin.uploadOn3gNetwork(file,signedDetails, result->{
+  //here Result class is from com.pixelbin.upload.Result
+      if (result instanceof Result.Success) {
+                System.out.println("Upload successful");
+          } else if (result instanceof Result.Failure) {
+                Result.Failure failure = (Result.Failure) result;
+                System.out.println("Upload failed: " + failure.getResponse());
+            } else if (result instanceof Result.Error) {
+                Result.Error error = (Result.Error) result;
+                System.out.println("Error during upload: " + error.getException().getMessage());
+            }
+            return null;
+        },size);
 ```
 
 ## Utilities
@@ -1162,16 +1198,17 @@ val t = Transformation.merge(mode = Merge.Mode.OVERLAY,image = "",transformation
 
 #### Supported Configuration
 
-| Parameter   | Type                             | Default      |
-| ----------- | -------------------------------- | ------------ |
-| type        | enum: `2x`, `4x`                 | `2x`         |
-| enhanceFace | boolean                          | false        |
-| model       | enum: `SuperScale`, `QuickScale` | `SuperScale` |
+| Parameter      | Type                     | Default   |
+| -------------- | ------------------------ | --------- |
+| type           | enum: `2x`, `4x`         | `2x`      |
+| enhanceFace    | boolean                  | false     |
+| model          | enum: `Picasso`, `Flash` | `Picasso` |
+| enhanceQuality | boolean                  | false     |
 
 #### Usage Example
 
 ```kotlin
-val t = Transformation.superresolution(type = SuperResolution.Type._2X,enhanceface = false,model = SuperResolution.Model.SUPERSCALE);
+val t = Transformation.superresolution(type = SuperResolution.Type._2X,enhanceface = false,model = SuperResolution.Model.PICASSO,enhancequality = false);
 ```
 
 </details>
