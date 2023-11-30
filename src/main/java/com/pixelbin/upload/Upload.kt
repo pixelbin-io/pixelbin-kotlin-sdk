@@ -1,6 +1,7 @@
 package com.pixelbin.upload
 
 import com.google.gson.Gson
+import com.pixelbin.error.PDKInvalidUrlException
 import com.pixelbin.error.PDKTimeoutException
 import kotlinx.coroutines.*
 import okhttp3.*
@@ -30,14 +31,14 @@ class Upload internal constructor(){
         file: File,
         signedDetails: SignedDetails,
         callback: (Result<Any>) -> Unit,
-        chunkSizeInKb: Int,
+        chunkSize: Int,
         concurrency: Int=1
     ) {
         val url = signedDetails.url
         val fields = signedDetails.fields
         url?.let {
             if(it.contains("storage.googleapis.com")) uploadToGCS(it,fields, file,callback)
-            else if(it.contains("api.pixelbin")) multipartFileUpload(file, signedDetails, callback, chunkSizeInKb, concurrency)
+            else if(it.contains("api.pixelbin")) multipartFileUpload(file, signedDetails, callback, chunkSize, concurrency)
             else uploadToS3(it, fields, file,callback)
         }
     }
@@ -99,12 +100,12 @@ class Upload internal constructor(){
         file: File,
         signedDetails: SignedDetails,
         callback: (Result<Any>) -> Unit,
-        chunkSizeInKb: Int,
+        chunkSize: Int,
         concurrency: Int = 1
     ) {
         var errorOccurred = false
         try {
-            val CHUNK_SIZE = 1024 * chunkSizeInKb
+            val CHUNK_SIZE = 1024 * chunkSize
             val fileSize = file.length()
             val startTime = System.currentTimeMillis()
             var partNo = 0;
@@ -213,7 +214,7 @@ class Upload internal constructor(){
             val matchResult = url?.let { regex.find(it) }
             matchResult?.groups?.get(1)?.value?:""
         }catch (e:Exception){
-            ""
+           throw PDKInvalidUrlException("Invalid image url")
         }
     }
 

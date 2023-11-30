@@ -129,12 +129,18 @@ image.getUrl()
 // https://cdn.pixelbin.io/v2/cloudName/z-slug/erase.bg()~t.resize(h:100,w:100)/path/to/image.jpeg
 ```
 
-### upload(file, signedDetails):
+### upload(file, signedDetails,callback,chunkSize,concurrency):
 
 | parameter                                                            | type                                                                                                                                 |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
 | signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
+| chunkSize (int)                                                      | size of chnks to be uploaded in kb. default value is 1024.                                                                           |
+|                                                                      | Recommended chunk size for                                                                                                           |
+|                                                                      | 3g network - upto 5kb                                                                                                                |
+|                                                                      | 4g network - 500kb to 1MB                                                                                                            |
+|                                                                      | 5g network - 1MB to 2MB                                                                                                              |
+| concurrency (int)                                                    | number of chunks to be uploaded in parallel api calls                                                                                |
 
 -   Resolves with no response on success.
 -   Rejects with error on failure.
@@ -150,7 +156,7 @@ val file =  File(pathname);
 2. Use the presignedUrl generated with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
 ```
-val signedDetails = SignedDetails(url = "url",completionUrl = "completionUrl", fields = fieldsToHashMap(fields))
+val signedDetails = SignedDetails(url = "url", fields = fieldsToHashMap(fields))
 
 //fields refer to hashmap of fields object which we got from signed url api
 Example
@@ -177,12 +183,6 @@ fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
 
 
 //for kotlin
-//recommended chunk size for
-//3g network - upto 5kb
-//4g network - 500kb to 1MB
-//5g network - 1MB to 2MB
-//chunkSizeInKb - size of chunks to be uploaded
-//concurrency - count of concurrent chunk upload
 CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file, details, {
         when (it) {
@@ -197,7 +197,7 @@ CoroutineScope(Dispatchers.IO).launch {
             }
             else -> {}
         }
-    }, chunkSizeInKb, concurrency)
+    }, chunkSize, concurrency)
 }
 
 //for java
@@ -213,7 +213,7 @@ CoroutineScope(Dispatchers.IO).launch {
                 System.out.println("Error during upload: " + error.getException().getMessage());
             }
             return null;
-        },chunkSizeInKb, concurrency);
+        },chunkSize, concurrency);
 
 
 ```

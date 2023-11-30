@@ -55,7 +55,7 @@ class PixelBin internal constructor(){
      *
      * @param file image file to upload
      * @param signedDetails signed details object containing url and headers
-     * @param chunkSizeInKb size of chunks in which file is break into and uploaded. Default value 1024
+     * @param chunkSize size of chunks in which file is break into and uploaded. Default value 1024
      * @param concurrency number of parallel uploads
      * @param callback callback for api response
      *
@@ -66,11 +66,11 @@ class PixelBin internal constructor(){
         file: File,
         signedDetails: SignedDetails,
         callback: (Result<Any>) -> Unit,
-        chunkSizeInKb: Int = 1024,
+        chunkSize: Int = 1024,
         concurrency: Int = 1
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-            Upload().upload(file, signedDetails, callback, chunkSizeInKb,concurrency)
+            Upload().upload(file, signedDetails, callback, chunkSize,concurrency)
         }
     }
 
