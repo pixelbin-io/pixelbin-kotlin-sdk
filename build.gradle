@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.pixelbin'
-version 'v0.0.7'
+version 'v0.0.8'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+    implementation 'com.google.code.gson:gson:2.8.8'
 }
 
 //publish jitpack
@@ -37,7 +38,7 @@ dependencies {
              from components.java
              groupId = 'com.github.pixelbin-dev'
              artifactId = 'pixelbin-kotlin-sdk'
-             version = 'v0.0.7'
+             version = 'v0.0.8'
          }
      }
      repositories {

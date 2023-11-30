@@ -129,12 +129,18 @@ image.getUrl()
 // https://cdn.pixelbin.io/v2/cloudName/z-slug/erase.bg()~t.resize(h:100,w:100)/path/to/image.jpeg
 ```
 
-### upload(file, signedDetails):
+### upload(file, signedDetails,callback,chunkSize,concurrency):
 
 | parameter                                                            | type                                                                                                                                 |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
 | signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
+| chunkSize (int)                                                      | size of chunks to be uploaded in kb. default value is 1024.                                                                          |
+|                                                                      | Recommended chunk size for                                                                                                           |
+|                                                                      | 3g network - upto 5kb                                                                                                                |
+|                                                                      | 4g network - 500kb to 1MB                                                                                                            |
+|                                                                      | 5g network - 1MB to 2MB                                                                                                              |
+| concurrency (int)                                                    | number of chunks to be uploaded in parallel api calls                                                                                |
 
 -   Resolves with no response on success.
 -   Rejects with error on failure.
@@ -150,73 +156,49 @@ val file =  File(pathname);
 2. Use the presignedUrl generated with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
 ```
-val signedDetails = SignedDetails(url = "url",fields = fieldsToHashMap(fields))
+val signedDetails = SignedDetails(url = "url", fields = fieldsToHashMap(fields))
 
 //fields refer to hashmap of fields object which we got from signed url api
 Example
 data class Fields(
-    @SerializedName("key") var key: String? = null,
-    @SerializedName("x-amz-meta-assetData") var xAmzMetaAssetData: String? = null,
-    @SerializedName("x-amz-meta-token") var xAmzMetaToken: String? = null,
-    @SerializedName("bucket") var bucket: String? = null,
-    @SerializedName("X-Amz-Algorithm") var xAmzAlgorithm: String? = null,
-    @SerializedName("X-Amz-Credential") var xAmzCredential: String? = null,
-    @SerializedName("X-Amz-Date") var xAmzDate: String? = null,
-    @SerializedName("Policy") var policy: String? = null,
-    @SerializedName("X-Amz-Signature") var xAmzSignature: String? = null
+    @SerializedName("x-goog-meta-assetdata") var xGoogMetaAssetData: String? = null,
+    @SerializedName("x-goog-meta-token") var xGoogMetaToken: String? = null,
+    @SerializedName("Access-Control-Request-Headers") var headers: String? = null,
+    @SerializedName("Content-Type") var contentType: String? = null,
+    //for pixelbin host
+    @SerializedName("x-pixb-meta-assetdata") var xPixbMetaAssetdata: String? = null
+
 )
 
 fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
         val hashMap = HashMap<String, String>()
-        hashMap["key"] = fields.key?:""
-        hashMap["x-amz-meta-assetData"] = fields.xAmzMetaAssetData?:""
-        hashMap["x-amz-meta-token"] = fields.xAmzMetaToken?:""
-        hashMap["bucket"] = fields.bucket?:""
-        hashMap["X-Amz-Algorithm"] = fields.xAmzAlgorithm?:""
-        hashMap["X-Amz-Credential"] = fields.xAmzCredential?:""
-        hashMap["X-Amz-Date"] = fields.xAmzDate?:""
-        hashMap["Policy"] = fields.policy?:""
-        hashMap["X-Amz-Signature"] = fields.xAmzSignature?:""
+        hashMap["x-goog-meta-assetData"] = fields.xGoogMetaAssetData?:""
+        hashMap["x-goog-meta-token"] = fields.xGoogMetaToken?:""
+        hashMap["Access-Control-Request-Headers"] = fields.headers?:""
+        hashMap["Content-Type"] = fields.contentType?:""
+        //for pixelbin host
+        hashMap["x-pixb-meta-assetdata"] = fields.xPixbMetaAssetdata?:""
         return hashMap
 }
 
 
 //for kotlin
 CoroutineScope(Dispatchers.IO).launch {
-    PixelBin.getInstance().upload(file,signedDetails){
-    //here Result class is from com.pixelbin.upload.Result
-            when(it){
-                is Result.Success ->{
-                    val response = it.data
-                }
-                is Result.Failure ->{
-                    val response = it.response
-                }
-                is Result.Error ->{
-                    val exception = it.exception
-                }
-                else -> {}
+    PixelBin.getInstance().upload(file, details, {
+        when (it) {
+            is com.pixelbin.upload.Result.Success -> {
+                val response = it.data
             }
+            is com.pixelbin.upload.Result.Failure -> {
+                val response = it.response
+            }
+            is com.pixelbin.upload.Result.Error -> {
+                val exception = it.exception
+            }
+            else -> {}
         }
+    }, chunkSize, concurrency)
 }
-//in case of poor network 3g use
-//signed details here only contain the url and fields map which has one key "x-pixb-meta-assetdata
-//here size is optional default is 3kb
-    PixelBin.getInstance().uploadOn3gNetwork(file,signedDetails,size){
-    //here Result class is from com.pixelbin.upload.Result
-            when(it){
-                is Result.Success ->{
-                    val response = it.data
-                }
-                is Result.Failure ->{
-                    val response = it.response
-                }
-                is Result.Error ->{
-                    val exception = it.exception
-                }
-                else -> {}
-            }
-        }
 
 //for java
   pixelbin.upload(file,signedDetails, result->{
@@ -231,23 +213,9 @@ CoroutineScope(Dispatchers.IO).launch {
                 System.out.println("Error during upload: " + error.getException().getMessage());
             }
             return null;
-        });
+        },chunkSize, concurrency);
 
-//here size is optional default is 3kb
-//signed details here only contain the url and fields map which has one key "x-pixb-meta-assetdata
-  pixelbin.uploadOn3gNetwork(file,signedDetails, result->{
-  //here Result class is from com.pixelbin.upload.Result
-      if (result instanceof Result.Success) {
-                System.out.println("Upload successful");
-          } else if (result instanceof Result.Failure) {
-                Result.Failure failure = (Result.Failure) result;
-                System.out.println("Upload failed: " + failure.getResponse());
-            } else if (result instanceof Result.Error) {
-                Result.Error error = (Result.Error) result;
-                System.out.println("Error during upload: " + error.getException().getMessage());
-            }
-            return null;
-        },size);
+
 ```
 
 ## Utilities
@@ -609,11 +577,12 @@ val t = Transformation.backgroundgenerator(backgroundprompt = "cmVhbGlzdGljIGdyZ
 | ------------ | -------------------------------------------- | --------- |
 | industryType | enum: `general`, `ecommerce`, `car`, `human` | `general` |
 | addShadow    | boolean                                      | false     |
+| refine       | boolean                                      | true      |
 
 #### Usage Example
 
 ```kotlin
-val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL,addshadow = false);
+val t = Transformation.erasebg(industrytype = EraseBG.Industrytype.GENERAL,addshadow = false,refine = true);
 ```
 
 </details>
