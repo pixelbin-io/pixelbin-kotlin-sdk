@@ -135,7 +135,7 @@ image.getUrl()
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
 | signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
-| chunkSize (int)                                                      | size of chnks to be uploaded in kb. default value is 1024.                                                                           |
+| chunkSize (int)                                                      | size of chunks to be uploaded in kb. default value is 1024.                                                                          |
 |                                                                      | Recommended chunk size for                                                                                                           |
 |                                                                      | 3g network - upto 5kb                                                                                                                |
 |                                                                      | 4g network - 500kb to 1MB                                                                                                            |
