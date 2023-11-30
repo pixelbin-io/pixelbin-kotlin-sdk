@@ -25,7 +25,6 @@ local.properties
 *.ipr
 *.iws
 
-#*.DS_Store
 .DS_Store
 
 publish-remote.gradle
