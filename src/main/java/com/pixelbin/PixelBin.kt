@@ -55,28 +55,22 @@ class PixelBin internal constructor(){
      *
      * @param file image file to upload
      * @param signedDetails signed details object containing url and headers
+     * @param chunkSizeInKb size of chunks in which file is break into and uploaded. Default value 1024
+     * @param concurrency number of parallel uploads
+     * @param callback callback for api response
      *
      * signedDetails object containing signed url details
      */
-     fun upload(file:File,signedDetails: SignedDetails,callback: (Result<Any>)-> Unit){
-        CoroutineScope(Dispatchers.IO).launch{
-            Upload().upload(file,signedDetails,callback)
-        }
-    }
-
-    /**
-     * method to upload file to aws bucket
-     *
-     * @param file image file to upload
-     * @param signedDetails signed details object containing url and headers
-     * @param chunkSizeInKb size of chunks in which file is break into and uploaded
-     *
-     * signedDetails object containing signed url details
-     */
-     @JvmOverloads
-     fun uploadOn3gNetwork(file:File,signedDetails: SignedDetails,callback: (Result<Any>)-> Unit,chunkSizeInKb: Int = 3){
-        CoroutineScope(Dispatchers.IO).launch{
-            Upload().uploadImageOn3gNetwork(file,signedDetails,callback,chunkSizeInKb)
+    @JvmOverloads
+    fun upload(
+        file: File,
+        signedDetails: SignedDetails,
+        callback: (Result<Any>) -> Unit,
+        chunkSizeInKb: Int = 1024,
+        concurrency: Int = 1
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Upload().upload(file, signedDetails, callback, chunkSizeInKb,concurrency)
         }
     }
 
