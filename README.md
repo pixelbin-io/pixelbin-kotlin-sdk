@@ -142,8 +142,27 @@ image.getUrl()
 |                                                                      | 5g network - 1MB to 2MB                                                                                                              |
 | concurrency (int)                                                    | number of chunks to be uploaded in parallel api calls                                                                                |
 
--   Resolves with no response on success.
--   Rejects with error on failure.
+**Returns**:
+
+| property                    | description                                                     | example                                                         |
+|-----------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------|
+| orgId (Int)                 | Organization id                                                 | `5320086`                                                       |
+| type (String)               |                                                                 | `file`                                                          |
+| name (String)               | name of the file                                                | `testfile.jpeg`                                                 |
+| path (String)               | Path of containing folder.                                      | `/path/to/image.jpeg`                                           |
+| fileId (String)             | id of file                                                      | `testfile.jpeg`                                                 |
+| access (String)             | Access level of asset, can be either `public-read` or `private` | `public-read`                                                   |
+| tags (List<String>)         | Tags associated with the file.                                  | `["tag1", "tag2"]`                                              |
+| metadata (Map<String, Any>) | Metadata associated with the file.                              | `{"source:"", "publicUploadId":""}`                             |
+| format (String)             | file format                                                     | `jpeg`                                                          |
+| assetType (String)          | type of asset                                                   | `image`                                                         |
+| size (Long)                 | file size                                                       | `37394`                                                         |
+| width (Int)                 | file width                                                      | `720`                                                           |
+| height (Int)                | file height                                                     | `450`                                                           |
+| context (Map<String, Any>)  | contains the file metadata and other contexts of file           | `json object`                                                   |
+| isOriginal (Boolean)        | flag about files type                                           | `true`                                                          |
+| _id (String)                | record id                                                       | `a0b0b19a-d526-4xc07-ae51-0xxxxxx`                              |
+| _url (String)               | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg` |
 
 Example :
 
