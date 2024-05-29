@@ -144,7 +144,7 @@ image.getUrl()
 
 **The callback will be invoked with the `com.pixelbin.upload.Result` object on upload completion.**
 
-**On Success, `com.pixelbin.upload.Result.Success.data` will contain the success response body:**
+**On Success, `com.pixelbin.upload.Result.Success.data` will contain the success response body, here you will have to cast `data` into `UploadResponse` class:**
 
 | property                    | description                                                     | example                                                         |
 |-----------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------|
@@ -223,7 +223,7 @@ CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file, details, {
         when (it) {
             is com.pixelbin.upload.Result.Success -> {
-                val response = it.data
+                val response: UploadResponse = it.data as UploadResponse
             }
             is com.pixelbin.upload.Result.Failure -> {
                 val response = it.response
