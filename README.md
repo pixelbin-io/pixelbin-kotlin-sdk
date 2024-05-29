@@ -142,7 +142,9 @@ image.getUrl()
 |                                                                      | 5g network - 1MB to 2MB                                                                                                              |
 | concurrency (int)                                                    | number of chunks to be uploaded in parallel api calls                                                                                |
 
-**Returns**:
+**The callback will be invoked with the `com.pixelbin.upload.Result` object on upload completion.**
+
+**On Success, `com.pixelbin.upload.Result.Success.data` will contain the success response body:**
 
 | property                    | description                                                     | example                                                         |
 |-----------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------|
@@ -163,6 +165,21 @@ image.getUrl()
 | isOriginal (Boolean)        | flag about files type                                           | `true`                                                          |
 | _id (String)                | record id                                                       | `a0b0b19a-d526-4xc07-ae51-0xxxxxx`                              |
 | _url (String)               | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg` |
+
+**On Failure, `com.pixelbin.upload.Result.Failure.response` will contain the failure response body:**
+
+| property                    | description                                                     | example                                                               |
+|-----------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------|
+| protocol (String)           | Http Protocol                                                   | `h2`                                                                  |
+| code (String)               | Http Response Code                                              | `400`                                                                 |
+| message (String)            | response failure message                                        | `Bad Request`                                                         |
+| url (String)                | Api end point url                                               | `https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart` |
+
+**On Error, `com.pixelbin.upload.Result.Error.exception` will contain the exception:**
+
+| property         | description              | example                                                               |
+|------------------|--------------------------|-----------------------------------------------------------------------|
+| message (String) | error message            | `Request timed out.`                                                  |
 
 Example :
 
