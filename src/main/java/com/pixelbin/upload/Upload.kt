@@ -144,7 +144,17 @@ class Upload internal constructor(){
                                 val deferred = async {
                                     val response = client.newCall(request).execute()
                                     when (response.code) {
-                                        200, 204 -> callback(Result.Success(response.message))
+                                        200, 204 -> {
+                                            val responseBody = response.body
+                                            if (responseBody != null) {
+                                                val successResult = Result.Success(responseBody)
+                                                callback(successResult)
+                                            } else {
+                                                errorOccurred = true
+                                                callback(Result.Failure(response))
+                                                cancel()
+                                            }
+                                        }
                                         408 -> {
                                             errorOccurred = true
                                             callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
