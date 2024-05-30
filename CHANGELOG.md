@@ -1,6 +1,7 @@
 # v0.0.9
 
 - Updated return response for upload(file, signedDetails,callback,chunkSize,concurrency) API
+- On success, response.data will now return an instance UploadResponse instead String.
 
 # v0.0.8
 
