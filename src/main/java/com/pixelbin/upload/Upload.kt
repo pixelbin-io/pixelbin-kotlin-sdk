@@ -144,7 +144,24 @@ class Upload internal constructor(){
                                 val deferred = async {
                                     val response = client.newCall(request).execute()
                                     when (response.code) {
-                                        200, 204 -> callback(Result.Success(response.message))
+                                        200, 204 -> {
+                                            val responseBody = response.body
+                                            if (responseBody != null) {
+                                                val json = responseBody.string()
+                                                if (json.isNotEmpty()) {
+                                                    val uploadResponse = Gson().fromJson(
+                                                        json,
+                                                        UploadResponse::class.java
+                                                    )
+                                                    val successResult = Result.Success(uploadResponse)
+                                                    callback(successResult)
+                                                }
+                                            } else {
+                                                errorOccurred = true
+                                                callback(Result.Failure(response))
+                                                cancel()
+                                            }
+                                        }
                                         408 -> {
                                             errorOccurred = true
                                             callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
@@ -192,14 +209,33 @@ class Upload internal constructor(){
                         .addHeader("Content-Type", "application/json")
                         .build()
                     val response = client.newCall(request).execute()
-                    if (response.code == 200) {
-                        callback(Result.Success(response.message))
-                    } else if (response.code == 408) {
-                        errorOccurred = true
-                        callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
-                    } else {
-                        errorOccurred = true
-                        callback(Result.Failure(response))
+                    when (response.code) {
+                        200 -> {
+                            val responseBody = response.body
+                            if (responseBody != null) {
+                                val json = responseBody.string()
+                                if (json.isNotEmpty()) {
+                                    val uploadResponse = Gson().fromJson(
+                                        json,
+                                        UploadResponse::class.java
+                                    )
+                                    val successResult = Result.Success(uploadResponse)
+                                    callback(successResult)
+                                }
+                            } else {
+                                errorOccurred = true
+                                callback(Result.Failure(response))
+                                cancel()
+                            }
+                        }
+                        408 -> {
+                            errorOccurred = true
+                            callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
+                        }
+                        else -> {
+                            errorOccurred = true
+                            callback(Result.Failure(response))
+                        }
                     }
                 }
             }
