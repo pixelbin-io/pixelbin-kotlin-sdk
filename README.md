@@ -164,7 +164,7 @@ image.getUrl()
 | context (Map<String, Any>)  | contains the file metadata and other contexts of file           | `json object`                                                   |
 | isOriginal (Boolean)        | flag about files type                                           | `true`                                                          |
 | _id (String)                | record id                                                       | `a0b0b19a-d526-4xc07-ae51-0xxxxxx`                              |
-| _url (String)               | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg` |
+| url (String)                | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg` |
 
 **On Failure, `com.pixelbin.upload.Result.Failure.response` will contain the failure response body:**
 
