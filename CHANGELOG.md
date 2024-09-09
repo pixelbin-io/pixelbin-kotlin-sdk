@@ -1,3 +1,7 @@
+# v0.0.10
+
+- Updated method names and add new transformations methods.
+
 # v0.0.9
 
 **Breaking change:**
