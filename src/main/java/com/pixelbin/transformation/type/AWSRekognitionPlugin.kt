@@ -2,7 +2,7 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
-class Detectlabels {
+class AwsrekDetectlabels {
  
     
     
@@ -52,7 +52,7 @@ class Detectlabels {
 }
 
 
-class Moderation {
+class AwsrekModeration {
  
     
     

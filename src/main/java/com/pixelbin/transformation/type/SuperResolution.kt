@@ -2,12 +2,12 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
- class SuperResolution {
+class SrUpscale {
  
     
     
       /**
-     * Type options: 2x, 4x
+     * Type options: 2x, 4x, 8x
      */
       enum class Type {
         
@@ -22,6 +22,13 @@ import com.pixelbin.transformation.TransformationObj
         {
             override fun toString(): String {
                 return "4x"
+            }
+        },
+        
+        _8X
+        {
+            override fun toString(): String {
+                return "8x"
             }
         },
         

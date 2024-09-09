@@ -2,12 +2,12 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
- class EraseBG {
+class EraseBg {
  
     
     
       /**
-     * Industry type options: general, ecommerce, car, human
+     * Foreground Type options: general, ecommerce, car, human, object
      */
       enum class Industrytype {
         
@@ -39,7 +39,16 @@ import com.pixelbin.transformation.TransformationObj
             }
         },
         
+        OBJECT
+        {
+            override fun toString(): String {
+                return "object"
+            }
+        },
+        
     }
+    
+    
     
     
     
@@ -52,6 +61,8 @@ import com.pixelbin.transformation.TransformationObj
      
      * @param Add Shadow Boolean (Default: false)
      
+     * @param Refine Boolean (Default: true)
+     
      * @return TransformationObj.
      */
      @JvmOverloads
@@ -59,7 +70,9 @@ import com.pixelbin.transformation.TransformationObj
        
         industrytype: Industrytype? = null,
         
-        addshadow: Boolean? = null
+        addshadow: Boolean? = null,
+        
+        refine: Boolean? = null
         
     ): TransformationObj {
         // Create the values HashMap
@@ -72,6 +85,12 @@ import com.pixelbin.transformation.TransformationObj
         
         
         values["shadow"] = addshadow.toString()
+        
+        
+        
+        
+        
+        values["r"] = refine.toString()
         
         
         

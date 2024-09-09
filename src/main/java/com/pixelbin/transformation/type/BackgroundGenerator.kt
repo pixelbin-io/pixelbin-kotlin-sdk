@@ -2,10 +2,8 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
- class BackgroundGenerator {
+class GenerateBg {
  
-    
-    
     
     
     
@@ -40,9 +38,7 @@ import com.pixelbin.transformation.TransformationObj
     /**
      * Method for AI Background Generator
      * 
-     * @param Background prompt custom (Default: cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw)
-     
-     * @param Background image for shadow file (Default: )
+     * @param Background prompt custom (Default: YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr)
      
      * @param focus Focus? (Default: Product)
      
@@ -56,8 +52,6 @@ import com.pixelbin.transformation.TransformationObj
     fun bg(
        
         backgroundprompt: String? = null,
-        
-        backgroundimageforshadow: String? = null,
         
         focus: Focus? = null,
         
@@ -74,16 +68,6 @@ import com.pixelbin.transformation.TransformationObj
         
         if(!backgroundprompt.isNullOrEmpty()){
             values["p"] = backgroundprompt.toString()
-        }
-        
-        
-        
-        
-        
-        
-        
-        if(!backgroundimageforshadow.isNullOrEmpty()){
-            values["i"] = backgroundimageforshadow.toString()
         }
         
         

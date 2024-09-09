@@ -6,137 +6,163 @@ internal object TransformationMap{
     val hashMap:HashMap<String,TransformationObj> = hashMapOf(
         
         
-        "dbt.detect" to Transformation.detectbackgroundtype(),
+        "dbt.detect" to Transformation.dbtDetect(),
         
         
         
-        "af.remove" to Transformation.artifact(),
+        "af.remove" to Transformation.afRemove(),
         
         
         
-        "awsRek.detectLabels" to Transformation.detectlabels(),
+        "awsRek.detectLabels" to Transformation.awsrekDetectlabels(),
         
-        "awsRek.moderation" to Transformation.moderation(),
+        "awsRek.moderation" to Transformation.awsrekModeration(),
         
         
         
-        "generate.bg" to Transformation.backgroundgenerator(),
+        "generate.bg" to Transformation.generateBg(),
         
         
         
-        "erase.bg" to Transformation.erasebg(),
+        "vg.generate" to Transformation.vgGenerate(),
         
         
         
-        "googleVis.detectLabels" to Transformation.googlevisionplugin(),
+        "erase.bg" to Transformation.eraseBg(),
         
         
         
-        "imc.detect" to Transformation.imagecentering(),
+        "googleVis.detectLabels" to Transformation.googlevisDetectlabels(),
         
         
         
-        "ic.crop" to Transformation.intelligentcrop(),
+        "imc.detect" to Transformation.imcDetect(),
         
         
         
-        "oc.detect" to Transformation.objectcounter(),
+        "ic.crop" to Transformation.icCrop(),
         
         
         
-        "nsfw.detect" to Transformation.nsfwdetection(),
+        "oc.detect" to Transformation.ocDetect(),
         
         
         
-        "numPlate.detect" to Transformation.numberplatedetection(),
+        "nsfw.detect" to Transformation.nsfwDetect(),
         
         
         
-        "od.detect" to Transformation.objectdetection(),
+        "numPlate.detect" to Transformation.numplateDetect(),
         
         
         
-        "cos.detect" to Transformation.checkobjectsize(),
+        "od.detect" to Transformation.odDetect(),
         
         
         
-        "ocr.extract" to Transformation.textdetectionandrecognition(),
+        "cos.detect" to Transformation.cosDetect(),
         
         
         
-        "pwr.remove" to Transformation.pdfwatermarkremoval(),
+        "ocr.extract" to Transformation.ocrExtract(),
         
         
         
-        "pr.tag" to Transformation.producttagging(),
+        "pwr.remove" to Transformation.pwrRemove(),
         
         
         
-        "cpv.detect" to Transformation.checkproductvisibility(),
+        "pr.tag" to Transformation.prTag(),
         
         
         
-        "remove.bg" to Transformation.removebg(),
+        "cpv.detect" to Transformation.cpvDetect(),
         
         
         
-        "t.resize" to Transformation.resize(),
+        "qr.generate" to Transformation.qrGenerate(),
         
-        "t.compress" to Transformation.compress(),
+        "qr.scan" to Transformation.qrScan(),
         
-        "t.extend" to Transformation.extend(),
         
-        "t.extract" to Transformation.extract(),
         
-        "t.trim" to Transformation.trim(),
+        "remove.bg" to Transformation.removeBg(),
         
-        "t.rotate" to Transformation.rotate(),
         
-        "t.flip" to Transformation.flip(),
         
-        "t.flop" to Transformation.flop(),
+        "t.resize" to Transformation.tResize(),
         
-        "t.sharpen" to Transformation.sharpen(),
+        "t.compress" to Transformation.tCompress(),
         
-        "t.median" to Transformation.median(),
+        "t.extend" to Transformation.tExtend(),
         
-        "t.blur" to Transformation.blur(),
+        "t.extract" to Transformation.tExtract(),
         
-        "t.flatten" to Transformation.flatten(),
+        "t.trim" to Transformation.tTrim(),
         
-        "t.negate" to Transformation.negate(),
+        "t.rotate" to Transformation.tRotate(),
         
-        "t.normalise" to Transformation.normalise(),
+        "t.flip" to Transformation.tFlip(),
         
-        "t.linear" to Transformation.linear(),
+        "t.flop" to Transformation.tFlop(),
         
-        "t.modulate" to Transformation.modulate(),
+        "t.sharpen" to Transformation.tSharpen(),
         
-        "t.grey" to Transformation.grey(),
+        "t.median" to Transformation.tMedian(),
         
-        "t.tint" to Transformation.tint(),
+        "t.blur" to Transformation.tBlur(),
         
-        "t.toFormat" to Transformation.toformat(),
+        "t.flatten" to Transformation.tFlatten(),
         
-        "t.density" to Transformation.density(),
+        "t.negate" to Transformation.tNegate(),
         
-        "t.merge" to Transformation.merge(),
+        "t.normalise" to Transformation.tNormalise(),
         
+        "t.linear" to Transformation.tLinear(),
         
+        "t.modulate" to Transformation.tModulate(),
         
-        "sr.upscale" to Transformation.superresolution(),
+        "t.grey" to Transformation.tGrey(),
         
+        "t.tint" to Transformation.tTint(),
         
+        "t.toFormat" to Transformation.tToformat(),
         
-        "vd.detect" to Transformation.viewdetection(),
+        "t.density" to Transformation.tDensity(),
         
+        "t.merge" to Transformation.tMerge(),
         
         
-        "wm.remove" to Transformation.watermarkremoval(),
         
+        "shadow.gen" to Transformation.shadowGen(),
         
         
-        "wmc.detect" to Transformation.watermarkdetection(),
+        
+        "sr.upscale" to Transformation.srUpscale(),
+        
+        
+        
+        "vertexAi.generateBG" to Transformation.vertexaiGeneratebg(),
+        
+        "vertexAi.removeBG" to Transformation.vertexaiRemovebg(),
+        
+        "vertexAi.upscale" to Transformation.vertexaiUpscale(),
+        
+        
+        
+        "wmv.remove" to Transformation.wmvRemove(),
+        
+        
+        
+        "vd.detect" to Transformation.vdDetect(),
+        
+        
+        
+        "wm.remove" to Transformation.wmRemove(),
+        
+        
+        
+        "wmc.detect" to Transformation.wmcDetect(),
         
         
     )
