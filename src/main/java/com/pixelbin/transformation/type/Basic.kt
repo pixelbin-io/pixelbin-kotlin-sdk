@@ -2,7 +2,7 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
-class Resize {
+class TResize {
  
     
     
@@ -264,7 +264,7 @@ class Resize {
 }
 
 
-class Compress {
+class TCompress {
  
     
     
@@ -302,7 +302,7 @@ class Compress {
 }
 
 
-class Extend {
+class TExtend {
  
     
     
@@ -449,8 +449,10 @@ class Extend {
 }
 
 
-class Extract {
+class TExtract {
  
+    
+    
     
     
     
@@ -472,6 +474,8 @@ class Extract {
      
      * @param width Int (Default: 20)
      
+     * @param Bounding Box bbox
+     
      * @return TransformationObj.
      */
      @JvmOverloads
@@ -483,7 +487,9 @@ class Extract {
         
         height: Int? = null,
         
-        width: Int? = null
+        width: Int? = null,
+        
+        boundingbox: String? = null
         
     ): TransformationObj {
         // Create the values HashMap
@@ -514,6 +520,16 @@ class Extract {
         
         
         
+        
+        
+        if(!boundingbox.isNullOrEmpty()){
+            values["bbox"] = boundingbox.toString()
+        }
+        
+        
+        
+        
+        
         return TransformationObj(
             plugin = "t",
             name = "extract",
@@ -523,7 +539,7 @@ class Extract {
 }
 
 
-class Trim {
+class TTrim {
  
     
     
@@ -561,7 +577,7 @@ class Trim {
 }
 
 
-class Rotate {
+class TRotate {
  
     
     
@@ -615,7 +631,7 @@ class Rotate {
 }
 
 
-class Flip {
+class TFlip {
  
     
 
@@ -641,7 +657,7 @@ class Flip {
 }
 
 
-class Flop {
+class TFlop {
  
     
 
@@ -667,7 +683,7 @@ class Flop {
 }
 
 
-class Sharpen {
+class TSharpen {
  
     
     
@@ -705,7 +721,7 @@ class Sharpen {
 }
 
 
-class Median {
+class TMedian {
  
     
     
@@ -743,7 +759,7 @@ class Median {
 }
 
 
-class Blur {
+class TBlur {
  
     
     
@@ -793,7 +809,7 @@ class Blur {
 }
 
 
-class Flatten {
+class TFlatten {
  
     
     
@@ -835,7 +851,7 @@ class Flatten {
 }
 
 
-class Negate {
+class TNegate {
  
     
 
@@ -861,7 +877,7 @@ class Negate {
 }
 
 
-class Normalise {
+class TNormalise {
  
     
 
@@ -887,7 +903,7 @@ class Normalise {
 }
 
 
-class Linear {
+class TLinear {
  
     
     
@@ -937,7 +953,7 @@ class Linear {
 }
 
 
-class Modulate {
+class TModulate {
  
     
     
@@ -999,7 +1015,7 @@ class Modulate {
 }
 
 
-class Grey {
+class TGrey {
  
     
 
@@ -1025,7 +1041,7 @@ class Grey {
 }
 
 
-class Tint {
+class TTint {
  
     
     
@@ -1067,12 +1083,12 @@ class Tint {
 }
 
 
-class Toformat {
+class TToformat {
  
     
     
       /**
-     * Format options: jpeg, png, webp, tiff, avif, bmp
+     * Format options: jpeg, png, webp, tiff, avif, bmp, heif
      */
       enum class Format {
         
@@ -1118,7 +1134,16 @@ class Toformat {
             }
         },
         
+        HEIF
+        {
+            override fun toString(): String {
+                return "heif"
+            }
+        },
+        
     }
+    
+    
     
     
 
@@ -1127,12 +1152,16 @@ class Toformat {
      * 
      * @param format Format? (Default: jpeg)
      
+     * @param quality Int (Default: 75)
+     
      * @return TransformationObj.
      */
      @JvmOverloads
     fun toFormat(
        
-        format: Format? = null
+        format: Format? = null,
+        
+        quality: Int? = null
         
     ): TransformationObj {
         // Create the values HashMap
@@ -1140,6 +1169,12 @@ class Toformat {
         
         
         values["f"] = format.toString()
+        
+        
+        
+        
+        values["q"] = quality.toString()
+        
         
         
         
@@ -1152,7 +1187,7 @@ class Toformat {
 }
 
 
-class Density {
+class TDensity {
  
     
     
@@ -1190,7 +1225,7 @@ class Density {
 }
 
 
-class Merge {
+class TMerge {
  
     
     

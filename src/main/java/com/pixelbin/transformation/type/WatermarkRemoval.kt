@@ -2,7 +2,7 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
- class WatermarkRemoval {
+class WmRemove {
  
     
     

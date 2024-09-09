@@ -2,12 +2,12 @@ package com.pixelbin.transformation.type
 import com.pixelbin.transformation.TransformationObj
 
 
-class AfRemove {
+class WmvRemove {
  
     
 
     /**
-     * Method for Artifact Removal Plugin
+     * Method for Video Watermark Removal Plugin
      * 
      * @return TransformationObj.
      */
@@ -20,7 +20,7 @@ class AfRemove {
         
         
         return TransformationObj(
-            plugin = "af",
+            plugin = "wmv",
             name = "remove",
             values = values
         )

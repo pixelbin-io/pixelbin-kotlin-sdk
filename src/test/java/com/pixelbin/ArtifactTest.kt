@@ -1,6 +1,6 @@
 package com.pixelbin
 
-import com.pixelbin.transformation.type.Artifact
+import com.pixelbin.transformation.type.AfRemove
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -8,7 +8,7 @@ class ArtifactTest {
     @Test
     fun testRemoveTransformation() {
         // Arrange
-        val artifact = Artifact()
+        val artifact = AfRemove()
 
         // Act
         val transformationObj = artifact.remove()

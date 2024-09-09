@@ -3,137 +3,163 @@ package com.pixelbin.transformation
 import com.pixelbin.transformation.TransformationObj
 
 
-import com.pixelbin.transformation.type.DetectBackgroundType
+import com.pixelbin.transformation.type.DbtDetect
 
 
 
-import com.pixelbin.transformation.type.Artifact
+import com.pixelbin.transformation.type.AfRemove
 
 
 
-import com.pixelbin.transformation.type.Detectlabels
+import com.pixelbin.transformation.type.AwsrekDetectlabels
 
-import com.pixelbin.transformation.type.Moderation
+import com.pixelbin.transformation.type.AwsrekModeration
 
 
 
-import com.pixelbin.transformation.type.BackgroundGenerator
+import com.pixelbin.transformation.type.GenerateBg
 
 
 
-import com.pixelbin.transformation.type.EraseBG
+import com.pixelbin.transformation.type.VgGenerate
 
 
 
-import com.pixelbin.transformation.type.GoogleVisionPlugin
+import com.pixelbin.transformation.type.EraseBg
 
 
 
-import com.pixelbin.transformation.type.ImageCentering
+import com.pixelbin.transformation.type.GooglevisDetectlabels
 
 
 
-import com.pixelbin.transformation.type.IntelligentCrop
+import com.pixelbin.transformation.type.ImcDetect
 
 
 
-import com.pixelbin.transformation.type.ObjectCounter
+import com.pixelbin.transformation.type.IcCrop
 
 
 
-import com.pixelbin.transformation.type.NSFWDetection
+import com.pixelbin.transformation.type.OcDetect
 
 
 
-import com.pixelbin.transformation.type.NumberPlateDetection
+import com.pixelbin.transformation.type.NsfwDetect
 
 
 
-import com.pixelbin.transformation.type.ObjectDetection
+import com.pixelbin.transformation.type.NumplateDetect
 
 
 
-import com.pixelbin.transformation.type.CheckObjectSize
+import com.pixelbin.transformation.type.OdDetect
 
 
 
-import com.pixelbin.transformation.type.TextDetectionandRecognition
+import com.pixelbin.transformation.type.CosDetect
 
 
 
-import com.pixelbin.transformation.type.PdfWatermarkRemoval
+import com.pixelbin.transformation.type.OcrExtract
 
 
 
-import com.pixelbin.transformation.type.ProductTagging
+import com.pixelbin.transformation.type.PwrRemove
 
 
 
-import com.pixelbin.transformation.type.CheckProductVisibility
+import com.pixelbin.transformation.type.PrTag
 
 
 
-import com.pixelbin.transformation.type.RemoveBG
+import com.pixelbin.transformation.type.CpvDetect
 
 
 
-import com.pixelbin.transformation.type.Resize
+import com.pixelbin.transformation.type.QrGenerate
 
-import com.pixelbin.transformation.type.Compress
+import com.pixelbin.transformation.type.QrScan
 
-import com.pixelbin.transformation.type.Extend
 
-import com.pixelbin.transformation.type.Extract
 
-import com.pixelbin.transformation.type.Trim
+import com.pixelbin.transformation.type.RemoveBg
 
-import com.pixelbin.transformation.type.Rotate
 
-import com.pixelbin.transformation.type.Flip
 
-import com.pixelbin.transformation.type.Flop
+import com.pixelbin.transformation.type.TResize
 
-import com.pixelbin.transformation.type.Sharpen
+import com.pixelbin.transformation.type.TCompress
 
-import com.pixelbin.transformation.type.Median
+import com.pixelbin.transformation.type.TExtend
 
-import com.pixelbin.transformation.type.Blur
+import com.pixelbin.transformation.type.TExtract
 
-import com.pixelbin.transformation.type.Flatten
+import com.pixelbin.transformation.type.TTrim
 
-import com.pixelbin.transformation.type.Negate
+import com.pixelbin.transformation.type.TRotate
 
-import com.pixelbin.transformation.type.Normalise
+import com.pixelbin.transformation.type.TFlip
 
-import com.pixelbin.transformation.type.Linear
+import com.pixelbin.transformation.type.TFlop
 
-import com.pixelbin.transformation.type.Modulate
+import com.pixelbin.transformation.type.TSharpen
 
-import com.pixelbin.transformation.type.Grey
+import com.pixelbin.transformation.type.TMedian
 
-import com.pixelbin.transformation.type.Tint
+import com.pixelbin.transformation.type.TBlur
 
-import com.pixelbin.transformation.type.Toformat
+import com.pixelbin.transformation.type.TFlatten
 
-import com.pixelbin.transformation.type.Density
+import com.pixelbin.transformation.type.TNegate
 
-import com.pixelbin.transformation.type.Merge
+import com.pixelbin.transformation.type.TNormalise
 
+import com.pixelbin.transformation.type.TLinear
 
+import com.pixelbin.transformation.type.TModulate
 
-import com.pixelbin.transformation.type.SuperResolution
+import com.pixelbin.transformation.type.TGrey
 
+import com.pixelbin.transformation.type.TTint
 
+import com.pixelbin.transformation.type.TToformat
 
-import com.pixelbin.transformation.type.ViewDetection
+import com.pixelbin.transformation.type.TDensity
 
+import com.pixelbin.transformation.type.TMerge
 
 
-import com.pixelbin.transformation.type.WatermarkRemoval
 
+import com.pixelbin.transformation.type.ShadowGen
 
 
-import com.pixelbin.transformation.type.WatermarkDetection
+
+import com.pixelbin.transformation.type.SrUpscale
+
+
+
+import com.pixelbin.transformation.type.VertexaiGeneratebg
+
+import com.pixelbin.transformation.type.VertexaiRemovebg
+
+import com.pixelbin.transformation.type.VertexaiUpscale
+
+
+
+import com.pixelbin.transformation.type.WmvRemove
+
+
+
+import com.pixelbin.transformation.type.VdDetect
+
+
+
+import com.pixelbin.transformation.type.WmRemove
+
+
+
+import com.pixelbin.transformation.type.WmcDetect
 
 
 
@@ -147,11 +173,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun detectbackgroundtype(
+    fun dbtDetect(
    
     ): TransformationObj {
         // Call the generated class method
-        return DetectBackgroundType().detect(
+        return DbtDetect().detect(
             
         )
     }
@@ -165,11 +191,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun artifact(
+    fun afRemove(
    
     ): TransformationObj {
         // Call the generated class method
-        return Artifact().remove(
+        return AfRemove().remove(
             
         )
     }
@@ -187,7 +213,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  detectlabels(
+    fun awsrekDetectlabels(
    
     maximumlabels: Int?
      = 5,
@@ -197,7 +223,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return  Detectlabels().detectLabels(
+        return AwsrekDetectlabels().detectLabels(
             
             maximumlabels, 
             
@@ -214,14 +240,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  moderation(
+    fun awsrekModeration(
    
     minimumconfidence: Int?
      = 55
 
     ): TransformationObj {
         // Call the generated class method
-        return  Moderation().moderation(
+        return AwsrekModeration().moderation(
             
             minimumconfidence
             
@@ -234,9 +260,7 @@ object Transformation {
     /**
      * AI Background Generator
      * 
-     * @param backgroundprompt Background prompt (Default: cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw)
-     
-     * @param backgroundimageforshadow Background image for shadow (Default: )
+     * @param backgroundprompt Background prompt (Default: YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr)
      
      * @param focus Focus (Default: Product)
      
@@ -247,16 +271,13 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun backgroundgenerator(
+    fun generateBg(
    
     backgroundprompt: String?
-     = "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",
+     = "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
 
-    backgroundimageforshadow: String?
-     = "",
-
-    focus: BackgroundGenerator.Focus?
-     = BackgroundGenerator.Focus.PRODUCT,
+    focus: GenerateBg.Focus?
+     = GenerateBg.Focus.PRODUCT,
 
     negativeprompt: String?
      = "",
@@ -266,11 +287,9 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return BackgroundGenerator().bg(
+        return GenerateBg().bg(
             
             backgroundprompt, 
-            
-            backgroundimageforshadow, 
             
             focus, 
             
@@ -282,33 +301,86 @@ object Transformation {
     }
     
     
+    // VariationGenerator
+    
+    /**
+     * AI Variation Generator
+     * 
+     * @param generatevariationprompt Generate variation prompt (Default: )
+     
+     * @param noofvariations No. of variations (Default: 1)
+     
+     * @param seed Seed (Default: 0)
+     
+     * @param autoscale Autoscale input if it exceeds maximum resolution (Default: true)
+     
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun vgGenerate(
+   
+    generatevariationprompt: String?
+     = "",
+
+    noofvariations: Int?
+     = 1,
+
+    seed: Int?
+     = 0,
+
+    autoscale: Boolean?
+     = true
+
+    ): TransformationObj {
+        // Call the generated class method
+        return VgGenerate().generate(
+            
+            generatevariationprompt, 
+            
+            noofvariations, 
+            
+            seed, 
+            
+            autoscale
+            
+        )
+    }
+    
+    
     // EraseBG
     
     /**
      * EraseBG Background Removal Module
      * 
-     * @param industrytype Industry type (Default: general)
+     * @param industrytype Foreground Type (Default: general)
      
      * @param addshadow Add Shadow (cars only) (Default: false)
+     
+     * @param refine Refine Output (Default: true)
      
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun erasebg(
+    fun eraseBg(
    
-    industrytype: EraseBG.Industrytype?
-     = EraseBG.Industrytype.GENERAL,
+    industrytype: EraseBg.Industrytype?
+     = EraseBg.Industrytype.GENERAL,
 
     addshadow: Boolean?
-     = false
+     = false,
+
+    refine: Boolean?
+     = true
 
     ): TransformationObj {
         // Call the generated class method
-        return EraseBG().bg(
+        return EraseBg().bg(
             
             industrytype, 
             
-            addshadow
+            addshadow, 
+            
+            refine
             
         )
     }
@@ -324,14 +396,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun googlevisionplugin(
+    fun googlevisDetectlabels(
    
     maximumlabels: Int?
      = 5
 
     ): TransformationObj {
         // Call the generated class method
-        return GoogleVisionPlugin().detectLabels(
+        return GooglevisDetectlabels().detectLabels(
             
             maximumlabels
             
@@ -349,14 +421,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun imagecentering(
+    fun imcDetect(
    
     distancepercentage: Int?
      = 10
 
     ): TransformationObj {
         // Call the generated class method
-        return ImageCentering().detect(
+        return ImcDetect().detect(
             
             distancepercentage
             
@@ -388,7 +460,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun intelligentcrop(
+    fun icCrop(
    
     requiredwidth: Int?
      = 0,
@@ -405,18 +477,18 @@ object Transformation {
     aspectratio: String?
      = "",
 
-    gravitytowards: IntelligentCrop.Gravitytowards?
-     = IntelligentCrop.Gravitytowards.NONE,
+    gravitytowards: IcCrop.Gravitytowards?
+     = IcCrop.Gravitytowards.NONE,
 
-    preferreddirection: IntelligentCrop.Preferreddirection?
-     = IntelligentCrop.Preferreddirection.CENTER,
+    preferreddirection: IcCrop.Preferreddirection?
+     = IcCrop.Preferreddirection.CENTER,
 
-    objecttype: IntelligentCrop.Objecttype?
-     = IntelligentCrop.Objecttype.PERSON
+    objecttype: IcCrop.Objecttype?
+     = IcCrop.Objecttype.PERSON
 
     ): TransformationObj {
         // Call the generated class method
-        return IntelligentCrop().crop(
+        return IcCrop().crop(
             
             requiredwidth, 
             
@@ -446,11 +518,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun objectcounter(
+    fun ocDetect(
    
     ): TransformationObj {
         // Call the generated class method
-        return ObjectCounter().detect(
+        return OcDetect().detect(
             
         )
     }
@@ -466,14 +538,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun nsfwdetection(
+    fun nsfwDetect(
    
     minimumconfidence: Number?
      = 0.5
 
     ): TransformationObj {
         // Call the generated class method
-        return NSFWDetection().detect(
+        return NsfwDetect().detect(
             
             minimumconfidence
             
@@ -489,11 +561,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun numberplatedetection(
+    fun numplateDetect(
    
     ): TransformationObj {
         // Call the generated class method
-        return NumberPlateDetection().detect(
+        return NumplateDetect().detect(
             
         )
     }
@@ -507,11 +579,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun objectdetection(
+    fun odDetect(
    
     ): TransformationObj {
         // Call the generated class method
-        return ObjectDetection().detect(
+        return OdDetect().detect(
             
         )
     }
@@ -527,14 +599,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun checkobjectsize(
+    fun cosDetect(
    
     objectthresholdpercent: Int?
      = 50
 
     ): TransformationObj {
         // Call the generated class method
-        return CheckObjectSize().detect(
+        return CosDetect().detect(
             
             objectthresholdpercent
             
@@ -552,14 +624,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun textdetectionandrecognition(
+    fun ocrExtract(
    
     detectonly: Boolean?
      = false
 
     ): TransformationObj {
         // Call the generated class method
-        return TextDetectionandRecognition().extract(
+        return OcrExtract().extract(
             
             detectonly
             
@@ -575,11 +647,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun pdfwatermarkremoval(
+    fun pwrRemove(
    
     ): TransformationObj {
         // Call the generated class method
-        return PdfWatermarkRemoval().remove(
+        return PwrRemove().remove(
             
         )
     }
@@ -593,11 +665,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun producttagging(
+    fun prTag(
    
     ): TransformationObj {
         // Call the generated class method
-        return ProductTagging().tag(
+        return PrTag().tag(
             
         )
     }
@@ -611,11 +683,149 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun checkproductvisibility(
+    fun cpvDetect(
    
     ): TransformationObj {
         // Call the generated class method
-        return CheckProductVisibility().detect(
+        return CpvDetect().detect(
+            
+        )
+    }
+    
+    
+    // QRCode
+    
+    /**
+     * QRCode Plugin
+     * 
+     * @param width Width (Default: 300)
+     
+     * @param height Height (Default: 300)
+     
+     * @param image Logo URL (Default: )
+     
+     * @param margin Margin around QR (Default: 0)
+     
+     * @param qrtypenumber QR Type Number (Default: 0)
+     
+     * @param qrerrorcorrectionlevel QR Error Correction Level (Default: Q)
+     
+     * @param imagesize Logo Size (Default: 0.4)
+     
+     * @param imagemargin Margin around Logo (Default: 0)
+     
+     * @param dotscolor Dots Color (Default: 000000)
+     
+     * @param dotstype Dots Type (Default: square)
+     
+     * @param dotsbgcolor Dots Background Color (Default: ffffff)
+     
+     * @param cornersquarecolor Corner Square Color (Default: 000000)
+     
+     * @param cornersquaretype Corner Square Type (Default: square)
+     
+     * @param cornerdotscolor Corner Dots Color (Default: 000000)
+     
+     * @param cornerdotstype Corner Dots Type (Default: dot)
+     
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun qrGenerate(
+   
+    width: Int?
+     = 300,
+
+    height: Int?
+     = 300,
+
+    image: String?
+     = "",
+
+    margin: Int?
+     = 0,
+
+    qrtypenumber: Int?
+     = 0,
+
+    qrerrorcorrectionlevel: QrGenerate.Qrerrorcorrectionlevel?
+     = QrGenerate.Qrerrorcorrectionlevel.Q,
+
+    imagesize: Number?
+     = 0.4,
+
+    imagemargin: Int?
+     = 0,
+
+    dotscolor: String?
+     = "000000",
+
+    dotstype: QrGenerate.Dotstype?
+     = QrGenerate.Dotstype.SQUARE,
+
+    dotsbgcolor: String?
+     = "ffffff",
+
+    cornersquarecolor: String?
+     = "000000",
+
+    cornersquaretype: QrGenerate.Cornersquaretype?
+     = QrGenerate.Cornersquaretype.SQUARE,
+
+    cornerdotscolor: String?
+     = "000000",
+
+    cornerdotstype: QrGenerate.Cornerdotstype?
+     = QrGenerate.Cornerdotstype.DOT
+
+    ): TransformationObj {
+        // Call the generated class method
+        return QrGenerate().generate(
+            
+            width, 
+            
+            height, 
+            
+            image, 
+            
+            margin, 
+            
+            qrtypenumber, 
+            
+            qrerrorcorrectionlevel, 
+            
+            imagesize, 
+            
+            imagemargin, 
+            
+            dotscolor, 
+            
+            dotstype, 
+            
+            dotsbgcolor, 
+            
+            cornersquarecolor, 
+            
+            cornersquaretype, 
+            
+            cornerdotscolor, 
+            
+            cornerdotstype
+            
+        )
+    }
+    
+    /**
+     * QRCode Plugin
+     * 
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun qrScan(
+   
+    ): TransformationObj {
+        // Call the generated class method
+        return QrScan().scan(
             
         )
     }
@@ -629,11 +839,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun removebg(
+    fun removeBg(
    
     ): TransformationObj {
         // Call the generated class method
-        return RemoveBG().bg(
+        return RemoveBg().bg(
             
         )
     }
@@ -661,7 +871,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  resize(
+    fun tResize(
    
     height: Int?
      = 0,
@@ -669,24 +879,24 @@ object Transformation {
     width: Int?
      = 0,
 
-    fit:  Resize.Fit?
-     =  Resize.Fit.COVER,
+    fit: TResize.Fit?
+     = TResize.Fit.COVER,
 
     background: String?
      = "000000",
 
-    position:  Resize.Position?
-     =  Resize.Position.CENTER,
+    position: TResize.Position?
+     = TResize.Position.CENTER,
 
-    algorithm:  Resize.Algorithm?
-     =  Resize.Algorithm.LANCZOS3,
+    algorithm: TResize.Algorithm?
+     = TResize.Algorithm.LANCZOS3,
 
     dpr: Number?
      = 1
 
     ): TransformationObj {
         // Call the generated class method
-        return  Resize().resize(
+        return TResize().resize(
             
             height, 
             
@@ -713,14 +923,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  compress(
+    fun tCompress(
    
     quality: Int?
      = 80
 
     ): TransformationObj {
         // Call the generated class method
-        return  Compress().compress(
+        return TCompress().compress(
             
             quality
             
@@ -747,7 +957,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  extend(
+    fun tExtend(
    
     top: Int?
      = 10,
@@ -764,15 +974,15 @@ object Transformation {
     background: String?
      = "000000",
 
-    bordertype:  Extend.Bordertype?
-     =  Extend.Bordertype.CONSTANT,
+    bordertype: TExtend.Bordertype?
+     = TExtend.Bordertype.CONSTANT,
 
     dpr: Number?
      = 1
 
     ): TransformationObj {
         // Call the generated class method
-        return  Extend().extend(
+        return TExtend().extend(
             
             top, 
             
@@ -802,10 +1012,12 @@ object Transformation {
      
      * @param width Width (Default: 20)
      
+     * @param boundingbox Bounding box
+     
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  extract(
+    fun tExtract(
    
     top: Int?
      = 10,
@@ -817,11 +1029,14 @@ object Transformation {
      = 50,
 
     width: Int?
-     = 20
+     = 20,
+
+    boundingbox: String?
+    =""
 
     ): TransformationObj {
         // Call the generated class method
-        return  Extract().extract(
+        return TExtract().extract(
             
             top, 
             
@@ -829,7 +1044,9 @@ object Transformation {
             
             height, 
             
-            width
+            width, 
+            
+            boundingbox
             
         )
     }
@@ -842,14 +1059,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  trim(
+    fun tTrim(
    
     threshold: Int?
      = 10
 
     ): TransformationObj {
         // Call the generated class method
-        return  Trim().trim(
+        return TTrim().trim(
             
             threshold
             
@@ -866,7 +1083,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  rotate(
+    fun tRotate(
    
     angle: Int?
      = 0,
@@ -876,7 +1093,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return  Rotate().rotate(
+        return TRotate().rotate(
             
             angle, 
             
@@ -891,11 +1108,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  flip(
+    fun tFlip(
    
     ): TransformationObj {
         // Call the generated class method
-        return  Flip().flip(
+        return TFlip().flip(
             
         )
     }
@@ -906,11 +1123,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  flop(
+    fun tFlop(
    
     ): TransformationObj {
         // Call the generated class method
-        return  Flop().flop(
+        return TFlop().flop(
             
         )
     }
@@ -923,14 +1140,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  sharpen(
+    fun tSharpen(
    
     sigma: Number?
      = 1.5
 
     ): TransformationObj {
         // Call the generated class method
-        return  Sharpen().sharpen(
+        return TSharpen().sharpen(
             
             sigma
             
@@ -945,14 +1162,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  median(
+    fun tMedian(
    
     size: Int?
      = 3
 
     ): TransformationObj {
         // Call the generated class method
-        return  Median().median(
+        return TMedian().median(
             
             size
             
@@ -969,7 +1186,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  blur(
+    fun tBlur(
    
     sigma: Number?
      = 0.3,
@@ -979,7 +1196,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return  Blur().blur(
+        return TBlur().blur(
             
             sigma, 
             
@@ -996,14 +1213,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  flatten(
+    fun tFlatten(
    
     background: String?
      = "000000"
 
     ): TransformationObj {
         // Call the generated class method
-        return  Flatten().flatten(
+        return TFlatten().flatten(
             
             background
             
@@ -1016,11 +1233,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  negate(
+    fun tNegate(
    
     ): TransformationObj {
         // Call the generated class method
-        return  Negate().negate(
+        return TNegate().negate(
             
         )
     }
@@ -1031,11 +1248,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  normalise(
+    fun tNormalise(
    
     ): TransformationObj {
         // Call the generated class method
-        return  Normalise().normalise(
+        return TNormalise().normalise(
             
         )
     }
@@ -1050,7 +1267,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  linear(
+    fun tLinear(
    
     a: Int?
      = 1,
@@ -1060,7 +1277,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return  Linear().linear(
+        return TLinear().linear(
             
             a, 
             
@@ -1081,7 +1298,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  modulate(
+    fun tModulate(
    
     brightness: Number?
      = 1,
@@ -1094,7 +1311,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return  Modulate().modulate(
+        return TModulate().modulate(
             
             brightness, 
             
@@ -1111,11 +1328,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  grey(
+    fun tGrey(
    
     ): TransformationObj {
         // Call the generated class method
-        return  Grey().grey(
+        return TGrey().grey(
             
         )
     }
@@ -1128,14 +1345,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  tint(
+    fun tTint(
    
     color: String?
      = "000000"
 
     ): TransformationObj {
         // Call the generated class method
-        return  Tint().tint(
+        return TTint().tint(
             
             color
             
@@ -1147,19 +1364,26 @@ object Transformation {
      * 
      * @param format Format (Default: jpeg)
      
+     * @param quality Quality (Default: 75)
+     
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  toformat(
+    fun tToformat(
    
-    format:  Toformat.Format?
-     =  Toformat.Format.JPEG
+    format: TToformat.Format?
+     = TToformat.Format.JPEG,
+
+    quality: Int?
+     = 75
 
     ): TransformationObj {
         // Call the generated class method
-        return  Toformat().toFormat(
+        return TToformat().toFormat(
             
-            format
+            format, 
+            
+            quality
             
         )
     }
@@ -1172,14 +1396,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  density(
+    fun tDensity(
    
     density: Int?
      = 300
 
     ): TransformationObj {
         // Call the generated class method
-        return  Density().density(
+        return TDensity().density(
             
             density
             
@@ -1218,10 +1442,10 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun  merge(
+    fun tMerge(
    
-    mode:  Merge.Mode?
-     =  Merge.Mode.OVERLAY,
+    mode: TMerge.Mode?
+     = TMerge.Mode.OVERLAY,
 
     image: String?
      = "",
@@ -1244,11 +1468,11 @@ object Transformation {
     left: Int?
      = 0,
 
-    gravity:  Merge.Gravity?
-     =  Merge.Gravity.CENTER,
+    gravity: TMerge.Gravity?
+     = TMerge.Gravity.CENTER,
 
-    blend:  Merge.Blend?
-     =  Merge.Blend.OVER,
+    blend: TMerge.Blend?
+     = TMerge.Blend.OVER,
 
     tile: Boolean?
      = false,
@@ -1261,7 +1485,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return  Merge().merge(
+        return TMerge().merge(
             
             mode, 
             
@@ -1293,6 +1517,52 @@ object Transformation {
     }
     
     
+    // SoftShadowGenerator
+    
+    /**
+     * AI Soft Shadow Generator
+     * 
+     * @param backgroundimage Background image
+     
+     * @param backgroundcolor Background color (Default: ffffff)
+     
+     * @param shadowangle Shadow angle (Default: 120)
+     
+     * @param shadowintensity Shadow intensity (Default: 0.5)
+     
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun shadowGen(
+   
+    backgroundimage: String?
+    ="",
+
+    backgroundcolor: String?
+     = "ffffff",
+
+    shadowangle: Number?
+     = 120,
+
+    shadowintensity: Number?
+     = 0.5
+
+    ): TransformationObj {
+        // Call the generated class method
+        return ShadowGen().gen(
+            
+            backgroundimage, 
+            
+            backgroundcolor, 
+            
+            shadowangle, 
+            
+            shadowintensity
+            
+        )
+    }
+    
+    
     // SuperResolution
     
     /**
@@ -1309,23 +1579,23 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun superresolution(
+    fun srUpscale(
    
-    type: SuperResolution.Type?
-     = SuperResolution.Type._2X,
+    type: SrUpscale.Type?
+     = SrUpscale.Type._2X,
 
     enhanceface: Boolean?
      = false,
 
-    model: SuperResolution.Model?
-     = SuperResolution.Model.PICASSO,
+    model: SrUpscale.Model?
+     = SrUpscale.Model.PICASSO,
 
     enhancequality: Boolean?
      = false
 
     ): TransformationObj {
         // Call the generated class method
-        return SuperResolution().upscale(
+        return SrUpscale().upscale(
             
             type, 
             
@@ -1339,6 +1609,107 @@ object Transformation {
     }
     
     
+    // VertexAI
+    
+    /**
+     * Vertex AI based transformations
+     * 
+     * @param backgroundprompt Background prompt (Default: YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr)
+     
+     * @param negativeprompt Negative prompt (Default: )
+     
+     * @param seed Seed (Default: 22)
+     
+     * @param guidancescale Guidance Scale (controls how much the model adheres to the text prompt) (Default: 60)
+     
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun vertexaiGeneratebg(
+   
+    backgroundprompt: String?
+     = "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
+
+    negativeprompt: String?
+     = "",
+
+    seed: Int?
+     = 22,
+
+    guidancescale: Int?
+     = 60
+
+    ): TransformationObj {
+        // Call the generated class method
+        return VertexaiGeneratebg().generateBG(
+            
+            backgroundprompt, 
+            
+            negativeprompt, 
+            
+            seed, 
+            
+            guidancescale
+            
+        )
+    }
+    
+    /**
+     * Vertex AI based transformations
+     * 
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun vertexaiRemovebg(
+   
+    ): TransformationObj {
+        // Call the generated class method
+        return VertexaiRemovebg().removeBG(
+            
+        )
+    }
+    
+    /**
+     * Vertex AI based transformations
+     * 
+     * @param type Type (Default: x2)
+     
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun vertexaiUpscale(
+   
+    type: VertexaiUpscale.Type?
+     = VertexaiUpscale.Type.X2
+
+    ): TransformationObj {
+        // Call the generated class method
+        return VertexaiUpscale().upscale(
+            
+            type
+            
+        )
+    }
+    
+    
+    // VideoWatermarkRemoval
+    
+    /**
+     * Video Watermark Removal Plugin
+     * 
+     * @return The generated TransformationObj.
+     */
+     @JvmOverloads
+    fun wmvRemove(
+   
+    ): TransformationObj {
+        // Call the generated class method
+        return WmvRemove().remove(
+            
+        )
+    }
+    
+    
     // ViewDetection
     
     /**
@@ -1347,11 +1718,11 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun viewdetection(
+    fun vdDetect(
    
     ): TransformationObj {
         // Call the generated class method
-        return ViewDetection().detect(
+        return VdDetect().detect(
             
         )
     }
@@ -1379,7 +1750,7 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun watermarkremoval(
+    fun wmRemove(
    
     removetext: Boolean?
      = false,
@@ -1404,7 +1775,7 @@ object Transformation {
 
     ): TransformationObj {
         // Call the generated class method
-        return WatermarkRemoval().remove(
+        return WmRemove().remove(
             
             removetext, 
             
@@ -1434,14 +1805,14 @@ object Transformation {
      * @return The generated TransformationObj.
      */
      @JvmOverloads
-    fun watermarkdetection(
+    fun wmcDetect(
    
     detecttext: Boolean?
      = false
 
     ): TransformationObj {
         // Call the generated class method
-        return WatermarkDetection().detect(
+        return WmcDetect().detect(
             
             detecttext
             
