@@ -1,31 +1,16 @@
-# Ignore .gradle folder
-.gradle/
-
-##uncomment for publishing library
-# Compiled Kotlin class files
-*.class
-
-# idea folder
-.idea/
-
-# Ignore .gradle folder
-.gradle/
-
-# Other generated files
-out/
-
-# Local configuration file (sdk path, etc)
-local.properties
-
-# Kotlin library specific build artifacts (e.g., JAR files)
-/libs/
-
-# IDE-specific files for Android Studio, IntelliJ IDEA, etc.
 *.iml
-*.ipr
-*.iws
-
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
 .DS_Store
-
-publish-remote.gradle
-scripts/
+/build
+/build/
+/captures
+.externalNativeBuild
+.cxx
+local.properties

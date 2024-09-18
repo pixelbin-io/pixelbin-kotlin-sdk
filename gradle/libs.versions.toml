@@ -1,0 +1,19 @@
+[versions]
+jetbrainsKotlinJvm = "1.9.20"
+foojay = "0.8.0"
+gson = "2.11.0"
+okhttp = "4.12.0"
+coroutines = "1.9.0"
+publishPlugin = "0.29.0"
+
+[libraries]
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+
+[plugins]
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+foojay-resolver-convention = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojay"}
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "publishPlugin" }
+

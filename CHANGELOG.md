@@ -6,7 +6,7 @@
 
 **Breaking change:**
 - Updated return response for upload(file, signedDetails,callback,chunkSize,concurrency) API
-- On success, response.data will now return an instance UploadResponse instead String.
+- On success, `response.data` will now return an instance UploadResponse instead String.
 
 # v0.0.8
 
@@ -35,3 +35,4 @@
 
 - Transformations are updated to their latest API
 - Added support for GCS signed URL uploads
+
