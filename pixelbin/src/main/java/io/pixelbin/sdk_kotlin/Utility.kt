@@ -1,20 +1,18 @@
 package io.pixelbin.sdk_kotlin
 
-import io.pixelbin.sdk_kotlin.transformation.TransformationObj
-
 internal object Utility {
-
     /**
      * method to get string containing all transformations
      */
     fun getTransformationString(transformation: ArrayList<TransformationObj>): String {
         var finalString = ""
         for ((index, item) in transformation.withIndex()) {
-            finalString = if (transformation.size == 1 || index == 0) {
-                getTransformationValue(item)
-            } else {
-                finalString + "~" + getTransformationValue(item)
-            }
+            finalString =
+                if (transformation.size == 1 || index == 0) {
+                    getTransformationValue(item)
+                } else {
+                    finalString + "~" + getTransformationValue(item)
+                }
         }
         return finalString
     }
@@ -24,7 +22,13 @@ internal object Utility {
      */
     private fun getTransformationValue(transformation: TransformationObj): String {
         val parametersString = transformation.values?.entries?.joinToString(",") { "${it.key}:${it.value}" }
-        return if (parametersString?.isNotEmpty() == true) "${transformation.plugin}.${transformation.name}($parametersString)" else "${transformation.plugin}.${transformation.name}()"
+        return if (parametersString?.isNotEmpty() ==
+            true
+        ) {
+            "${transformation.plugin}.${transformation.name}($parametersString)"
+        } else {
+            "${transformation.plugin}.${transformation.name}()"
+        }
     }
 
     /**

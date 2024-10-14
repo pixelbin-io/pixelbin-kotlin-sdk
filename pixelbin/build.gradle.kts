@@ -15,9 +15,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
 }
 
-
 mavenPublishing {
-    coordinates("io.pixelbin", "pixelbin-kotlin-sdk", "0.0.10")
+    coordinates("io.pixelbin", "pixelbin-kotlin-sdk", "0.0.11")
     pom {
         name.set("PixelBin")
         description.set("Pixelbin kotlin sdk used to integrate pixelbin with your project")
@@ -46,7 +45,7 @@ mavenPublishing {
         JavaLibrary(
             javadocJar = JavadocJar.Javadoc(),
             sourcesJar = false,
-        )
+        ),
     )
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
