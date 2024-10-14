@@ -6,60 +6,18 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 
 ### Setup
 
-Add it in your root build.gradle at the end of repositories:
-
-```
-//jitpack
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
-```
-
 Add the dependency
 
 ```
 dependencies {
-//jitpack
     implementation 'com.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
-//maven central
-    implementation 'io.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
 }
-```
-
-For maven
-
-```
-//jitpack
-//add jitpack repository to your build file
-<repositories>
-	<repository>
-	    <id>jitpack.io</id>
-	    <url>https://jitpack.io</url>
-	</repository>
-</repositories>
-
-//add the dependency
-<dependency>
-	<groupId>com.github.pixelbin-dev</groupId>
-    <artifactId>pixelbin-kotlin-sdk</artifactId>
-    <version>v0.0.3</version>
-</dependency>
-
-//maven central
-<dependency>
-    <groupId>io.github.pixelbin-dev</groupId>
-    <artifactId>pixelbin-kotlin-sdk</artifactId>
-    <version>v0.0.3</version>
-</dependency>
 ```
 
 Import the Pixelbin class
 
 ```
-import com.pixelbin.PixelBin
+import io.pixelbin.sdk_kotlin.PixelBin
 ```
 
 Create your instance
@@ -87,7 +45,7 @@ val image = pixelbin.url(
 Import transformations
 
 ```
-import com.pixelbin.transformation.Transformation
+import io.pixelbin.sdk_kotlin.transformation.Transformation
 
 val eraseTransformation = Transformation.erasebg();
 
@@ -186,13 +144,13 @@ fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
 CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file, details, {
         when (it) {
-            is com.pixelbin.upload.Result.Success -> {
+            is io.pixelbin.sdk_kotlin.upload.Result.Success -> {
                 val response = it.data
             }
-            is com.pixelbin.upload.Result.Failure -> {
+            is io.pixelbin.sdk_kotlin.upload.Result.Failure -> {
                 val response = it.response
             }
-            is com.pixelbin.upload.Result.Error -> {
+            is io.pixelbin.sdk_kotlin.upload.Result.Error -> {
                 val exception = it.exception
             }
             else -> {}
@@ -202,7 +160,7 @@ CoroutineScope(Dispatchers.IO).launch {
 
 //for java
   pixelbin.upload(file,signedDetails, result->{
-  //here Result class is from com.pixelbin.upload.Result
+  //here Result class is from io.pixelbin.sdk_kotlin.upload.Result
       if (result instanceof Result.Success) {
                 System.out.println("Upload successful");
           } else if (result instanceof Result.Failure) {
@@ -223,7 +181,7 @@ CoroutineScope(Dispatchers.IO).launch {
 Import the utils class
 
 ```
-import com.pixelbin.Utils
+import io.pixelbin.sdk_kotlin.Utils
 ```
 
 Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
