@@ -9,23 +9,29 @@ Pixelbin kotlin library helps you integrate Pixelbin with your Android Applicati
 Add the dependency
 
 ```
+// gradle
 dependencies {
-    implementation 'com.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
+//for latest version 
+implementation 'io.pixelbin:pixelbin-kotlin-sdk:version'
+//for below 0.0.10 version
+implementation 'io.github.pixelbin-dev:pixelbin-kotlin-sdk:version'
 }
 ```
 
-Import the Pixelbin class
+For other artifacts check this link
+[pixelbin-kotlin-sdk](https://mvnrepository.com/artifact/io.pixelbin/pixelbin-kotlin-sdk)
+
+- Import the Pixelbin class
 
 ```
-import io.pixelbin.sdk_kotlin.PixelBin
+import io.pixelbin:pixelbin-kotlin-sdk.*
 ```
 
-Create your instance
+- Create your instance
 
 ```
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url("https://cdn.pixelbin.io/v2/cloudName/z-slug/transformation/path/to/image.jpeg")
-
 val image = pixelbin.url(
     UrlObj(
         baseUrl = baseUrl,
@@ -38,49 +44,39 @@ val image = pixelbin.url(
 )
 ```
 
----
+______________________________________________________________________
 
 ### Transform and Optimize Images
 
 Import transformations
 
 ```
-import io.pixelbin.sdk_kotlin.transformation.Transformation
-
+import io.pixelbin.sdk_kotlin.Transformation
 val eraseTransformation = Transformation.erasebg();
-
 // Create a new instance. If you have't (see above for the details)
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url(imageUrl)
-
 // Create EraseBg.bg transformation
 // Kotlin
 val t1 = Transformation.erasebg();
-
 //Java
 TransformationObj t1 = Transformation.INSTANCE.erasebg();
-
 // Create resize transformation
 // Kotlin
 val t2 = Transformation.tResize(height = 100,width = 100)
-
 //Java
 TransformationObj t2 = Transformation.INSTANCE.tResize(height = 100,width = 100);
-
 // Add the transformations to the image object
 //add single transformation
 image.addTransformation(t1);
-
 //or add multiple transformation
 //Kotlin
 image.addTransformation(arrayListOf(t1,t2));
-
 //Java
 ArrayList<TransformationObj> list = new ArrayList<>();
 list.add(t1);
 list.add(t2);
 image.add(list);
-
 // Get the image url
 image.getUrl()
 // output
@@ -93,17 +89,16 @@ image.getUrl()
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
 | signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
-| chunkSize (int)                                                      | size of chunks to be uploaded in kb. default value is 1024.                                                                          |
-|                                                                      | Recommended chunk size for                                                                                                           |
-|                                                                      | 3g network - upto 5kb                                                                                                                |
-|                                                                      | 4g network - 500kb to 1MB                                                                                                            |
-|                                                                      | 5g network - 1MB to 2MB                                                                                                              |
-| concurrency (int)                                                    | number of chunks to be uploaded in parallel api calls                                                                                |
+| chunkSize (int)                                                      | size of chunks to be uploaded in kb. default value is 1024.                                                                          |\
+|                                                                      | Recommended chunk size for                                                                                                           |\
+|                                                                      |     3g network - upto 5kb                                                                                                            |
+|                                                                      |     4g network - 500kb to 1MB                                                                                                        |\
+|                                                                      |     5g network - 1MB to 2MB                                                                                                          |
+| concurrency (int)                                                    |  number of chunks to be uploaded in parallel api calls                                                                               |
 
--   Resolves with no response on success.
--   Rejects with error on failure.
-
-Example :
+- Resolves with no response on success.
+- Rejects with error on failure.
+  Example :
 
 1. Define a file element
 
@@ -115,8 +110,7 @@ val file =  File(pathname);
 
 ```
 val signedDetails = SignedDetails(url = "url", fields = fieldsToHashMap(fields))
-
-//fields refer to hashmap of fields object which we got from signed url api
+//fields refer to hashmap of fields object which we got from signed url api 
 Example
 data class Fields(
     @SerializedName("x-goog-meta-assetdata") var xGoogMetaAssetData: String? = null,
@@ -125,9 +119,7 @@ data class Fields(
     @SerializedName("Content-Type") var contentType: String? = null,
     //for pixelbin host
     @SerializedName("x-pixb-meta-assetdata") var xPixbMetaAssetdata: String? = null
-
 )
-
 fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
         val hashMap = HashMap<String, String>()
         hashMap["x-goog-meta-assetData"] = fields.xGoogMetaAssetData?:""
@@ -138,29 +130,26 @@ fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
         hashMap["x-pixb-meta-assetdata"] = fields.xPixbMetaAssetdata?:""
         return hashMap
 }
-
-
 //for kotlin
 CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file, details, {
         when (it) {
-            is io.pixelbin.sdk_kotlin.upload.Result.Success -> {
+            is com.pixelbin.upload.Result.Success -> {
                 val response = it.data
             }
-            is io.pixelbin.sdk_kotlin.upload.Result.Failure -> {
+            is com.pixelbin.upload.Result.Failure -> {
                 val response = it.response
             }
-            is io.pixelbin.sdk_kotlin.upload.Result.Error -> {
+            is com.pixelbin.upload.Result.Error -> {
                 val exception = it.exception
             }
             else -> {}
         }
     }, chunkSize, concurrency)
 }
-
 //for java
   pixelbin.upload(file,signedDetails, result->{
-  //here Result class is from io.pixelbin.sdk_kotlin.upload.Result
+  //here Result class is from com.pixelbin.upload.Result
       if (result instanceof Result.Success) {
                 System.out.println("Upload successful");
           } else if (result instanceof Result.Failure) {
@@ -172,8 +161,6 @@ CoroutineScope(Dispatchers.IO).launch {
             }
             return null;
         },chunkSize, concurrency);
-
-
 ```
 
 ## Utilities
@@ -181,7 +168,7 @@ CoroutineScope(Dispatchers.IO).launch {
 Import the utils class
 
 ```
-import io.pixelbin.sdk_kotlin.Utils
+import com.pixelbin.Utils
 ```
 
 Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
@@ -189,16 +176,13 @@ Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 ### urlToObj
 
 Deconstruct a pixelbin url
-
 | parameter                | description                                               | example                                                                                               |
-| ------------------------ | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|--------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | pixelbinUrl (string)     | A valid pixelbin url                                      | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
 | isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                                                                                               |
-
 **Returns**:
-
 | property                 | description                                               | example                              |
-| ------------------------ | --------------------------------------------------------- | ------------------------------------ |
+|--------------------------|-----------------------------------------------------------|--------------------------------------|
 | cloudName (string)       | The cloudname extracted from the url                      | `your-cloud-name`                    |
 | zone (string)            | 6 character zone slug                                     | `z-slug`                             |
 | version (string)         | cdn api version                                           | `v2`                                 |
@@ -209,16 +193,13 @@ Deconstruct a pixelbin url
 | workerPath (string)      | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
 | options (Object)         | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
 | isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                              |
-
 Example:
 
 ```
 val pixelbinUrl =
     "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
-
 //string representation of url object
 //name of transformation = plugin+"."+name
-
 val obj = Utils.urlToUrlObj(pixelbinUrl)
 //        UrlObj(
 //            baseUrl = "https://cdn.pixelbin.io/",
@@ -240,15 +221,14 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                            ),
 //                zone =" z-slug",
 //            filePath = "path/to/image.jpeg",
-//            wrkr = false;
-//            workerPath = ";
+//            wrkr = false;  
+//            workerPath = ";  
 //        )
 ```
 
 ```
 val pixelbinUrl =
     "https://xyz.designify.media/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
-
 val obj = Utils.urlToUrlObj(url=pixelbinUrl, isCustomDomain = true)
 //        UrlObj(
 //            baseUrl = "https://cdn.pixelbin.io/",
@@ -270,11 +250,10 @@ val obj = Utils.urlToUrlObj(url=pixelbinUrl, isCustomDomain = true)
 //                            ),
 //            zone =" z-slug",
 //            filePath = "path/to/image.jpeg",
-//            isCustomDomain = true
-//            wrkr = false;
-//            workerPath = ";
+//            isCustomDomain = true  
+//            wrkr = false;  
+//            workerPath = ";  
 //        )
-
 ```
 
 ```
@@ -306,9 +285,9 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                  "dpr" to "2.0",
 //                  "f_auto" to "true"
 //              ),
-//            filePath = "path/to/image.jpeg",
-//            wrkr = false;
-//            workerPath = ";
+//            filePath = "path/to/image.jpeg",  
+//            wrkr = false;  
+//            workerPath = ";  
 //        )
 ```
 
@@ -328,29 +307,27 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 //                  "dpr" to "2.0",
 //                  "f_auto" to "true"
 //              ),
-//            filePath = "",
-//            wrkr = true;
-//            workerPath = "t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+//            filePath = "",  
+//            wrkr = true;  
+//            workerPath = "t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";  
 //        )
 ```
 
 ### objToUrl
 
 Converts the extracted url obj to a Pixelbin url.
-
-| property                 | description                                               | example                              |
-| ------------------------ | --------------------------------------------------------- | ------------------------------------ |
-| cloudName (string)       | The cloudname extracted from the url                      | `your-cloud-name`                    |
-| zone (string)            | 6 character zone slug                                     | `z-slug`                             |
-| version (string)         | cdn api version                                           | `v2`                                 |
-| transformations (array)  | Extracted transformations from the url                    |                                      |
-| filePath                 | Path to the file on Pixelbin storage                      | `/path/to/image.jpeg`                |
-| baseUrl (string)         | Base url                                                  | `https://cdn.pixelbin.io/`           |
-| worker (boolean)         | Indicates if the URL is a URL Translation Worker URL      | `false`                              |
-| workerPath (string)      | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
-| options (Object)         | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
-| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                              |
-
+| property                  | description                                               | example                              |
+|---------------------------|-----------------------------------------------------------|--------------------------------------|
+| cloudName (string)        | The cloudname extracted from the url                      | `your-cloud-name`                    |
+| zone (string)             | 6 character zone slug                                     | `z-slug`                             |
+| version (string)          | cdn api version                                           | `v2`                                 |
+| transformations (array)   | Extracted transformations from the url                    |                                      |
+| filePath                  | Path to the file on Pixelbin storage                      | `/path/to/image.jpeg`                |
+| baseUrl (string)          | Base url                                                  | `https://cdn.pixelbin.io/`           |
+| worker (boolean)          | Indicates if the URL is a URL Translation Worker URL      | `false`                              |
+| workerPath (string)       | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
+| options (Object)          | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
+| isCustomDomain (boolean)  | Indicates if the URL belongs to a custom domain (default) | `false`                              |
 Example
 
 ```
@@ -375,8 +352,6 @@ val obj = UrlObj(
     filePath = "path/to/image.jpeg",
     baseUrl = "https://cdn.pixelbin.io"
 )
-
-
 val url = Utils.objToUrl(pixelbinUrl) // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
@@ -408,7 +383,6 @@ val obj = UrlObj(
         "f_auto" to "true"
     )
 )
-
 val url = Utils.objToUrl(obj)  // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True
@@ -425,926 +399,890 @@ val obj = UrlObj(
                     "dpr" to "2.0",
                     "f_auto" to "true"
                 ),
-              filePath = "",
-              wrkr = true;
-              workerPath = "t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+              filePath = "",  
+              wrkr = true;  
+              workerPath = "t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";  
           )
-val url = Utils.objToUrl(obj)
+val url = Utils.objToUrl(obj)          
 //url
 //"https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/wrkr/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
-
-
 ```
 
 ## List of supported transformations
 
-### 1. DetectBackgroundType
+### DetectBackgroundType
 
-<details>
-<summary>1. dbtDetect</summary>
+#### 1. dbtDetect()
 
-#### Usage Example
-
-```kotlin
-val t = Transformation.dbtDetect();
-```
-
-</details>
-
-### 2. Artifact
-
-<details>
-<summary>1. afRemove</summary>
-
-#### Usage Example
+Classifies the background of a product as plain, clean or busy
 
 ```kotlin
-val t = Transformation.afRemove();
+val t = Transformation.dbtDetect(
+)
 ```
 
-</details>
+### Basic
 
-### 3. AWSRekognitionPlugin
+#### 1. tResize(height, width, fit, background, position, algorithm, dpr)
 
-<details>
-<summary>1. awsrekDetectlabels</summary>
-
-#### Supported Configuration
-
-| Parameter         | Type    | Default |
-| ----------------- | ------- | ------- |
-| maximumLabels     | integer | 5       |
-| minimumConfidence | integer | 55      |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| height | integer | 0 |
+| width | integer | 0 |
+| fit | enum: `cover`, `contain`, `fill`, `inside`, `outside` | TResize.Fit.COVER |
+| background | color | "000000" |
+| position | enum: `top`, `bottom`, `left`, `right`, `right_top`, `right_bottom`, `left_top`, `left_bottom`, `center` | TResize.Position.CENTER |
+| algorithm | enum: `nearest`, `cubic`, `mitchell`, `lanczos2`, `lanczos3` | TResize.Algorithm.LANCZOS3 |
+| dpr | float | 1 |
 
 ```kotlin
-val t = Transformation.awsrekDetectlabels(maximumlabels = 5,minimumconfidence = 55);
+val t = Transformation.tResize(
+ height = 0,
+ width = 0,
+ fit = TResize.Fit.COVER,
+ background = "000000",
+ position = TResize.Position.CENTER,
+ algorithm = TResize.Algorithm.LANCZOS3,
+ dpr = 1
+)
 ```
 
-</details>
+#### 2. tCompress(quality)
 
-<details>
-<summary>2. awsrekModeration</summary>
-
-#### Supported Configuration
-
-| Parameter         | Type    | Default |
-| ----------------- | ------- | ------- |
-| minimumConfidence | integer | 55      |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| quality | integer | 80 |
 
 ```kotlin
-val t = Transformation.awsrekModeration(minimumconfidence = 55);
+val t = Transformation.tCompress(
+ quality = 80
+)
 ```
 
-</details>
+#### 3. tExtend(top, left, bottom, right, background, borderType, dpr)
 
-### 4. BackgroundGenerator
-
-<details>
-<summary>1. generateBg</summary>
-
-#### Supported Configuration
-
-| Parameter        | Type                          | Default                                                                                                                    |
-| ---------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| backgroundPrompt | custom                        | `YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr` |
-| focus            | enum: `Product`, `Background` | `Product`                                                                                                                  |
-| negativePrompt   | custom                        | ``                                                                                                                         |
-| seed             | integer                       | 123                                                                                                                        |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| top | integer | 10 |
+| left | integer | 10 |
+| bottom | integer | 10 |
+| right | integer | 10 |
+| background | color | "000000" |
+| borderType | enum: `constant`, `replicate`, `reflect`, `wrap` | TExtend.Bordertype.CONSTANT |
+| dpr | float | 1 |
 
 ```kotlin
-val t = Transformation.generateBg(backgroundprompt = "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",focus = BackgroundGenerator.Focus.PRODUCT,negativeprompt = "",seed = 123);
+val t = Transformation.tExtend(
+ top = 10,
+ left = 10,
+ bottom = 10,
+ right = 10,
+ background = "000000",
+ bordertype = TExtend.Bordertype.CONSTANT,
+ dpr = 1
+)
 ```
 
-</details>
+#### 4. tExtract(top, left, height, width, boundingBox)
 
-### 5. VariationGenerator
-
-<details>
-<summary>1. vgGenerate</summary>
-
-#### Supported Configuration
-
-| Parameter               | Type    | Default |
-| ----------------------- | ------- | ------- |
-| generateVariationPrompt | custom  | ``      |
-| noOfVariations          | integer | 1       |
-| seed                    | integer | 0       |
-| autoscale               | boolean | true    |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| top | integer | 10 |
+| left | integer | 10 |
+| height | integer | 50 |
+| width | integer | 20 |
+| boundingBox | bbox | ="" |
 
 ```kotlin
-val t = Transformation.vgGenerate(generatevariationprompt = "",no.ofvariations = 1,seed = 0,autoscale = true);
+val t = Transformation.tExtract(
+ top = 10,
+ left = 10,
+ height = 50,
+ width = 20,
+ boundingbox=""
+)
 ```
 
-</details>
+#### 5. tTrim(threshold)
 
-### 6. EraseBG
-
-<details>
-<summary>1. eraseBg</summary>
-
-#### Supported Configuration
-
-| Parameter    | Type                                                   | Default   |
-| ------------ | ------------------------------------------------------ | --------- |
-| industryType | enum: `general`, `ecommerce`, `car`, `human`, `object` | `general` |
-| addShadow    | boolean                                                | false     |
-| refine       | boolean                                                | true      |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| threshold | integer | 10 |
 
 ```kotlin
-val t = Transformation.eraseBg(industrytype = EraseBG.Industrytype.GENERAL,addshadow = false,refine = true);
+val t = Transformation.tTrim(
+ threshold = 10
+)
 ```
 
-</details>
+#### 6. tRotate(angle, background)
 
-### 7. GoogleVisionPlugin
-
-<details>
-<summary>1. googlevisDetectlabels</summary>
-
-#### Supported Configuration
-
-| Parameter     | Type    | Default |
-| ------------- | ------- | ------- |
-| maximumLabels | integer | 5       |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| angle | integer | 0 |
+| background | color | "000000" |
 
 ```kotlin
-val t = Transformation.googlevisDetectlabels(maximumlabels = 5);
+val t = Transformation.tRotate(
+ angle = 0,
+ background = "000000"
+)
 ```
 
-</details>
+#### 7. tFlip()
 
-### 8. ImageCentering
-
-<details>
-<summary>1. imcDetect</summary>
-
-#### Supported Configuration
-
-| Parameter          | Type    | Default |
-| ------------------ | ------- | ------- |
-| distancePercentage | integer | 10      |
-
-#### Usage Example
+Basic Transformations
 
 ```kotlin
-val t = Transformation.imcDetect(distancepercentage = 10);
+val t = Transformation.tFlip(
+)
 ```
 
-</details>
+#### 8. tFlop()
 
-### 9. IntelligentCrop
-
-<details>
-<summary>1. icCrop</summary>
-
-#### Supported Configuration
-
-| Parameter              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Default  |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| requiredWidth          | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
-| requiredHeight         | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
-| paddingPercentage      | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
-| maintainOriginalAspect | boolean                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | false    |
-| aspectRatio            | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ``       |
-| gravityTowards         | enum: `object`, `foreground`, `face`, `none`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `none`   |
-| preferredDirection     | enum: `north_west`, `north`, `north_east`, `west`, `center`, `east`, `south_west`, `south`, `south_east`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `center` |
-| objectType             | enum: `airplane`, `apple`, `backpack`, `banana`, `baseball_bat`, `baseball_glove`, `bear`, `bed`, `bench`, `bicycle`, `bird`, `boat`, `book`, `bottle`, `bowl`, `broccoli`, `bus`, `cake`, `car`, `carrot`, `cat`, `cell_phone`, `chair`, `clock`, `couch`, `cow`, `cup`, `dining_table`, `dog`, `donut`, `elephant`, `fire_hydrant`, `fork`, `frisbee`, `giraffe`, `hair_drier`, `handbag`, `horse`, `hot_dog`, `keyboard`, `kite`, `knife`, `laptop`, `microwave`, `motorcycle`, `mouse`, `orange`, `oven`, `parking_meter`, `person`, `pizza`, `potted_plant`, `refrigerator`, `remote`, `sandwich`, `scissors`, `sheep`, `sink`, `skateboard`, `skis`, `snowboard`, `spoon`, `sports_ball`, `stop_sign`, `suitcase`, `surfboard`, `teddy_bear`, `tennis_racket`, `tie`, `toaster`, `toilet`, `toothbrush`, `traffic_light`, `train`, `truck`, `tv`, `umbrella`, `vase`, `wine_glass`, `zebra` | `person` |
-
-#### Usage Example
+Basic Transformations
 
 ```kotlin
-val t = Transformation.icCrop(requiredwidth = 0,requiredheight = 0,paddingpercentage = 0,maintainoriginalaspect = false,aspectratio = "",gravitytowards = IntelligentCrop.Gravitytowards.NONE,preferreddirection = IntelligentCrop.Preferreddirection.CENTER,objecttype = IntelligentCrop.Objecttype.PERSON);
+val t = Transformation.tFlop(
+)
 ```
 
-</details>
+#### 9. tSharpen(sigma)
 
-### 10. ObjectCounter
-
-<details>
-<summary>1. ocDetect</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| sigma | float | 1.5 |
 
 ```kotlin
-val t = Transformation.ocDetect();
+val t = Transformation.tSharpen(
+ sigma = 1.5
+)
 ```
 
-</details>
+#### 10. tMedian(size)
 
-### 11. NSFWDetection
-
-<details>
-<summary>1. nsfwDetect</summary>
-
-#### Supported Configuration
-
-| Parameter         | Type  | Default |
-| ----------------- | ----- | ------- |
-| minimumConfidence | float | 0.5     |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| size | integer | 3 |
 
 ```kotlin
-val t = Transformation.nsfwDetect(minimumconfidence = 0.5);
+val t = Transformation.tMedian(
+ size = 3
+)
 ```
 
-</details>
+#### 11. tBlur(sigma, dpr)
 
-### 12. NumberPlateDetection
-
-<details>
-<summary>1. numplateDetect</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| sigma | float | 0.3 |
+| dpr | float | 1 |
 
 ```kotlin
-val t = Transformation.numplateDetect();
+val t = Transformation.tBlur(
+ sigma = 0.3,
+ dpr = 1
+)
 ```
 
-</details>
+#### 12. tFlatten(background)
 
-### 13. ObjectDetection
-
-<details>
-<summary>1. odDetect</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| background | color | "000000" |
 
 ```kotlin
-val t = Transformation.odDetect();
+val t = Transformation.tFlatten(
+ background = "000000"
+)
 ```
 
-</details>
+#### 13. tNegate()
 
-### 14. CheckObjectSize
-
-<details>
-<summary>1. cosDetect</summary>
-
-#### Supported Configuration
-
-| Parameter              | Type    | Default |
-| ---------------------- | ------- | ------- |
-| objectThresholdPercent | integer | 50      |
-
-#### Usage Example
+Basic Transformations
 
 ```kotlin
-val t = Transformation.cosDetect(objectthresholdpercent = 50);
+val t = Transformation.tNegate(
+)
 ```
 
-</details>
+#### 14. tNormalise()
 
-### 15. TextDetectionandRecognition
-
-<details>
-<summary>1. ocrExtract</summary>
-
-#### Supported Configuration
-
-| Parameter  | Type    | Default |
-| ---------- | ------- | ------- |
-| detectOnly | boolean | false   |
-
-#### Usage Example
+Basic Transformations
 
 ```kotlin
-val t = Transformation.ocrExtract(detectonly = false);
+val t = Transformation.tNormalise(
+)
 ```
 
-</details>
+#### 15. tLinear(a, b)
 
-### 16. PdfWatermarkRemoval
-
-<details>
-<summary>1. pwrRemove</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| a | integer | 1 |
+| b | integer | 0 |
 
 ```kotlin
-val t = Transformation.pwrRemove();
+val t = Transformation.tLinear(
+ a = 1,
+ b = 0
+)
 ```
 
-</details>
+#### 16. tModulate(brightness, saturation, hue)
 
-### 17. ProductTagging
-
-<details>
-<summary>1. prTag</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| brightness | float | 1 |
+| saturation | float | 1 |
+| hue | integer | 90 |
 
 ```kotlin
-val t = Transformation.prTag();
+val t = Transformation.tModulate(
+ brightness = 1,
+ saturation = 1,
+ hue = 90
+)
 ```
 
-</details>
+#### 17. tGrey()
 
-### 18. CheckProductVisibility
-
-<details>
-<summary>1. cpvDetect</summary>
-
-#### Usage Example
+Basic Transformations
 
 ```kotlin
-val t = Transformation.cpvDetect();
+val t = Transformation.tGrey(
+)
 ```
 
-</details>
+#### 18. tTint(color)
 
-### 19. QRCode
-
-<details>
-<summary>1. qrGenerate</summary>
-
-#### Supported Configuration
-
-| Parameter              | Type                                                                           | Default  |
-| ---------------------- | ------------------------------------------------------------------------------ | -------- |
-| width                  | integer                                                                        | 300      |
-| height                 | integer                                                                        | 300      |
-| image                  | custom                                                                         | ``       |
-| margin                 | integer                                                                        | 0        |
-| qRTypeNumber           | integer                                                                        | 0        |
-| qrErrorCorrectionLevel | enum: `L`, `M`, `Q`, `H`                                                       | `Q`      |
-| imageSize              | float                                                                          | 0.4      |
-| imageMargin            | integer                                                                        | 0        |
-| dotsColor              | color                                                                          | `000000` |
-| dotsType               | enum: `rounded`, `dots`, `classy`, `classy-rounded`, `square`, `extra-rounded` | `square` |
-| dotsBgColor            | color                                                                          | `ffffff` |
-| cornerSquareColor      | color                                                                          | `000000` |
-| cornerSquareType       | enum: `dot`, `square`, `extra-rounded`                                         | `square` |
-| cornerDotsColor        | color                                                                          | `000000` |
-| cornerDotsType         | enum: `dot`, `square`                                                          | `dot`    |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| color | color | "000000" |
 
 ```kotlin
-val t = Transformation.qrGenerate(width = 300,height = 300,image = "",margin = 0,qrtypenumber = 0,qrerrorcorrectionlevel = Generate.Qrerrorcorrectionlevel.Q,imagesize = 0.4,imagemargin = 0,dotscolor = "000000",dotstype = Generate.Dotstype.SQUARE,dotsbgcolor = "ffffff",cornersquarecolor = "000000",cornersquaretype = Generate.Cornersquaretype.SQUARE,cornerdotscolor = "000000",cornerdotstype = Generate.Cornerdotstype.DOT);
+val t = Transformation.tTint(
+ color = "000000"
+)
 ```
 
-</details>
+#### 19. tToformat(format, quality)
 
-<details>
-<summary>2. qrScan</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| format | enum: `jpeg`, `png`, `webp`, `tiff`, `avif`, `bmp`, `heif` | TToformat.Format.JPEG |
+| quality | enum: `100`, `95`, `90`, `85`, `80`, `75`, `70`, `60`, `50`, `40`, `30`, `20`, `10`, `best`, `good`, `eco`, `low` | TToformat.Quality.\_75 |
 
 ```kotlin
-val t = Transformation.qrScan();
+val t = Transformation.tToformat(
+ format = TToformat.Format.JPEG,
+ quality = TToformat.Quality._75
+)
 ```
 
-</details>
+#### 20. tDensity(density)
 
-### 20. RemoveBG
-
-<details>
-<summary>1. removeBg</summary>
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| density | integer | 300 |
 
 ```kotlin
-val t = Transformation.removeBg();
+val t = Transformation.tDensity(
+ density = 300
+)
 ```
 
-</details>
+#### 21. tMerge(mode, image, transformation, background, height, width, top, left, gravity, blend, tile, listOfBboxes, listOfPolygons)
 
-### 21. Basic
-
-<details>
-<summary>1. tResize</summary>
-
-#### Supported Configuration
-
-| Parameter  | Type                                                                                                     | Default    |
-| ---------- | -------------------------------------------------------------------------------------------------------- | ---------- |
-| height     | integer                                                                                                  | 0          |
-| width      | integer                                                                                                  | 0          |
-| fit        | enum: `cover`, `contain`, `fill`, `inside`, `outside`                                                    | `cover`    |
-| background | color                                                                                                    | `000000`   |
-| position   | enum: `top`, `bottom`, `left`, `right`, `right_top`, `right_bottom`, `left_top`, `left_bottom`, `center` | `center`   |
-| algorithm  | enum: `nearest`, `cubic`, `mitchell`, `lanczos2`, `lanczos3`                                             | `lanczos3` |
-| dpr        | float                                                                                                    | 1          |
-
-#### Usage Example
+Basic Transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| mode | enum: `overlay`, `underlay`, `wrap` | TMerge.Mode.OVERLAY |
+| image | file | "" |
+| transformation | custom | "" |
+| background | color | "00000000" |
+| height | integer | 0 |
+| width | integer | 0 |
+| top | integer | 0 |
+| left | integer | 0 |
+| gravity | enum: `northwest`, `north`, `northeast`, `east`, `center`, `west`, `southwest`, `south`, `southeast`, `custom` | TMerge.Gravity.CENTER |
+| blend | enum: `over`, `in`, `out`, `atop`, `dest`, `dest-over`, `dest-in`, `dest-out`, `dest-atop`, `xor`, `add`, `saturate`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `colour-dodge`, `color-dodge`, `colour-burn`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion` | TMerge.Blend.OVER |
+| tile | boolean | false |
+| listOfBboxes | bboxList | ="" |
+| listOfPolygons | polygonList | ="" |
 
 ```kotlin
-val t = Transformation.tResize(height = 0,width = 0,fit = Resize.Fit.COVER,background = "000000",position = Resize.Position.CENTER,algorithm = Resize.Algorithm.LANCZOS3,dpr = 1);
+val t = Transformation.tMerge(
+ mode = TMerge.Mode.OVERLAY,
+ image = "",
+ transformation = "",
+ background = "00000000",
+ height = 0,
+ width = 0,
+ top = 0,
+ left = 0,
+ gravity = TMerge.Gravity.CENTER,
+ blend = TMerge.Blend.OVER,
+ tile = false,
+ listofbboxes="",
+ listofpolygons=""
+)
 ```
 
-</details>
+### Artifact
 
-<details>
-<summary>2. tCompress</summary>
+#### 1. afRemove()
 
-#### Supported Configuration
-
-| Parameter | Type    | Default |
-| --------- | ------- | ------- |
-| quality   | integer | 80      |
-
-#### Usage Example
+Artifact Removal Plugin
 
 ```kotlin
-val t = Transformation.tCompress(quality = 80);
+val t = Transformation.afRemove(
+)
 ```
 
-</details>
+### AWSRekognitionPlugin
 
-<details>
-<summary>3. tExtend</summary>
+#### 1. awsrekDetectlabels(maximumLabels, minimumConfidence)
 
-#### Supported Configuration
-
-| Parameter  | Type                                             | Default    |
-| ---------- | ------------------------------------------------ | ---------- |
-| top        | integer                                          | 10         |
-| left       | integer                                          | 10         |
-| bottom     | integer                                          | 10         |
-| right      | integer                                          | 10         |
-| background | color                                            | `000000`   |
-| borderType | enum: `constant`, `replicate`, `reflect`, `wrap` | `constant` |
-| dpr        | float                                            | 1          |
-
-#### Usage Example
+Detect objects and text in images
+| Parameter | Type | Default |
+|-----------|------|---------|
+| maximumLabels | integer | 5 |
+| minimumConfidence | integer | 55 |
 
 ```kotlin
-val t = Transformation.tExtend(top = 10,left = 10,bottom = 10,right = 10,background = "000000",bordertype = Extend.Bordertype.CONSTANT,dpr = 1);
+val t = Transformation.awsrekDetectlabels(
+ maximumlabels = 5,
+ minimumconfidence = 55
+)
 ```
 
-</details>
+#### 2. awsrekModeration(minimumConfidence)
 
-<details>
-<summary>4. tExtract</summary>
-
-#### Supported Configuration
-
-| Parameter   | Type    | Default |
-| ----------- | ------- | ------- |
-| top         | integer | 10      |
-| left        | integer | 10      |
-| height      | integer | 50      |
-| width       | integer | 20      |
-| boundingBox | bbox    |         |
-
-#### Usage Example
+Detect objects and text in images
+| Parameter | Type | Default |
+|-----------|------|---------|
+| minimumConfidence | integer | 55 |
 
 ```kotlin
-val t = Transformation.tExtract(top = 10,left = 10,height = 50,width = 20,boundingbox = "");
+val t = Transformation.awsrekModeration(
+ minimumconfidence = 55
+)
 ```
 
-</details>
+### BackgroundGenerator
 
-<details>
-<summary>5. tTrim</summary>
+#### 1. generateBg(backgroundPrompt, focus, negativePrompt, seed)
 
-#### Supported Configuration
-
-| Parameter | Type    | Default |
-| --------- | ------- | ------- |
-| threshold | integer | 10      |
-
-#### Usage Example
+AI Background Generator
+| Parameter | Type | Default |
+|-----------|------|---------|
+| backgroundPrompt | custom | "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr" |
+| focus | enum: `Product`, `Background` | GenerateBg.Focus.PRODUCT |
+| negativePrompt | custom | "" |
+| seed | integer | 123 |
 
 ```kotlin
-val t = Transformation.tTrim(threshold = 10);
+val t = Transformation.generateBg(
+ backgroundprompt = "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
+ focus = GenerateBg.Focus.PRODUCT,
+ negativeprompt = "",
+ seed = 123
+)
 ```
 
-</details>
+### ImageExtender
 
-<details>
-<summary>6. tRotate</summary>
+#### 1. bgExtend(boundingBox, prompt, negativePrompt, strength, guidanceScale, numberOfInferenceSteps, colorAdjust, seed)
 
-#### Supported Configuration
-
-| Parameter  | Type    | Default  |
-| ---------- | ------- | -------- |
-| angle      | integer | 0        |
-| background | color   | `000000` |
-
-#### Usage Example
+AI Image Extender
+| Parameter | Type | Default |
+|-----------|------|---------|
+| boundingBox | bbox | ="" |
+| prompt | custom | "" |
+| negativePrompt | custom | "" |
+| strength | float | 0.999 |
+| guidanceScale | integer | 8 |
+| numberOfInferenceSteps | integer | 10 |
+| colorAdjust | boolean | false |
+| seed | integer | 123 |
 
 ```kotlin
-val t = Transformation.tRotate(angle = 0,background = "000000");
+val t = Transformation.bgExtend(
+ boundingbox="",
+ prompt = "",
+ negativeprompt = "",
+ strength = 0.999,
+ guidancescale = 8,
+ numberofinferencesteps = 10,
+ coloradjust = false,
+ seed = 123
+)
 ```
 
-</details>
+### VariationGenerator
 
-<details>
-<summary>7. tFlip</summary>
+#### 1. vgGenerate(generateVariationPrompt, noOfVariations, seed, autoscale)
 
-#### Usage Example
+AI Variation Generator
+| Parameter | Type | Default |
+|-----------|------|---------|
+| generateVariationPrompt | custom | "" |
+| noOfVariations | integer | 1 |
+| seed | integer | 0 |
+| autoscale | boolean | true |
 
 ```kotlin
-val t = Transformation.tFlip();
+val t = Transformation.vgGenerate(
+ generatevariationprompt = "",
+ noofvariations = 1,
+ seed = 0,
+ autoscale = true
+)
 ```
 
-</details>
+### EraseBG
 
-<details>
-<summary>8. tFlop</summary>
+#### 1. eraseBg(industryType, addShadow, refine)
 
-#### Usage Example
+EraseBG Background Removal Module
+| Parameter | Type | Default |
+|-----------|------|---------|
+| industryType | enum: `general`, `ecommerce`, `car`, `human`, `object` | EraseBg.Industrytype.GENERAL |
+| addShadow | boolean | false |
+| refine | boolean | true |
 
 ```kotlin
-val t = Transformation.tFlop();
+val t = Transformation.eraseBg(
+ industrytype = EraseBg.Industrytype.GENERAL,
+ addshadow = false,
+ refine = true
+)
 ```
 
-</details>
+### GoogleVisionPlugin
 
-<details>
-<summary>9. tSharpen</summary>
+#### 1. googlevisDetectlabels(maximumLabels)
 
-#### Supported Configuration
-
-| Parameter | Type  | Default |
-| --------- | ----- | ------- |
-| sigma     | float | 1.5     |
-
-#### Usage Example
+Detect content and text in images
+| Parameter | Type | Default |
+|-----------|------|---------|
+| maximumLabels | integer | 5 |
 
 ```kotlin
-val t = Transformation.tSharpen(sigma = 1.5);
+val t = Transformation.googlevisDetectlabels(
+ maximumlabels = 5
+)
 ```
 
-</details>
+### ImageCentering
 
-<details>
-<summary>10. tMedian</summary>
+#### 1. imcDetect(distancePercentage)
 
-#### Supported Configuration
-
-| Parameter | Type    | Default |
-| --------- | ------- | ------- |
-| size      | integer | 3       |
-
-#### Usage Example
+Image Centering Module
+| Parameter | Type | Default |
+|-----------|------|---------|
+| distancePercentage | integer | 10 |
 
 ```kotlin
-val t = Transformation.tMedian(size = 3);
+val t = Transformation.imcDetect(
+ distancepercentage = 10
+)
 ```
 
-</details>
+### IntelligentCrop
 
-<details>
-<summary>11. tBlur</summary>
+#### 1. icCrop(requiredWidth, requiredHeight, paddingPercentage, maintainOriginalAspect, aspectRatio, gravityTowards, preferredDirection, objectType)
 
-#### Supported Configuration
-
-| Parameter | Type  | Default |
-| --------- | ----- | ------- |
-| sigma     | float | 0.3     |
-| dpr       | float | 1       |
-
-#### Usage Example
+Intelligent Crop Plugin
+| Parameter | Type | Default |
+|-----------|------|---------|
+| requiredWidth | integer | 0 |
+| requiredHeight | integer | 0 |
+| paddingPercentage | integer | 0 |
+| maintainOriginalAspect | boolean | false |
+| aspectRatio | string | "" |
+| gravityTowards | enum: `object`, `foreground`, `face`, `none` | IcCrop.Gravitytowards.NONE |
+| preferredDirection | enum: `north_west`, `north`, `north_east`, `west`, `center`, `east`, `south_west`, `south`, `south_east` | IcCrop.Preferreddirection.CENTER |
+| objectType | enum: `airplane`, `apple`, `backpack`, `banana`, `baseball_bat`, `baseball_glove`, `bear`, `bed`, `bench`, `bicycle`, `bird`, `boat`, `book`, `bottle`, `bowl`, `broccoli`, `bus`, `cake`, `car`, `carrot`, `cat`, `cell_phone`, `chair`, `clock`, `couch`, `cow`, `cup`, `dining_table`, `dog`, `donut`, `elephant`, `fire_hydrant`, `fork`, `frisbee`, `giraffe`, `hair_drier`, `handbag`, `horse`, `hot_dog`, `keyboard`, `kite`, `knife`, `laptop`, `microwave`, `motorcycle`, `mouse`, `orange`, `oven`, `parking_meter`, `person`, `pizza`, `potted_plant`, `refrigerator`, `remote`, `sandwich`, `scissors`, `sheep`, `sink`, `skateboard`, `skis`, `snowboard`, `spoon`, `sports_ball`, `stop_sign`, `suitcase`, `surfboard`, `teddy_bear`, `tennis_racket`, `tie`, `toaster`, `toilet`, `toothbrush`, `traffic_light`, `train`, `truck`, `tv`, `umbrella`, `vase`, `wine_glass`, `zebra` | IcCrop.Objecttype.PERSON |
 
 ```kotlin
-val t = Transformation.tBlur(sigma = 0.3,dpr = 1);
+val t = Transformation.icCrop(
+ requiredwidth = 0,
+ requiredheight = 0,
+ paddingpercentage = 0,
+ maintainoriginalaspect = false,
+ aspectratio = "",
+ gravitytowards = IcCrop.Gravitytowards.NONE,
+ preferreddirection = IcCrop.Preferreddirection.CENTER,
+ objecttype = IcCrop.Objecttype.PERSON
+)
 ```
 
-</details>
+### IntelligentMasking
 
-<details>
-<summary>12. tFlatten</summary>
+#### 1. imMask(replacementImage, detector, maskType)
 
-#### Supported Configuration
-
-| Parameter  | Type  | Default  |
-| ---------- | ----- | -------- |
-| background | color | `000000` |
-
-#### Usage Example
+Intelligent Masking
+| Parameter | Type | Default |
+|-----------|------|---------|
+| replacementImage | file | "" |
+| detector | enum: `face`, `text`, `number_plate` | ImMask.Detector.NUMBER_PLATE |
+| maskType | enum: `fill_black`, `pixelate`, `blur` | ImMask.Masktype.FILL_BLACK |
 
 ```kotlin
-val t = Transformation.tFlatten(background = "000000");
+val t = Transformation.imMask(
+ replacementimage = "",
+ detector = ImMask.Detector.NUMBER_PLATE,
+ masktype = ImMask.Masktype.FILL_BLACK
+)
 ```
 
-</details>
+### ObjectCounter
 
-<details>
-<summary>13. tNegate</summary>
+#### 1. ocDetect()
 
-#### Usage Example
+Classifies whether objects in the image are single or multiple
 
 ```kotlin
-val t = Transformation.tNegate();
+val t = Transformation.ocDetect(
+)
 ```
 
-</details>
+### NSFWDetection
 
-<details>
-<summary>14. tNormalise</summary>
+#### 1. nsfwDetect(minimumConfidence)
 
-#### Usage Example
+Detect NSFW content in images
+| Parameter | Type | Default |
+|-----------|------|---------|
+| minimumConfidence | float | 0.5 |
 
 ```kotlin
-val t = Transformation.tNormalise();
+val t = Transformation.nsfwDetect(
+ minimumconfidence = 0.5
+)
 ```
 
-</details>
+### NumberPlateDetection
 
-<details>
-<summary>15. tLinear</summary>
+#### 1. numplateDetect()
 
-#### Supported Configuration
-
-| Parameter | Type    | Default |
-| --------- | ------- | ------- |
-| a         | integer | 1       |
-| b         | integer | 0       |
-
-#### Usage Example
+Number Plate Detection Plugin
 
 ```kotlin
-val t = Transformation.tLinear(a = 1,b = 0);
+val t = Transformation.numplateDetect(
+)
 ```
 
-</details>
+### ObjectDetection
 
-<details>
-<summary>16. tModulate</summary>
+#### 1. odDetect()
 
-#### Supported Configuration
-
-| Parameter  | Type    | Default |
-| ---------- | ------- | ------- |
-| brightness | float   | 1       |
-| saturation | float   | 1       |
-| hue        | integer | 90      |
-
-#### Usage Example
+Detect bounding boxes of objects in the image
 
 ```kotlin
-val t = Transformation.tModulate(brightness = 1,saturation = 1,hue = 90);
+val t = Transformation.odDetect(
+)
 ```
 
-</details>
+### CheckObjectSize
 
-<details>
-<summary>17. tGrey</summary>
+#### 1. cosDetect(objectThresholdPercent)
 
-#### Usage Example
+Calculates the percentage of the main object area relative to image dimensions.
+| Parameter | Type | Default |
+|-----------|------|---------|
+| objectThresholdPercent | integer | 50 |
 
 ```kotlin
-val t = Transformation.tGrey();
+val t = Transformation.cosDetect(
+ objectthresholdpercent = 50
+)
 ```
 
-</details>
+### TextDetectionandRecognition
 
-<details>
-<summary>18. tTint</summary>
+#### 1. ocrExtract(detectOnly)
 
-#### Supported Configuration
-
-| Parameter | Type  | Default  |
-| --------- | ----- | -------- |
-| color     | color | `000000` |
-
-#### Usage Example
+OCR Module
+| Parameter | Type | Default |
+|-----------|------|---------|
+| detectOnly | boolean | false |
 
 ```kotlin
-val t = Transformation.tTint(color = "000000");
+val t = Transformation.ocrExtract(
+ detectonly = false
+)
 ```
 
-</details>
+### PdfWatermarkRemoval
 
-<details>
-<summary>19. tToformat</summary>
+#### 1. pwrRemove()
 
-#### Supported Configuration
-
-| Parameter | Type                                                       | Default |
-| --------- | ---------------------------------------------------------- | ------- |
-| format    | enum: `jpeg`, `png`, `webp`, `tiff`, `avif`, `bmp`, `heif` | `jpeg`  |
-| quality   | integer                                                    | 75      |
-
-#### Usage Example
+PDF Watermark Removal Plugin
 
 ```kotlin
-val t = Transformation.tToformat(format = Toformat.Format.JPEG,quality = 75);
+val t = Transformation.pwrRemove(
+)
 ```
 
-</details>
+### ProductTagging
 
-<details>
-<summary>20. tDensity</summary>
+#### 1. prTag()
 
-#### Supported Configuration
-
-| Parameter | Type    | Default |
-| --------- | ------- | ------- |
-| density   | integer | 300     |
-
-#### Usage Example
+AI Product Tagging
 
 ```kotlin
-val t = Transformation.tDensity(density = 300);
+val t = Transformation.prTag(
+)
 ```
 
-</details>
+### CheckProductVisibility
 
-<details>
-<summary>21. tMerge</summary>
+#### 1. cpvDetect()
 
-#### Supported Configuration
-
-| Parameter      | Type                                                                                                                                                                                                                                                                                          | Default    |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| mode           | enum: `overlay`, `underlay`, `wrap`                                                                                                                                                                                                                                                           | `overlay`  |
-| image          | file                                                                                                                                                                                                                                                                                          | ``         |
-| transformation | custom                                                                                                                                                                                                                                                                                        | ``         |
-| background     | color                                                                                                                                                                                                                                                                                         | `00000000` |
-| height         | integer                                                                                                                                                                                                                                                                                       | 0          |
-| width          | integer                                                                                                                                                                                                                                                                                       | 0          |
-| top            | integer                                                                                                                                                                                                                                                                                       | 0          |
-| left           | integer                                                                                                                                                                                                                                                                                       | 0          |
-| gravity        | enum: `northwest`, `north`, `northeast`, `east`, `center`, `west`, `southwest`, `south`, `southeast`, `custom`                                                                                                                                                                                | `center`   |
-| blend          | enum: `over`, `in`, `out`, `atop`, `dest`, `dest-over`, `dest-in`, `dest-out`, `dest-atop`, `xor`, `add`, `saturate`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `colour-dodge`, `color-dodge`, `colour-burn`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion` | `over`     |
-| tile           | boolean                                                                                                                                                                                                                                                                                       | false      |
-| listOfBboxes   | bboxList                                                                                                                                                                                                                                                                                      |            |
-| listOfPolygons | polygonList                                                                                                                                                                                                                                                                                   |            |
-
-#### Usage Example
+Classifies whether the product in the image is completely visible or not
 
 ```kotlin
-val t = Transformation.tMerge(mode = Merge.Mode.OVERLAY,image = "",transformation = "",background = "00000000",height = 0,width = 0,top = 0,left = 0,gravity = Merge.Gravity.CENTER,blend = Merge.Blend.OVER,tile = false,listofbboxes = "",listofpolygons = "");
+val t = Transformation.cpvDetect(
+)
 ```
 
-</details>
+### QRCode
 
-### 22. SoftShadowGenerator
+#### 1. qrGenerate(width, height, image, margin, qRTypeNumber, qrErrorCorrectionLevel, imageSize, imageMargin, dotsColor, dotsType, dotsBgColor, cornerSquareColor, cornerSquareType, cornerDotsColor, cornerDotsType)
 
-<details>
-<summary>1. shadowGen</summary>
-
-#### Supported Configuration
-
-| Parameter       | Type  | Default  |
-| --------------- | ----- | -------- |
-| backgroundImage | file  |          |
-| backgroundColor | color | `ffffff` |
-| shadowAngle     | float | 120      |
-| shadowIntensity | float | 0.5      |
-
-#### Usage Example
+QRCode Plugin
+| Parameter | Type | Default |
+|-----------|------|---------|
+| width | integer | 300 |
+| height | integer | 300 |
+| image | custom | "" |
+| margin | integer | 0 |
+| qRTypeNumber | integer | 0 |
+| qrErrorCorrectionLevel | enum: `L`, `M`, `Q`, `H` | QrGenerate.Qrerrorcorrectionlevel.Q |
+| imageSize | float | 0.4 |
+| imageMargin | integer | 0 |
+| dotsColor | color | "000000" |
+| dotsType | enum: `rounded`, `dots`, `classy`, `classy-rounded`, `square`, `extra-rounded` | QrGenerate.Dotstype.SQUARE |
+| dotsBgColor | color | "ffffff" |
+| cornerSquareColor | color | "000000" |
+| cornerSquareType | enum: `dot`, `square`, `extra-rounded` | QrGenerate.Cornersquaretype.SQUARE |
+| cornerDotsColor | color | "000000" |
+| cornerDotsType | enum: `dot`, `square` | QrGenerate.Cornerdotstype.DOT |
 
 ```kotlin
-val t = Transformation.shadowGen(backgroundimage = "",backgroundcolor = "ffffff",shadowangle = 120,shadowintensity = 0.5);
+val t = Transformation.qrGenerate(
+ width = 300,
+ height = 300,
+ image = "",
+ margin = 0,
+ qrtypenumber = 0,
+ qrerrorcorrectionlevel = QrGenerate.Qrerrorcorrectionlevel.Q,
+ imagesize = 0.4,
+ imagemargin = 0,
+ dotscolor = "000000",
+ dotstype = QrGenerate.Dotstype.SQUARE,
+ dotsbgcolor = "ffffff",
+ cornersquarecolor = "000000",
+ cornersquaretype = QrGenerate.Cornersquaretype.SQUARE,
+ cornerdotscolor = "000000",
+ cornerdotstype = QrGenerate.Cornerdotstype.DOT
+)
 ```
 
-</details>
+#### 2. qrScan()
 
-### 23. SuperResolution
-
-<details>
-<summary>1. srUpscale</summary>
-
-#### Supported Configuration
-
-| Parameter      | Type                     | Default   |
-| -------------- | ------------------------ | --------- |
-| type           | enum: `2x`, `4x`, `8x`   | `2x`      |
-| enhanceFace    | boolean                  | false     |
-| model          | enum: `Picasso`, `Flash` | `Picasso` |
-| enhanceQuality | boolean                  | false     |
-
-#### Usage Example
+QRCode Plugin
 
 ```kotlin
-val t = Transformation.srUpscale(type = SuperResolution.Type._2X,enhanceface = false,model = SuperResolution.Model.PICASSO,enhancequality = false);
+val t = Transformation.qrScan(
+)
 ```
 
-</details>
+### RemoveBG
 
-### 24. VertexAI
+#### 1. removeBg()
 
-<details>
-<summary>1. vertexaiGeneratebg</summary>
-
-#### Supported Configuration
-
-| Parameter        | Type    | Default                                                                                                                    |
-| ---------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
-| backgroundPrompt | custom  | `YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr` |
-| negativePrompt   | custom  | ``                                                                                                                         |
-| seed             | integer | 22                                                                                                                         |
-| guidanceScale    | integer | 60                                                                                                                         |
-
-#### Usage Example
+Remove background from any image
 
 ```kotlin
-val t = Transformation.vertexaiGeneratebg(backgroundprompt = "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",negativeprompt = "",seed = 22,guidancescale = 60);
+val t = Transformation.removeBg(
+)
 ```
 
-</details>
+### SoftShadowGenerator
 
-<details>
-<summary>2. vertexaiRemovebg</summary>
+#### 1. shadowGen(backgroundImage, backgroundColor, shadowAngle, shadowIntensity)
 
-#### Usage Example
+AI Soft Shadow Generator
+| Parameter | Type | Default |
+|-----------|------|---------|
+| backgroundImage | file | ="" |
+| backgroundColor | color | "ffffff" |
+| shadowAngle | float | 120 |
+| shadowIntensity | float | 0.5 |
 
 ```kotlin
-val t = Transformation.vertexaiRemovebg();
+val t = Transformation.shadowGen(
+ backgroundimage="",
+ backgroundcolor = "ffffff",
+ shadowangle = 120,
+ shadowintensity = 0.5
+)
 ```
 
-</details>
+### SuperResolution
 
-<details>
-<summary>3. vertexaiUpscale</summary>
+#### 1. srUpscale(type, enhanceFace, model, enhanceQuality)
 
-#### Supported Configuration
-
-| Parameter | Type             | Default |
-| --------- | ---------------- | ------- |
-| type      | enum: `x2`, `x4` | `x2`    |
-
-#### Usage Example
+Super Resolution Module
+| Parameter | Type | Default |
+|-----------|------|---------|
+| type | enum: `2x`, `4x`, `8x` | SrUpscale.Type.\_2X |
+| enhanceFace | boolean | false |
+| model | enum: `Picasso`, `Flash` | SrUpscale.Model.PICASSO |
+| enhanceQuality | boolean | false |
 
 ```kotlin
-val t = Transformation.vertexaiUpscale(type = Upscale.Type.X2);
+val t = Transformation.srUpscale(
+ type = SrUpscale.Type._2X,
+ enhanceface = false,
+ model = SrUpscale.Model.PICASSO,
+ enhancequality = false
+)
 ```
 
-</details>
+### VertexAI
 
-### 25. VideoWatermarkRemoval
+#### 1. vertexaiGeneratebg(backgroundPrompt, negativePrompt, seed, guidanceScale)
 
-<details>
-<summary>1. wmvRemove</summary>
-
-#### Usage Example
+Vertex AI based transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| backgroundPrompt | custom | "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr" |
+| negativePrompt | custom | "" |
+| seed | integer | 22 |
+| guidanceScale | integer | 60 |
 
 ```kotlin
-val t = Transformation.wmvRemove();
+val t = Transformation.vertexaiGeneratebg(
+ backgroundprompt = "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
+ negativeprompt = "",
+ seed = 22,
+ guidancescale = 60
+)
 ```
 
-</details>
+#### 2. vertexaiRemovebg()
 
-### 26. ViewDetection
-
-<details>
-<summary>1. vdDetect</summary>
-
-#### Usage Example
+Vertex AI based transformations
 
 ```kotlin
-val t = Transformation.vdDetect();
+val t = Transformation.vertexaiRemovebg(
+)
 ```
 
-</details>
+#### 3. vertexaiUpscale(type)
 
-### 27. WatermarkRemoval
-
-<details>
-<summary>1. wmRemove</summary>
-
-#### Supported Configuration
-
-| Parameter  | Type    | Default       |
-| ---------- | ------- | ------------- |
-| removeText | boolean | false         |
-| removeLogo | boolean | false         |
-| box1       | string  | `0_0_100_100` |
-| box2       | string  | `0_0_0_0`     |
-| box3       | string  | `0_0_0_0`     |
-| box4       | string  | `0_0_0_0`     |
-| box5       | string  | `0_0_0_0`     |
-
-#### Usage Example
+Vertex AI based transformations
+| Parameter | Type | Default |
+|-----------|------|---------|
+| type | enum: `x2`, `x4` | VertexaiUpscale.Type.X2 |
 
 ```kotlin
-val t = Transformation.wmRemove(removetext = false,removelogo = false,box1 = "0_0_100_100",box2 = "0_0_0_0",box3 = "0_0_0_0",box4 = "0_0_0_0",box5 = "0_0_0_0");
+val t = Transformation.vertexaiUpscale(
+ type = VertexaiUpscale.Type.X2
+)
 ```
 
-</details>
+### VideoWatermarkRemoval
 
-### 28. WatermarkDetection
+#### 1. wmvRemove()
 
-<details>
-<summary>1. wmcDetect</summary>
-
-#### Supported Configuration
-
-| Parameter  | Type    | Default |
-| ---------- | ------- | ------- |
-| detectText | boolean | false   |
-
-#### Usage Example
+Video Watermark Removal Plugin
 
 ```kotlin
-val t = Transformation.wmcDetect(detecttext = false);
+val t = Transformation.wmvRemove(
+)
 ```
 
-</details>
+### VideoUpscalerPlugin
+
+#### 1. vsrUpscale()
+
+Video Upscaler Plugin
+
+```kotlin
+val t = Transformation.vsrUpscale(
+)
+```
+
+### ViewDetection
+
+#### 1. vdDetect()
+
+Classifies wear type and view type of products in the image
+
+```kotlin
+val t = Transformation.vdDetect(
+)
+```
+
+### WatermarkRemoval
+
+#### 1. wmRemove(removeText, removeLogo, box1, box2, box3, box4, box5)
+
+Watermark Removal Plugin
+| Parameter | Type | Default |
+|-----------|------|---------|
+| removeText | boolean | false |
+| removeLogo | boolean | false |
+| box1 | string | "0_0_100_100" |
+| box2 | string | "0_0_0_0" |
+| box3 | string | "0_0_0_0" |
+| box4 | string | "0_0_0_0" |
+| box5 | string | "0_0_0_0" |
+
+```kotlin
+val t = Transformation.wmRemove(
+ removetext = false,
+ removelogo = false,
+ box1 = "0_0_100_100",
+ box2 = "0_0_0_0",
+ box3 = "0_0_0_0",
+ box4 = "0_0_0_0",
+ box5 = "0_0_0_0"
+)
+```
+
+### WatermarkDetection
+
+#### 1. wmcDetect(detectText)
+
+Watermark Detection Plugin
+| Parameter | Type | Default |
+|-----------|------|---------|
+| detectText | boolean | false |
+
+```kotlin
+val t = Transformation.wmcDetect(
+ detecttext = false
+)
+```

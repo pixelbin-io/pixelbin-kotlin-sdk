@@ -6,8 +6,7 @@ plugins {
 group = "org.example"
 version = "unspecified"
 
-
-dependencies{
+dependencies {
     implementation(project(":pixelbin"))
     implementation(libs.kotlinx.coroutines)
 }

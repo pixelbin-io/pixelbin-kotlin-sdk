@@ -17,5 +17,5 @@ data class UploadResponse(
     val tags: List<String?>?,
     val type: String?,
     val url: String?,
-    val width: Int?
+    val width: Int?,
 )

@@ -14,12 +14,10 @@ import okio.source
 import java.io.File
 import java.io.IOException
 
-
 /**
  * class for uploading file to aws bucket
  */
 class Upload internal constructor() {
-
     /**
      * method to upload file to aws bucket
      *
@@ -32,20 +30,24 @@ class Upload internal constructor() {
         signedDetails: SignedDetails,
         callback: (Result<Any>) -> Unit,
         chunkSize: Int,
-        concurrency: Int = 1
+        concurrency: Int = 1,
     ) {
         val url = signedDetails.url
         val fields = signedDetails.fields
         url?.let {
-            if (it.contains("storage.googleapis.com")) uploadToGCS(it, fields, file, callback)
-            else if (it.contains("api.pixelbin")) multipartFileUpload(
-                file,
-                signedDetails,
-                callback,
-                chunkSize,
-                concurrency
-            )
-            else uploadToS3(it, fields, file, callback)
+            if (it.contains("storage.googleapis.com")) {
+                uploadToGCS(it, fields, file, callback)
+            } else if (it.contains("api.pixelbin")) {
+                multipartFileUpload(
+                    file,
+                    signedDetails,
+                    callback,
+                    chunkSize,
+                    concurrency,
+                )
+            } else {
+                uploadToS3(it, fields, file, callback)
+            }
         }
     }
 
@@ -60,14 +62,16 @@ class Upload internal constructor() {
         url: String,
         fields: Map<String, String>,
         file: File,
-        callback: (Result<Any>) -> Unit
+        callback: (Result<Any>) -> Unit,
     ) {
         if (url.isNullOrEmpty() || fields.isNullOrEmpty()) {
             throw Error("Please provide the correct object. Refer upload api docs for details.")
         }
 
-        val builder = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
+        val builder =
+            MultipartBody
+                .Builder()
+                .setType(MultipartBody.FORM)
 
         fields.forEach { (key, value) ->
             builder.addFormDataPart(key, value)
@@ -77,25 +81,40 @@ class Upload internal constructor() {
         val form = builder.build()
         try {
             val client = NetworkUtil.createOkHttpClient()
-            val request = Request.Builder()
-                .url(url)
-                .post(form)
-                .build()
+            val request =
+                Request
+                    .Builder()
+                    .url(url)
+                    .post(form)
+                    .build()
 
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    callback(Result.Error(e))
-                }
+            client.newCall(request).enqueue(
+                object : Callback {
+                    override fun onFailure(
+                        call: Call,
+                        e: IOException,
+                    ) {
+                        callback(Result.Error(e))
+                    }
 
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.code == 200 || response.code == 204)
-                        callback(Result.Success(response.message))
-                    else if (response.code == 408)
-                        callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
-                    else
-                        callback(Result.Failure(response))
-                }
-            })
+                    override fun onResponse(
+                        call: Call,
+                        response: Response,
+                    ) {
+                        if (response.code == 200 || response.code == 204) {
+                            callback(Result.Success(response.message))
+                        } else if (response.code == 408) {
+                            callback(
+                                Result.Error(
+                                    PDKTimeoutException("Request timed out. Please check your internet connection and try again."),
+                                ),
+                            )
+                        } else {
+                            callback(Result.Failure(response))
+                        }
+                    }
+                },
+            )
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -106,7 +125,7 @@ class Upload internal constructor() {
         signedDetails: SignedDetails,
         callback: (Result<Any>) -> Unit,
         chunkSize: Int,
-        concurrency: Int = 1
+        concurrency: Int = 1,
     ) {
         var errorOccurred = false
         try {
@@ -127,60 +146,72 @@ class Upload internal constructor() {
                             partNo++
                             val end = minOf(i + CHUNK_SIZE, fileSize)
                             val chunk = source.readByteArray(end - i)
-                            val requestBody = MultipartBody.Builder()
-                                .setType(MultipartBody.FORM)
-                                .addFormDataPart(
-                                    "file",
-                                    "chunk",
-                                    chunk.toRequestBody("application/octet-stream".toMediaType())
-                                )
+                            val requestBody =
+                                MultipartBody
+                                    .Builder()
+                                    .setType(MultipartBody.FORM)
+                                    .addFormDataPart(
+                                        "file",
+                                        "chunk",
+                                        chunk.toRequestBody("application/octet-stream".toMediaType()),
+                                    )
                             signedDetails.fields.forEach { (key, value) ->
                                 requestBody.addFormDataPart(key, value)
                             }
 
-                            val finalUrl = (signedDetails.url ?: "") + "&partNumber=${partNo}"
-                            val request = Request.Builder()
-                                .url(finalUrl)
-                                .header("Content-Range", "bytes $i-$end/$fileSize")
-                                .header("file-chunk-size", chunk.size.toString())
-                                .put(requestBody.build())
-                                .build()
+                            val finalUrl = (signedDetails.url ?: "") + "&partNumber=$partNo"
+                            val request =
+                                Request
+                                    .Builder()
+                                    .url(finalUrl)
+                                    .header("Content-Range", "bytes $i-$end/$fileSize")
+                                    .header("file-chunk-size", chunk.size.toString())
+                                    .put(requestBody.build())
+                                    .build()
                             withContext(Dispatchers.IO) {
-                                val deferred = async {
-                                    val response = client.newCall(request).execute()
-                                    when (response.code) {
-                                        200, 204 -> {
-                                            val responseBody = response.body
-                                            if (responseBody != null) {
-                                                val json = responseBody.string()
-                                                if (json.isNotEmpty()) {
-                                                    val uploadResponse = Gson().fromJson(
-                                                        json,
-                                                        UploadResponse::class.java
-                                                    )
-                                                    val successResult = Result.Success(uploadResponse)
-                                                    callback(successResult)
+                                val deferred =
+                                    async {
+                                        val response = client.newCall(request).execute()
+                                        when (response.code) {
+                                            200, 204 -> {
+                                                val responseBody = response.body
+                                                if (responseBody != null) {
+                                                    val json = responseBody.string()
+                                                    if (json.isNotEmpty()) {
+                                                        val uploadResponse =
+                                                            Gson().fromJson(
+                                                                json,
+                                                                UploadResponse::class.java,
+                                                            )
+                                                        val successResult = Result.Success(uploadResponse)
+                                                        callback(successResult)
+                                                    }
+                                                } else {
+                                                    errorOccurred = true
+                                                    callback(Result.Failure(response))
+                                                    cancel()
                                                 }
-                                            } else {
+                                            }
+
+                                            408 -> {
+                                                errorOccurred = true
+                                                callback(
+                                                    Result.Error(
+                                                        PDKTimeoutException(
+                                                            "Request timed out. Please check your internet connection and try again.",
+                                                        ),
+                                                    ),
+                                                )
+                                                cancel()
+                                            }
+
+                                            else -> {
                                                 errorOccurred = true
                                                 callback(Result.Failure(response))
                                                 cancel()
                                             }
                                         }
-
-                                        408 -> {
-                                            errorOccurred = true
-                                            callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
-                                            cancel()
-                                        }
-
-                                        else -> {
-                                            errorOccurred = true
-                                            callback(Result.Failure(response))
-                                            cancel()
-                                        }
                                     }
-                                }
                                 if (deferred.isCancelled) {
                                     errorOccurred = true
                                     return@withContext
@@ -210,11 +241,13 @@ class Upload internal constructor() {
                     val requestBody =
                         jsonBody.toRequestBody("application/json".toMediaTypeOrNull())
 
-                    val request = Request.Builder()
-                        .url(signedDetails.url ?: "")
-                        .post(requestBody)
-                        .addHeader("Content-Type", "application/json")
-                        .build()
+                    val request =
+                        Request
+                            .Builder()
+                            .url(signedDetails.url ?: "")
+                            .post(requestBody)
+                            .addHeader("Content-Type", "application/json")
+                            .build()
                     val response = client.newCall(request).execute()
                     when (response.code) {
                         200 -> {
@@ -222,10 +255,11 @@ class Upload internal constructor() {
                             if (responseBody != null) {
                                 val json = responseBody.string()
                                 if (json.isNotEmpty()) {
-                                    val uploadResponse = Gson().fromJson(
-                                        json,
-                                        UploadResponse::class.java
-                                    )
+                                    val uploadResponse =
+                                        Gson().fromJson(
+                                            json,
+                                            UploadResponse::class.java,
+                                        )
                                     val successResult = Result.Success(uploadResponse)
                                     callback(successResult)
                                 }
@@ -238,7 +272,11 @@ class Upload internal constructor() {
 
                         408 -> {
                             errorOccurred = true
-                            callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
+                            callback(
+                                Result.Error(
+                                    PDKTimeoutException("Request timed out. Please check your internet connection and try again."),
+                                ),
+                            )
                         }
 
                         else -> {
@@ -253,15 +291,14 @@ class Upload internal constructor() {
         }
     }
 
-    private fun extractPbuValue(url: String?): String {
-        return try {
+    private fun extractPbuValue(url: String?): String =
+        try {
             val regex = Regex("[?&]pbu=([^&]+)")
             val matchResult = url?.let { regex.find(it) }
             matchResult?.groups?.get(1)?.value ?: ""
         } catch (e: Exception) {
             throw PDKInvalidUrlException("Invalid image url")
         }
-    }
 
     /**
      * method to make post request call
@@ -274,13 +311,15 @@ class Upload internal constructor() {
         url: String,
         fields: Map<String, String>,
         file: File,
-        callback: (Result<Any>) -> Unit
+        callback: (Result<Any>) -> Unit,
     ) {
         if (url.isNullOrEmpty() || fields.isNullOrEmpty()) {
             throw Error("Please provide the correct object. Refer upload api docs for details.")
         }
-        val requestBuilder = Request.Builder()
-            .url(url)
+        val requestBuilder =
+            Request
+                .Builder()
+                .url(url)
 
         fields.forEach { (key, value) ->
             requestBuilder.addHeader(key, value)
@@ -292,20 +331,33 @@ class Upload internal constructor() {
         val request = requestBuilder.build()
         try {
             val client = NetworkUtil.createOkHttpClient()
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    callback(Result.Error(e))
-                }
+            client.newCall(request).enqueue(
+                object : Callback {
+                    override fun onFailure(
+                        call: Call,
+                        e: IOException,
+                    ) {
+                        callback(Result.Error(e))
+                    }
 
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.code == 200)
-                        callback(Result.Success(response.message))
-                    else if (response.code == 408)
-                        callback(Result.Error(PDKTimeoutException("Request timed out. Please check your internet connection and try again.")))
-                    else
-                        callback(Result.Failure(response))
-                }
-            })
+                    override fun onResponse(
+                        call: Call,
+                        response: Response,
+                    ) {
+                        if (response.code == 200) {
+                            callback(Result.Success(response.message))
+                        } else if (response.code == 408) {
+                            callback(
+                                Result.Error(
+                                    PDKTimeoutException("Request timed out. Please check your internet connection and try again."),
+                                ),
+                            )
+                        } else {
+                            callback(Result.Failure(response))
+                        }
+                    }
+                },
+            )
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -8,9 +8,6 @@ import io.pixelbin.sdk_kotlin.upload.SignedDetails
 import io.pixelbin.sdk_kotlin.upload.Upload
 import io.pixelbin.sdk_kotlin.url.Url
 import io.pixelbin.sdk_kotlin.url.UrlObj
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -26,7 +23,10 @@ class PixelBin internal constructor() {
      * @param isCustomDomain domain of the image url
      */
     @JvmOverloads
-    fun url(imageUrl: String, isCustomDomain: Boolean? = false): Url {
+    fun url(
+        imageUrl: String,
+        isCustomDomain: Boolean? = false,
+    ): Url {
         if (isImageUrlValid(imageUrl)) {
             url = Url(imageUrl, isCustomDomain = isCustomDomain)
             return url as Url
@@ -41,10 +41,13 @@ class PixelBin internal constructor() {
      * @param isCustomDomain domain of the image url
      */
     @JvmOverloads
-    fun url(urlObj: UrlObj, isCustomDomain: Boolean? = false): Url {
-        if (urlObj.baseUrl.isEmpty() || urlObj.cloudName.isEmpty() || urlObj.filePath.isEmpty())
+    fun url(
+        urlObj: UrlObj,
+        isCustomDomain: Boolean? = false,
+    ): Url {
+        if (urlObj.baseUrl.isEmpty() || urlObj.cloudName.isEmpty() || urlObj.filePath.isEmpty()) {
             throw PDKIllegalArgumentException("invalid url object")
-        else {
+        } else {
             url = Url(urlObject = urlObj, isCustomDomain = isCustomDomain)
         }
         return url as Url
@@ -67,15 +70,13 @@ class PixelBin internal constructor() {
         signedDetails: SignedDetails,
         callback: (Result<Any>) -> Unit,
         chunkSize: Int = 1024,
-        concurrency: Int = 1
+        concurrency: Int = 1,
     ) {
         Upload().upload(file, signedDetails, callback, chunkSize, concurrency)
     }
 
     companion object {
         @JvmStatic
-        fun getInstance(): PixelBin {
-            return PixelBin()
-        }
+        fun getInstance(): PixelBin = PixelBin()
     }
 }
