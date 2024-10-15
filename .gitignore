@@ -1,11 +1,26 @@
-*.iml
-.gradle
-/local.properties
-.idea/
-.DS_Store
-/build
-/build/
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+# Ignore all .iml files
+**/*.iml
+
+# Ignore .gradle directories
+**/.gradle/
+
+# Ignore all local.properties files
+**/local.properties
+
+# Ignore .idea directories
+**/.idea/
+
+# Ignore .DS_Store files
+**/.DS_Store
+
+# Ignore build directories
+**/build/
+
+# Ignore captures directories
+**/captures/
+
+# Ignore .externalNativeBuild directories
+**/.externalNativeBuild/
+
+# Ignore .cxx directories
+**/.cxx/
