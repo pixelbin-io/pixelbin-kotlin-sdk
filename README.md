@@ -24,14 +24,14 @@ For other artifacts check this link
 - Import the Pixelbin class
 
 ```
-import io.pixelbin:pixelbin-kotlin-sdk.*
+import io.pixelbin.sdk_kotlin.*
 ```
 
 - Create your instance
 
 ```
 val pixelbin = PixelBin.getInstance()
-val image = pixelbin.url("https://cdn.pixelbin.io/v2/cloudName/z-slug/transformation/path/to/image.jpeg")
+val image = pixelbin.url("https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg")
 val image = pixelbin.url(
     UrlObj(
         baseUrl = baseUrl,
@@ -51,7 +51,7 @@ ______________________________________________________________________
 Import transformations
 
 ```
-import io.pixelbin.sdk_kotlin.Transformation
+import io.pixelbin.sdk_kotlin.transformation.Transformation
 val eraseTransformation = Transformation.erasebg();
 // Create a new instance. If you have't (see above for the details)
 val pixelbin = PixelBin.getInstance()
@@ -168,7 +168,7 @@ CoroutineScope(Dispatchers.IO).launch {
 Import the utils class
 
 ```
-import com.pixelbin.Utils
+import io.pixelbin.sdk_kotlin.Utils
 ```
 
 Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
@@ -495,7 +495,7 @@ Basic Transformations
 | left | integer | 10 |
 | height | integer | 50 |
 | width | integer | 20 |
-| boundingBox | bbox | ="" |
+| boundingBox | bbox | null |
 
 ```kotlin
 val t = Transformation.tExtract(
@@ -503,7 +503,7 @@ val t = Transformation.tExtract(
  left = 10,
  height = 50,
  width = 20,
- boundingbox=""
+ boundingbox = null
 )
 ```
 
@@ -723,8 +723,8 @@ Basic Transformations
 | gravity | enum: `northwest`, `north`, `northeast`, `east`, `center`, `west`, `southwest`, `south`, `southeast`, `custom` | TMerge.Gravity.CENTER |
 | blend | enum: `over`, `in`, `out`, `atop`, `dest`, `dest-over`, `dest-in`, `dest-out`, `dest-atop`, `xor`, `add`, `saturate`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `colour-dodge`, `color-dodge`, `colour-burn`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion` | TMerge.Blend.OVER |
 | tile | boolean | false |
-| listOfBboxes | bboxList | ="" |
-| listOfPolygons | polygonList | ="" |
+| listOfBboxes | bboxList | null |
+| listOfPolygons | polygonList | null |
 
 ```kotlin
 val t = Transformation.tMerge(
@@ -739,8 +739,8 @@ val t = Transformation.tMerge(
  gravity = TMerge.Gravity.CENTER,
  blend = TMerge.Blend.OVER,
  tile = false,
- listofbboxes="",
- listofpolygons=""
+ listofbboxes = null,
+ listofpolygons = null
 )
 ```
 
@@ -813,7 +813,7 @@ val t = Transformation.generateBg(
 AI Image Extender
 | Parameter | Type | Default |
 |-----------|------|---------|
-| boundingBox | bbox | ="" |
+| boundingBox | bbox | null |
 | prompt | custom | "" |
 | negativePrompt | custom | "" |
 | strength | float | 0.999 |
@@ -824,7 +824,7 @@ AI Image Extender
 
 ```kotlin
 val t = Transformation.bgExtend(
- boundingbox="",
+ boundingbox = null,
  prompt = "",
  negativeprompt = "",
  strength = 0.999,
@@ -1134,14 +1134,14 @@ val t = Transformation.removeBg(
 AI Soft Shadow Generator
 | Parameter | Type | Default |
 |-----------|------|---------|
-| backgroundImage | file | ="" |
+| backgroundImage | file | null |
 | backgroundColor | color | "ffffff" |
 | shadowAngle | float | 120 |
 | shadowIntensity | float | 0.5 |
 
 ```kotlin
 val t = Transformation.shadowGen(
- backgroundimage="",
+ backgroundimage = null,
  backgroundcolor = "ffffff",
  shadowangle = 120,
  shadowintensity = 0.5

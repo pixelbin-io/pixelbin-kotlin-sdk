@@ -16,7 +16,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.pixelbin", "pixelbin-kotlin-sdk", "0.0.11")
+    coordinates("io.pixelbin", "pixelbin-kotlin-sdk", "0.0.12")
     pom {
         name.set("PixelBin")
         description.set("Pixelbin kotlin sdk used to integrate pixelbin with your project")

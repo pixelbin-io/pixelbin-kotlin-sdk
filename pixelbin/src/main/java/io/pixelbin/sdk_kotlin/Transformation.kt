@@ -189,7 +189,7 @@ object Transformation {
         width: Int? =
             20,
         boundingbox: String? =
-            "",
+            null,
     ): TransformationObj {
         // Call the generated class method
         return TExtract().extract(
@@ -510,9 +510,9 @@ object Transformation {
         tile: Boolean? =
             false,
         listofbboxes: String? =
-            "",
+            null,
         listofpolygons: String? =
-            "",
+            null,
     ): TransformationObj {
         // Call the generated class method
         return TMerge().merge(
@@ -630,7 +630,7 @@ object Transformation {
     @JvmOverloads
     fun bgExtend(
         boundingbox: String? =
-            "",
+            null,
         prompt: String? =
             "",
         negativeprompt: String? =
@@ -1059,7 +1059,7 @@ object Transformation {
     @JvmOverloads
     fun shadowGen(
         backgroundimage: String? =
-            "",
+            null,
         backgroundcolor: String? =
             "ffffff",
         shadowangle: Number? =
