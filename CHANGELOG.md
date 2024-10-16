@@ -1,6 +1,6 @@
-## 0.0.11
+## 0.0.12
 
-- Release version 0.0.11 bring minor changes
+- Release version 0.0.12 bring minor changes
 
 # 0.0.10
 
