@@ -1,7 +1,3 @@
-## 0.0.12
-
-- Release version 0.0.12 bring minor changes
-
 # 0.0.10
 
 - Updated method names and add new transformations methods.
