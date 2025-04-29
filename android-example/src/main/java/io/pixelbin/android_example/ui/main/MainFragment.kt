@@ -9,25 +9,25 @@ import android.view.ViewGroup
 import io.pixelbin.android_example.R
 
 class MainFragment : Fragment() {
-    companion object {
-        fun newInstance() = MainFragment()
-    }
 
-    private lateinit var viewModel: MainViewModel
+  companion object {
+    fun newInstance() = MainFragment()
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel =
-            ViewModelProvider(
-                this,
-                ViewModelProvider.NewInstanceFactory(),
-            )[MainViewModel::class.java]
-        // TODO: Use the ViewModel
-    }
+  private lateinit var viewModel: MainViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View = inflater.inflate(R.layout.fragment_main, container, false)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    viewModel =
+        ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+    // TODO: Use the ViewModel
+  }
+
+  override fun onCreateView(
+      inflater: LayoutInflater,
+      container: ViewGroup?,
+      savedInstanceState: Bundle?
+  ): View {
+    return inflater.inflate(R.layout.fragment_main, container, false)
+  }
 }

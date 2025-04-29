@@ -32,6 +32,7 @@ import io.pixelbin.sdk_kotlin.*
 ```
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url("https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg")
+    
 val image = pixelbin.url(
     UrlObj(
         baseUrl = baseUrl,
@@ -52,31 +53,41 @@ Import transformations
 
 ```
 import io.pixelbin.sdk_kotlin.transformation.Transformation
+
 val eraseTransformation = Transformation.erasebg();
+
 // Create a new instance. If you have't (see above for the details)
 val pixelbin = PixelBin.getInstance()
 val image = pixelbin.url(imageUrl)
+
 // Create EraseBg.bg transformation
 // Kotlin
 val t1 = Transformation.erasebg();
+
 //Java
 TransformationObj t1 = Transformation.INSTANCE.erasebg();
+
 // Create resize transformation
 // Kotlin
 val t2 = Transformation.tResize(height = 100,width = 100)
+
 //Java
 TransformationObj t2 = Transformation.INSTANCE.tResize(height = 100,width = 100);
+
 // Add the transformations to the image object
 //add single transformation
 image.addTransformation(t1);
+
 //or add multiple transformation
 //Kotlin
 image.addTransformation(arrayListOf(t1,t2));
+
 //Java
 ArrayList<TransformationObj> list = new ArrayList<>();
 list.add(t1);
 list.add(t2);
 image.add(list);
+
 // Get the image url
 image.getUrl()
 // output
@@ -85,20 +96,21 @@ image.getUrl()
 
 ### upload(file, signedDetails,callback,chunkSize,concurrency):
 
-| parameter                                                            | type                                                                                                                                 |
+| parameter | type |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
-| signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
-| chunkSize (int)                                                      | size of chunks to be uploaded in kb. default value is 1024.                                                                          |\
-|                                                                      | Recommended chunk size for                                                                                                           |\
-|                                                                      |     3g network - upto 5kb                                                                                                            |
-|                                                                      |     4g network - 500kb to 1MB                                                                                                        |\
-|                                                                      |     5g network - 1MB to 2MB                                                                                                          |
-| concurrency (int)                                                    |  number of chunks to be uploaded in parallel api calls                                                                               |
+| file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin |
+| signedDetails (Object) | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
+| chunkSize (int) | size of chunks to be uploaded in kb. default value is 1024. |\
+| | Recommended chunk size for |\
+| | 3g network - upto 5kb |
+| | 4g network - 500kb to 1MB |\
+| | 5g network - 1MB to 2MB |
+| concurrency (int) | number of chunks to be uploaded in parallel api calls |
 
 - Resolves with no response on success.
 - Rejects with error on failure.
-  Example :
+
+Example :
 
 1. Define a file element
 
@@ -110,6 +122,7 @@ val file =  File(pathname);
 
 ```
 val signedDetails = SignedDetails(url = "url", fields = fieldsToHashMap(fields))
+
 //fields refer to hashmap of fields object which we got from signed url api 
 Example
 data class Fields(
@@ -119,7 +132,9 @@ data class Fields(
     @SerializedName("Content-Type") var contentType: String? = null,
     //for pixelbin host
     @SerializedName("x-pixb-meta-assetdata") var xPixbMetaAssetdata: String? = null
+    
 )
+
 fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
         val hashMap = HashMap<String, String>()
         hashMap["x-goog-meta-assetData"] = fields.xGoogMetaAssetData?:""
@@ -130,6 +145,8 @@ fun fieldsToHashMap(fields: Fields): HashMap<String, String> {
         hashMap["x-pixb-meta-assetdata"] = fields.xPixbMetaAssetdata?:""
         return hashMap
 }
+
+
 //for kotlin
 CoroutineScope(Dispatchers.IO).launch {
     PixelBin.getInstance().upload(file, details, {
@@ -147,6 +164,7 @@ CoroutineScope(Dispatchers.IO).launch {
         }
     }, chunkSize, concurrency)
 }
+
 //for java
   pixelbin.upload(file,signedDetails, result->{
   //here Result class is from com.pixelbin.upload.Result
@@ -161,6 +179,8 @@ CoroutineScope(Dispatchers.IO).launch {
             }
             return null;
         },chunkSize, concurrency);
+
+
 ```
 
 ## Utilities
@@ -176,30 +196,36 @@ Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 ### urlToObj
 
 Deconstruct a pixelbin url
-| parameter                | description                                               | example                                                                                               |
+
+| parameter | description | example |
 |--------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| pixelbinUrl (string)     | A valid pixelbin url                                      | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
-| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                                                                                               |
+| pixelbinUrl (string) | A valid pixelbin url | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false` |
+
 **Returns**:
-| property                 | description                                               | example                              |
+
+| property | description | example |
 |--------------------------|-----------------------------------------------------------|--------------------------------------|
-| cloudName (string)       | The cloudname extracted from the url                      | `your-cloud-name`                    |
-| zone (string)            | 6 character zone slug                                     | `z-slug`                             |
-| version (string)         | cdn api version                                           | `v2`                                 |
-| transformations (array)  | Extracted transformations from the url                    |                                      |
-| filePath                 | Path to the file on Pixelbin storage                      | `/path/to/image.jpeg`                |
-| baseUrl (string)         | Base url                                                  | `https://cdn.pixelbin.io/`           |
-| worker (boolean)         | Indicates if the URL is a URL Translation Worker URL      | `false`                              |
-| workerPath (string)      | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
-| options (Object)         | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
-| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false`                              |
+| cloudName (string) | The cloudname extracted from the url | `your-cloud-name` |
+| zone (string) | 6 character zone slug | `z-slug` |
+| version (string) | cdn api version | `v2` |
+| transformations (array) | Extracted transformations from the url | |
+| filePath | Path to the file on Pixelbin storage | `/path/to/image.jpeg` |
+| baseUrl (string) | Base url | `https://cdn.pixelbin.io/` |
+| worker (boolean) | Indicates if the URL is a URL Translation Worker URL | `false` |
+| workerPath (string) | Input path to a URL Translation Worker | `resize:w200,h400/folder/image.jpeg` |
+| options (Object) | Query parameters added, such as "dpr" and "f_auto" | `{ dpr: 2.5, f_auto: true}` |
+| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false` |
+
 Example:
 
 ```
 val pixelbinUrl =
     "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+
 //string representation of url object
 //name of transformation = plugin+"."+name
+
 val obj = Utils.urlToUrlObj(pixelbinUrl)
 //        UrlObj(
 //            baseUrl = "https://cdn.pixelbin.io/",
@@ -229,6 +255,7 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 ```
 val pixelbinUrl =
     "https://xyz.designify.media/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+
 val obj = Utils.urlToUrlObj(url=pixelbinUrl, isCustomDomain = true)
 //        UrlObj(
 //            baseUrl = "https://cdn.pixelbin.io/",
@@ -254,6 +281,7 @@ val obj = Utils.urlToUrlObj(url=pixelbinUrl, isCustomDomain = true)
 //            wrkr = false;  
 //            workerPath = ";  
 //        )
+
 ```
 
 ```
@@ -316,18 +344,20 @@ val obj = Utils.urlToUrlObj(pixelbinUrl)
 ### objToUrl
 
 Converts the extracted url obj to a Pixelbin url.
-| property                  | description                                               | example                              |
+
+| property | description | example |
 |---------------------------|-----------------------------------------------------------|--------------------------------------|
-| cloudName (string)        | The cloudname extracted from the url                      | `your-cloud-name`                    |
-| zone (string)             | 6 character zone slug                                     | `z-slug`                             |
-| version (string)          | cdn api version                                           | `v2`                                 |
-| transformations (array)   | Extracted transformations from the url                    |                                      |
-| filePath                  | Path to the file on Pixelbin storage                      | `/path/to/image.jpeg`                |
-| baseUrl (string)          | Base url                                                  | `https://cdn.pixelbin.io/`           |
-| worker (boolean)          | Indicates if the URL is a URL Translation Worker URL      | `false`                              |
-| workerPath (string)       | Input path to a URL Translation Worker                    | `resize:w200,h400/folder/image.jpeg` |
-| options (Object)          | Query parameters added, such as "dpr" and "f_auto"        | `{ dpr: 2.5, f_auto: true}`          |
-| isCustomDomain (boolean)  | Indicates if the URL belongs to a custom domain (default) | `false`                              |
+| cloudName (string) | The cloudname extracted from the url | `your-cloud-name` |
+| zone (string) | 6 character zone slug | `z-slug` |
+| version (string) | cdn api version | `v2` |
+| transformations (array) | Extracted transformations from the url | |
+| filePath | Path to the file on Pixelbin storage | `/path/to/image.jpeg` |
+| baseUrl (string) | Base url | `https://cdn.pixelbin.io/` |
+| worker (boolean) | Indicates if the URL is a URL Translation Worker URL | `false` |
+| workerPath (string) | Input path to a URL Translation Worker | `resize:w200,h400/folder/image.jpeg` |
+| options (Object) | Query parameters added, such as "dpr" and "f_auto" | `{ dpr: 2.5, f_auto: true}` |
+| isCustomDomain (boolean) | Indicates if the URL belongs to a custom domain (default) | `false` |
+
 Example
 
 ```
@@ -352,6 +382,8 @@ val obj = UrlObj(
     filePath = "path/to/image.jpeg",
     baseUrl = "https://cdn.pixelbin.io"
 )
+
+
 val url = Utils.objToUrl(pixelbinUrl) // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
@@ -383,6 +415,7 @@ val obj = UrlObj(
         "f_auto" to "true"
     )
 )
+
 val url = Utils.objToUrl(obj)  // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True
@@ -406,6 +439,8 @@ val obj = UrlObj(
 val url = Utils.objToUrl(obj)          
 //url
 //"https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/wrkr/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg?dpr=2.0&f_auto=True";
+          
+          
 ```
 
 ## List of supported transformations
@@ -418,6 +453,7 @@ Classifies the background of a product as plain, clean or busy
 
 ```kotlin
 val t = Transformation.dbtDetect(
+
 )
 ```
 
@@ -426,6 +462,7 @@ val t = Transformation.dbtDetect(
 #### 1. tResize(height, width, fit, background, position, algorithm, dpr)
 
 Basic Transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | height | integer | 0 |
@@ -448,9 +485,210 @@ val t = Transformation.tResize(
 )
 ```
 
-#### 2. tCompress(quality)
+#### 2. tFlip()
 
 Basic Transformations
+
+```kotlin
+val t = Transformation.tFlip(
+
+)
+```
+
+#### 3. tFlop()
+
+Basic Transformations
+
+```kotlin
+val t = Transformation.tFlop(
+
+)
+```
+
+#### 4. tBlur(sigma, dpr)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| sigma | float | 1 |
+| dpr | float | 1 |
+
+```kotlin
+val t = Transformation.tBlur(
+ sigma = 1,
+ dpr = 1
+)
+```
+
+#### 5. tTrim(threshold)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| threshold | integer | 10 |
+
+```kotlin
+val t = Transformation.tTrim(
+ threshold = 10
+)
+```
+
+#### 6. tRotate(angle, background)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| angle | integer | 0 |
+| background | color | "000000" |
+
+```kotlin
+val t = Transformation.tRotate(
+ angle = 0,
+ background = "000000"
+)
+```
+
+#### 7. tDensity(density)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| density | integer | 300 |
+
+```kotlin
+val t = Transformation.tDensity(
+ density = 300
+)
+```
+
+#### 8. tFlatten(background)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| background | color | "000000" |
+
+```kotlin
+val t = Transformation.tFlatten(
+ background = "000000"
+)
+```
+
+#### 9. tNegate()
+
+Basic Transformations
+
+```kotlin
+val t = Transformation.tNegate(
+
+)
+```
+
+#### 10. tNormalise()
+
+Basic Transformations
+
+```kotlin
+val t = Transformation.tNormalise(
+
+)
+```
+
+#### 11. tGrey()
+
+Basic Transformations
+
+```kotlin
+val t = Transformation.tGrey(
+
+)
+```
+
+#### 12. tTint(color)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| color | color | "000000" |
+
+```kotlin
+val t = Transformation.tTint(
+ color = "000000"
+)
+```
+
+#### 13. tMedian(size)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| size | integer | 3 |
+
+```kotlin
+val t = Transformation.tMedian(
+ size = 3
+)
+```
+
+#### 14. tSharpen(sigma)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| sigma | float | 1.5 |
+
+```kotlin
+val t = Transformation.tSharpen(
+ sigma = 1.5
+)
+```
+
+#### 15. tLinear(a, b)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| a | integer | 1 |
+| b | integer | 0 |
+
+```kotlin
+val t = Transformation.tLinear(
+ a = 1,
+ b = 0
+)
+```
+
+#### 16. tModulate(brightness, saturation, hue)
+
+Basic Transformations
+
+| Parameter | Type | Default |
+|-----------|------|---------|
+| brightness | float | 1 |
+| saturation | float | 1 |
+| hue | integer | 90 |
+
+```kotlin
+val t = Transformation.tModulate(
+ brightness = 1,
+ saturation = 1,
+ hue = 90
+)
+```
+
+#### 17. tCompress(quality)
+
+Basic Transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | quality | integer | 80 |
@@ -461,9 +699,10 @@ val t = Transformation.tCompress(
 )
 ```
 
-#### 3. tExtend(top, left, bottom, right, background, borderType, dpr)
+#### 18. tExtend(top, left, bottom, right, background, borderType, dpr)
 
 Basic Transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | top | integer | 10 |
@@ -486,202 +725,32 @@ val t = Transformation.tExtend(
 )
 ```
 
-#### 4. tExtract(top, left, height, width, boundingBox)
+#### 19. tExtract(top, left, height, width, boundingBox)
 
 Basic Transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
-| top | integer | 10 |
-| left | integer | 10 |
-| height | integer | 50 |
-| width | integer | 20 |
+| top | integer | 0 |
+| left | integer | 0 |
+| height | integer | 0 |
+| width | integer | 0 |
 | boundingBox | bbox | null |
 
 ```kotlin
 val t = Transformation.tExtract(
- top = 10,
- left = 10,
- height = 50,
- width = 20,
+ top = 0,
+ left = 0,
+ height = 0,
+ width = 0,
  boundingbox = null
 )
 ```
 
-#### 5. tTrim(threshold)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| threshold | integer | 10 |
-
-```kotlin
-val t = Transformation.tTrim(
- threshold = 10
-)
-```
-
-#### 6. tRotate(angle, background)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| angle | integer | 0 |
-| background | color | "000000" |
-
-```kotlin
-val t = Transformation.tRotate(
- angle = 0,
- background = "000000"
-)
-```
-
-#### 7. tFlip()
+#### 20. tToformat(format, quality)
 
 Basic Transformations
 
-```kotlin
-val t = Transformation.tFlip(
-)
-```
-
-#### 8. tFlop()
-
-Basic Transformations
-
-```kotlin
-val t = Transformation.tFlop(
-)
-```
-
-#### 9. tSharpen(sigma)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| sigma | float | 1.5 |
-
-```kotlin
-val t = Transformation.tSharpen(
- sigma = 1.5
-)
-```
-
-#### 10. tMedian(size)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| size | integer | 3 |
-
-```kotlin
-val t = Transformation.tMedian(
- size = 3
-)
-```
-
-#### 11. tBlur(sigma, dpr)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| sigma | float | 0.3 |
-| dpr | float | 1 |
-
-```kotlin
-val t = Transformation.tBlur(
- sigma = 0.3,
- dpr = 1
-)
-```
-
-#### 12. tFlatten(background)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| background | color | "000000" |
-
-```kotlin
-val t = Transformation.tFlatten(
- background = "000000"
-)
-```
-
-#### 13. tNegate()
-
-Basic Transformations
-
-```kotlin
-val t = Transformation.tNegate(
-)
-```
-
-#### 14. tNormalise()
-
-Basic Transformations
-
-```kotlin
-val t = Transformation.tNormalise(
-)
-```
-
-#### 15. tLinear(a, b)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| a | integer | 1 |
-| b | integer | 0 |
-
-```kotlin
-val t = Transformation.tLinear(
- a = 1,
- b = 0
-)
-```
-
-#### 16. tModulate(brightness, saturation, hue)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| brightness | float | 1 |
-| saturation | float | 1 |
-| hue | integer | 90 |
-
-```kotlin
-val t = Transformation.tModulate(
- brightness = 1,
- saturation = 1,
- hue = 90
-)
-```
-
-#### 17. tGrey()
-
-Basic Transformations
-
-```kotlin
-val t = Transformation.tGrey(
-)
-```
-
-#### 18. tTint(color)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| color | color | "000000" |
-
-```kotlin
-val t = Transformation.tTint(
- color = "000000"
-)
-```
-
-#### 19. tToformat(format, quality)
-
-Basic Transformations
 | Parameter | Type | Default |
 |-----------|------|---------|
 | format | enum: `jpeg`, `png`, `webp`, `tiff`, `avif`, `bmp`, `heif` | TToformat.Format.JPEG |
@@ -694,22 +763,10 @@ val t = Transformation.tToformat(
 )
 ```
 
-#### 20. tDensity(density)
-
-Basic Transformations
-| Parameter | Type | Default |
-|-----------|------|---------|
-| density | integer | 300 |
-
-```kotlin
-val t = Transformation.tDensity(
- density = 300
-)
-```
-
 #### 21. tMerge(mode, image, transformation, background, height, width, top, left, gravity, blend, tile, listOfBboxes, listOfPolygons)
 
 Basic Transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | mode | enum: `overlay`, `underlay`, `wrap` | TMerge.Mode.OVERLAY |
@@ -752,6 +809,7 @@ Artifact Removal Plugin
 
 ```kotlin
 val t = Transformation.afRemove(
+
 )
 ```
 
@@ -760,6 +818,7 @@ val t = Transformation.afRemove(
 #### 1. awsrekDetectlabels(maximumLabels, minimumConfidence)
 
 Detect objects and text in images
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | maximumLabels | integer | 5 |
@@ -775,6 +834,7 @@ val t = Transformation.awsrekDetectlabels(
 #### 2. awsrekModeration(minimumConfidence)
 
 Detect objects and text in images
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | minimumConfidence | integer | 55 |
@@ -790,6 +850,7 @@ val t = Transformation.awsrekModeration(
 #### 1. generateBg(backgroundPrompt, focus, negativePrompt, seed)
 
 AI Background Generator
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | backgroundPrompt | custom | "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr" |
@@ -808,29 +869,24 @@ val t = Transformation.generateBg(
 
 ### ImageExtender
 
-#### 1. bgExtend(boundingBox, prompt, negativePrompt, strength, guidanceScale, numberOfInferenceSteps, colorAdjust, seed)
+#### 1. bgExtend(boundingBox, prompt, guidanceScale, numberOfInferenceSteps, seed)
 
 AI Image Extender
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | boundingBox | bbox | null |
 | prompt | custom | "" |
-| negativePrompt | custom | "" |
-| strength | float | 0.999 |
-| guidanceScale | integer | 8 |
-| numberOfInferenceSteps | integer | 10 |
-| colorAdjust | boolean | false |
+| guidanceScale | integer | 30 |
+| numberOfInferenceSteps | integer | 50 |
 | seed | integer | 123 |
 
 ```kotlin
 val t = Transformation.bgExtend(
  boundingbox = null,
  prompt = "",
- negativeprompt = "",
- strength = 0.999,
- guidancescale = 8,
- numberofinferencesteps = 10,
- coloradjust = false,
+ guidancescale = 30,
+ numberofinferencesteps = 50,
  seed = 123
 )
 ```
@@ -840,6 +896,7 @@ val t = Transformation.bgExtend(
 #### 1. vgGenerate(generateVariationPrompt, noOfVariations, seed, autoscale)
 
 AI Variation Generator
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | generateVariationPrompt | custom | "" |
@@ -861,6 +918,7 @@ val t = Transformation.vgGenerate(
 #### 1. eraseBg(industryType, addShadow, refine)
 
 EraseBG Background Removal Module
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | industryType | enum: `general`, `ecommerce`, `car`, `human`, `object` | EraseBg.Industrytype.GENERAL |
@@ -880,6 +938,7 @@ val t = Transformation.eraseBg(
 #### 1. googlevisDetectlabels(maximumLabels)
 
 Detect content and text in images
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | maximumLabels | integer | 5 |
@@ -895,6 +954,7 @@ val t = Transformation.googlevisDetectlabels(
 #### 1. imcDetect(distancePercentage)
 
 Image Centering Module
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | distancePercentage | integer | 10 |
@@ -910,6 +970,7 @@ val t = Transformation.imcDetect(
 #### 1. icCrop(requiredWidth, requiredHeight, paddingPercentage, maintainOriginalAspect, aspectRatio, gravityTowards, preferredDirection, objectType)
 
 Intelligent Crop Plugin
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | requiredWidth | integer | 0 |
@@ -939,6 +1000,7 @@ val t = Transformation.icCrop(
 #### 1. imMask(replacementImage, detector, maskType)
 
 Intelligent Masking
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | replacementImage | file | "" |
@@ -961,6 +1023,7 @@ Classifies whether objects in the image are single or multiple
 
 ```kotlin
 val t = Transformation.ocDetect(
+
 )
 ```
 
@@ -969,6 +1032,7 @@ val t = Transformation.ocDetect(
 #### 1. nsfwDetect(minimumConfidence)
 
 Detect NSFW content in images
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | minimumConfidence | float | 0.5 |
@@ -987,6 +1051,7 @@ Number Plate Detection Plugin
 
 ```kotlin
 val t = Transformation.numplateDetect(
+
 )
 ```
 
@@ -998,6 +1063,7 @@ Detect bounding boxes of objects in the image
 
 ```kotlin
 val t = Transformation.odDetect(
+
 )
 ```
 
@@ -1006,6 +1072,7 @@ val t = Transformation.odDetect(
 #### 1. cosDetect(objectThresholdPercent)
 
 Calculates the percentage of the main object area relative to image dimensions.
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | objectThresholdPercent | integer | 50 |
@@ -1021,6 +1088,7 @@ val t = Transformation.cosDetect(
 #### 1. ocrExtract(detectOnly)
 
 OCR Module
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | detectOnly | boolean | false |
@@ -1039,6 +1107,7 @@ PDF Watermark Removal Plugin
 
 ```kotlin
 val t = Transformation.pwrRemove(
+
 )
 ```
 
@@ -1050,6 +1119,7 @@ AI Product Tagging
 
 ```kotlin
 val t = Transformation.prTag(
+
 )
 ```
 
@@ -1061,6 +1131,7 @@ Classifies whether the product in the image is completely visible or not
 
 ```kotlin
 val t = Transformation.cpvDetect(
+
 )
 ```
 
@@ -1069,6 +1140,7 @@ val t = Transformation.cpvDetect(
 #### 1. qrGenerate(width, height, image, margin, qRTypeNumber, qrErrorCorrectionLevel, imageSize, imageMargin, dotsColor, dotsType, dotsBgColor, cornerSquareColor, cornerSquareType, cornerDotsColor, cornerDotsType)
 
 QRCode Plugin
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | width | integer | 300 |
@@ -1113,6 +1185,7 @@ QRCode Plugin
 
 ```kotlin
 val t = Transformation.qrScan(
+
 )
 ```
 
@@ -1124,6 +1197,7 @@ Remove background from any image
 
 ```kotlin
 val t = Transformation.removeBg(
+
 )
 ```
 
@@ -1132,6 +1206,7 @@ val t = Transformation.removeBg(
 #### 1. shadowGen(backgroundImage, backgroundColor, shadowAngle, shadowIntensity)
 
 AI Soft Shadow Generator
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | backgroundImage | file | null |
@@ -1153,9 +1228,10 @@ val t = Transformation.shadowGen(
 #### 1. srUpscale(type, enhanceFace, model, enhanceQuality)
 
 Super Resolution Module
+
 | Parameter | Type | Default |
 |-----------|------|---------|
-| type | enum: `2x`, `4x`, `8x` | SrUpscale.Type.\_2X |
+| type | enum: `1x`, `2x`, `4x`, `8x` | SrUpscale.Type.\_2X |
 | enhanceFace | boolean | false |
 | model | enum: `Picasso`, `Flash` | SrUpscale.Model.PICASSO |
 | enhanceQuality | boolean | false |
@@ -1174,6 +1250,7 @@ val t = Transformation.srUpscale(
 #### 1. vertexaiGeneratebg(backgroundPrompt, negativePrompt, seed, guidanceScale)
 
 Vertex AI based transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | backgroundPrompt | custom | "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr" |
@@ -1196,12 +1273,14 @@ Vertex AI based transformations
 
 ```kotlin
 val t = Transformation.vertexaiRemovebg(
+
 )
 ```
 
 #### 3. vertexaiUpscale(type)
 
 Vertex AI based transformations
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | type | enum: `x2`, `x4` | VertexaiUpscale.Type.X2 |
@@ -1220,6 +1299,7 @@ Video Watermark Removal Plugin
 
 ```kotlin
 val t = Transformation.wmvRemove(
+
 )
 ```
 
@@ -1231,6 +1311,7 @@ Video Upscaler Plugin
 
 ```kotlin
 val t = Transformation.vsrUpscale(
+
 )
 ```
 
@@ -1242,6 +1323,7 @@ Classifies wear type and view type of products in the image
 
 ```kotlin
 val t = Transformation.vdDetect(
+
 )
 ```
 
@@ -1250,6 +1332,7 @@ val t = Transformation.vdDetect(
 #### 1. wmRemove(removeText, removeLogo, box1, box2, box3, box4, box5)
 
 Watermark Removal Plugin
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | removeText | boolean | false |
@@ -1277,6 +1360,7 @@ val t = Transformation.wmRemove(
 #### 1. wmcDetect(detectText)
 
 Watermark Detection Plugin
+
 | Parameter | Type | Default |
 |-----------|------|---------|
 | detectText | boolean | false |
